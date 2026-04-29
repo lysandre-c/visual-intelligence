@@ -1,0 +1,68 @@
+# Stimulus generation configuration.
+# Each entry defines the constructor arguments for the corresponding generator.
+
+geometric:
+  muller_lyer:
+    image_size: [512, 256]
+    shaft_length: 200
+    line_width: 3
+    background: [255, 255, 255]
+    foreground: [0, 0, 0]
+
+  ponzo:
+    image_size: [512, 512]
+    bar_length: 120
+    line_width: 3
+
+  ebbinghaus:
+    image_size: [512, 256]
+    center_radius: 30
+    n_satellites: 6
+    satellite_distance: 70
+
+color:
+  simultaneous_contrast:
+    image_size: [512, 256]
+    patch_size: 80
+    target_luminance: 128
+
+  whites_illusion:
+    image_size: [512, 512]
+    target_luminance: 128
+    n_stripes: 8
+
+angle:
+  zollner:
+    image_size: [512, 512]
+    n_main_lines: 5
+    hatch_spacing: 20
+    hatch_length: 15
+    line_width: 3
+
+  poggendorff:
+    image_size: [512, 256]
+    line_angle_deg: 30.0
+    line_width: 3
+
+motion:
+  scintillating_grid:
+    image_size: [512, 512]
+    grid_spacing: 48
+    grid_line_width: 8
+    background_lum: 64
+    grid_lum: 200
+    disc_lum: 255
+
+  fraser_spiral:
+    image_size: [512, 512]
+    segment_length: 6
+    line_width: 3
+
+impossible:
+  illusion_vqa:
+    source: illusion_vqa
+    data_root: data/external/illusion_vqa
+
+  hallusion_bench:
+    source: hallusion_bench
+    data_root: data/external/hallusion_bench

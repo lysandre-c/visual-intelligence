@@ -1,0 +1,15 @@
+results/
+data/stimuli/
+data/external/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.coverage
+*.egg-info/
+dist/
+build/
+.env
+*.pt
+*.pth
+*.safetensors

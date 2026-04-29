@@ -1,0 +1,52 @@
+# Model panel configuration.
+# probe_path: path to a saved linear probe .pt file (relative to project root).
+#             Leave null to train from scratch.
+
+supervised_cnn:
+  resnet50:
+    class: ResNetProber
+    probe_path: null
+
+  convnext_base:
+    class: ConvNeXtProber
+    probe_path: null
+
+supervised_vit:
+  vit_b_16:
+    class: ViTBProber
+    probe_path: null
+
+  vit_l_16:
+    class: ViTLProber
+    probe_path: null
+
+contrastive:
+  clip_vit_b32:
+    class: CLIPProber
+    open_clip_model: ViT-B-32
+    open_clip_pretrained: openai
+
+  dinov2_vit_b14:
+    class: DINOv2Prober
+
+multimodal_llm:
+  llava_1.5:
+    class: LLaVAProber
+    hf_model_id: llava-hf/llava-1.5-7b-hf
+    n_orderings: 4
+    n_framings: 2
+    load_in_4bit: false
+
+  qwen_vl:
+    class: QwenVLProber
+    hf_model_id: Qwen/Qwen-VL-Chat
+    n_orderings: 4
+    n_framings: 2
+
+# Linear probe training hyperparameters (for CNN / ViT families)
+probe_training:
+  lr: 1.0e-3
+  epochs: 20
+  batch_size: 64
+  weight_decay: 1.0e-4
+  control_ceiling_threshold: 0.80
