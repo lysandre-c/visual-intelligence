@@ -289,7 +289,7 @@ _QUESTIONS: dict[str, str] = {
     "geometric": "Which of the two horizontal lines looks longer?",
     "color": "Which of the two grey patches looks brighter?",
     "angle": "Do the long diagonal lines appear parallel?",
-    "motion": "Do any of the white dots at intersections appear to flicker or turn dark?",
+    "motion": "Does the static pattern appear to move, rotate, or flicker?",
     "impossible": "Is the object shown in the image physically possible or impossible?",
 }
 
@@ -310,9 +310,9 @@ _ANSWER_DESCRIPTIONS: dict[str, dict[str, str]] = {
         "other": "It is unclear.",
     },
     "motion": {
-        "correct": "No, the dots remain white.",
-        "illusory": "Yes, the dots appear to flicker or turn dark.",
-        "other": "There are no dots at the intersections.",
+        "correct": "No, the pattern appears still.",
+        "illusory": "Yes, the pattern appears to move, rotate, or flicker.",
+        "other": "It is unclear.",
     },
     "impossible": {
         "correct": "It is physically possible.",

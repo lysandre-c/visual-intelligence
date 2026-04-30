@@ -18,14 +18,14 @@ from pathlib import Path
 from src.stimuli.geometric import MullerLyerGenerator, PonzoGenerator, EbbinghausGenerator
 from src.stimuli.color import SimultaneousContrastGenerator, WhiteIllusionGenerator
 from src.stimuli.angle import ZollnerGenerator, PoggendorffGenerator
-from src.stimuli.motion import ScintillatingGridGenerator, FraserSpiralGenerator
+from src.stimuli.motion import ScintillatingGridGenerator, RotatingSnakesGenerator
 
 stimuli_dir = Path("data/stimuli")
 for gen_cls in [
     MullerLyerGenerator, PonzoGenerator, EbbinghausGenerator,
     SimultaneousContrastGenerator, WhiteIllusionGenerator,
     ZollnerGenerator, PoggendorffGenerator,
-    ScintillatingGridGenerator, FraserSpiralGenerator,
+    ScintillatingGridGenerator, RotatingSnakesGenerator,
 ]:
     gen_cls().generate_dataset(stimuli_dir)
 print("Done.")

@@ -37,9 +37,9 @@ _TEXT_PROMPTS: dict[str, dict[str, str]] = {
         "other": "A pattern of lines with no clear parallel relationship.",
     },
     "motion": {
-        "correct": "A grid with bright white dots at every intersection.",
-        "illusory": "A grid where dark spots appear to flash at the intersections.",
-        "other": "A grid pattern.",
+        "correct": "A static pattern that appears still.",
+        "illusory": "A static pattern that appears to move or flicker.",
+        "other": "An abstract visual pattern.",
     },
     "impossible": {
         "correct": "A three-dimensional object that could exist in the real world.",
@@ -90,6 +90,17 @@ _ILLUSION_TYPE_PROMPTS: dict[str, dict[str, str]] = {
         "correct": "A diagonal line passing behind a rectangle, with the two visible segments perfectly aligned.",
         "illusory": "A diagonal line passing behind a rectangle, where the two segments look misaligned.",
         "other": "A rectangle with line segments on either side.",
+    },
+    # Motion
+    "scintillating_grid": {
+        "correct": "A grid with bright white dots at every intersection.",
+        "illusory": "A grid where dark spots appear to flash at the intersections.",
+        "other": "A grid pattern.",
+    },
+    "rotating_snakes": {
+        "correct": "A static pattern of circular colored rings that appears still.",
+        "illusory": "A static pattern of circular colored rings that appears to rotate.",
+        "other": "An abstract circular color pattern.",
     },
 }
 

@@ -53,10 +53,14 @@ motion:
     grid_lum: 200
     disc_lum: 255
 
-  fraser_spiral:
+  rotating_snakes:
     image_size: [512, 512]
-    segment_length: 6
-    line_width: 3
+    wheel_radius: 58
+    ring_width: 10
+    ring_gap: 2
+    n_rings: 4
+    segment_count: 48
+    background: [128, 128, 128]
 
 impossible:
   illusion_vqa:

@@ -21,7 +21,7 @@ from src.stimuli.base import StimulusPair, ANSWER_CORRECT, ANSWER_ILLUSORY
 from src.stimuli.geometric import MullerLyerGenerator, PonzoGenerator, EbbinghausGenerator
 from src.stimuli.color import SimultaneousContrastGenerator, WhiteIllusionGenerator
 from src.stimuli.angle import ZollnerGenerator, PoggendorffGenerator
-from src.stimuli.motion import ScintillatingGridGenerator, FraserSpiralGenerator
+from src.stimuli.motion import ScintillatingGridGenerator, RotatingSnakesGenerator
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -37,7 +37,7 @@ ALL_GENERATORS = [
     ZollnerGenerator,
     PoggendorffGenerator,
     ScintillatingGridGenerator,
-    FraserSpiralGenerator,
+    RotatingSnakesGenerator,
 ]
 
 

@@ -10,7 +10,7 @@ import sys; sys.path.insert(0, ".")
 from src.stimuli.geometric import MullerLyerGenerator, PonzoGenerator, EbbinghausGenerator
 from src.stimuli.color import SimultaneousContrastGenerator, WhiteIllusionGenerator
 from src.stimuli.angle import ZollnerGenerator, PoggendorffGenerator
-from src.stimuli.motion import ScintillatingGridGenerator, FraserSpiralGenerator
+from src.stimuli.motion import ScintillatingGridGenerator, RotatingSnakesGenerator
 from pathlib import Path
 
 stimuli_dir = Path("data/stimuli")
@@ -18,7 +18,7 @@ for gen_cls in [
     MullerLyerGenerator, PonzoGenerator, EbbinghausGenerator,
     SimultaneousContrastGenerator, WhiteIllusionGenerator,
     ZollnerGenerator, PoggendorffGenerator,
-    ScintillatingGridGenerator, FraserSpiralGenerator,
+    ScintillatingGridGenerator, RotatingSnakesGenerator,
 ]:
     gen = gen_cls()
     print(f"Generating {gen.illusion_type} …")

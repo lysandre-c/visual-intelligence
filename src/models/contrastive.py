@@ -207,9 +207,9 @@ _DEFAULT_PROMPTS: dict[str, dict[str, str]] = {
         "other": "The image shows a set of lines.",
     },
     "motion": {
-        "correct": "The grid intersections contain white dots.",
-        "illusory": "The grid intersections appear to flicker or appear dark.",
-        "other": "The image shows a grid pattern.",
+        "correct": "The static pattern appears still.",
+        "illusory": "The static pattern appears to move or flicker.",
+        "other": "The image shows an abstract pattern.",
     },
     "impossible": {
         "correct": "The object in the image is physically possible.",

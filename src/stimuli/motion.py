@@ -5,8 +5,8 @@ Illusions implemented
 - Scintillating Grid : bright spots at grid intersections appear to scintillate
   (flicker dark) when the image is viewed statically.
   Follows Sun & Dekel (2021) [doi:10.1167/jov.21.11.15].
-- Fraser Spiral      : concentric arcs that appear to form a spiral but are
-  actually circles.
+- Rotating Snakes    : asymmetric luminance/color cycles appear to rotate in
+  peripheral vision, despite being static.
 """
 
 from __future__ import annotations
@@ -112,165 +112,191 @@ class ScintillatingGridGenerator(StimulusGenerator):
         jitter_seed: int = 49,
     ) -> list[dict[str, Any]]:
         rng = np.random.default_rng(jitter_seed)
-        # Avoid tiny discs: the scintillation effect is weak or absent.
-        disc_radii = np.linspace(7, 18, n_levels).astype(int).tolist()
+        # Keep dots in a perceptual range where scintillation remains visible.
+        # Very large dots can suppress the effect, so cap the upper radius.
+        disc_radii = np.linspace(6, 13, n_levels).astype(int).tolist()
         grid: list[dict[str, Any]] = []
         for radius in disc_radii:
             for rep in range(n_repeats):
+                # Couple line thickness to dot size to preserve local contrast
+                # at intersections for larger radii.
+                line_base = int(round(0.65 * radius + 3))
+                line_width = int(np.clip(line_base + rng.integers(-1, 2), 6, 12))
                 grid.append({
                     "disc_radius": int(radius),
                     "repeat": rep,
                     "grid_spacing": int(rng.choice([44, 48, 52])),
-                    "grid_line_width": int(rng.choice([7, 8, 9])),
+                    "grid_line_width": line_width,
                 })
         return grid
 
 
 # ──────────────────────────────────────────────────────────────────────────────
-# Fraser Spiral
+# Rotating Snakes
 # ──────────────────────────────────────────────────────────────────────────────
 
-class FraserSpiralGenerator(StimulusGenerator):
-    """Fraser spiral (twisted cord) illusion.
+class RotatingSnakesGenerator(StimulusGenerator):
+    """Parametric Rotating Snakes illusion.
 
-    Concentric annuli are divided into alternating black/white *slanted*
-    tiles.  The true contours are circular, but the local slant cues create
-    a strong apparent spiral.  The control shows the same concentric layout
-    without slanted texture.
+    Circular "snakes" are built from repeated asymmetric luminance/color
+    cycles.  The ordered sequence creates a strong apparent rotation in
+    peripheral vision.  The control keeps the same circular segmentation but
+    uses a symmetric sequence without a consistent motion direction.
 
-    Sweep variable: number of rings (more rings → stronger spiral percept).
+    Sweep variable: wheel radius (larger snakes produce stronger peripheral
+    drift while preserving the same local pattern).
     """
 
     category = "motion"
-    illusion_type = "fraser_spiral"
+    illusion_type = "rotating_snakes"
 
     def __init__(
         self,
         image_size: tuple[int, int] = (512, 512),
-        tile_arc_length: int = 34,
-        ring_width: int = 16,
-        ring_gap: int = 8,
-        line_width: int = 4,
-        background: tuple[int, int, int] = (255, 255, 255),
+        wheel_radius: int = 58,
+        ring_width: int = 10,
+        ring_gap: int = 2,
+        n_rings: int = 4,
+        segment_count: int = 48,
+        background: tuple[int, int, int] = (128, 128, 128),
     ) -> None:
         self.image_size = image_size
-        self.tile_arc_length = tile_arc_length
+        self.wheel_radius = wheel_radius
         self.ring_width = ring_width
         self.ring_gap = ring_gap
-        self.line_width = line_width
+        self.n_rings = n_rings
+        self.segment_count = segment_count
         self.background = background
 
-    @staticmethod
-    def _annular_tile_points(
-        cx: int,
-        cy: int,
-        inner_r: float,
-        outer_r: float,
-        inner_a0: float,
-        inner_a1: float,
-        outer_a0: float,
-        outer_a1: float,
-        n_steps: int = 4,
-    ) -> list[tuple[int, int]]:
-        """Polygon points for one slanted annular tile."""
-        points: list[tuple[int, int]] = []
-        for a in np.linspace(outer_a0, outer_a1, n_steps):
-            points.append((int(cx + outer_r * math.cos(a)), int(cy + outer_r * math.sin(a))))
-        for a in np.linspace(inner_a1, inner_a0, n_steps):
-            points.append((int(cx + inner_r * math.cos(a)), int(cy + inner_r * math.sin(a))))
-        return points
-
-    def _draw_twisted_ring(
+    def _draw_luminance_ring(
         self,
         draw: ImageDraw.ImageDraw,
         cx: int,
         cy: int,
-        inner_r: float,
-        outer_r: float,
-        tile_arc_length: int,
-        slant_rad: float,
-        phase: float = 0.0,
-        black_fraction: float = 0.52,
+        outer_radius: int,
+        phase_deg: float,
+        direction: int,
+        illusion: bool,
     ) -> None:
-        """Draw one ring of alternating slanted black tiles.
+        palette = [
+            (0, 0, 0),
+            (45, 80, 210),
+            (255, 255, 255),
+            (245, 205, 30),
+        ]
+        control_palette = [
+            (0, 0, 0),
+            (255, 255, 255),
+            (0, 0, 0),
+            (255, 255, 255),
+        ]
+        colors = palette if illusion else control_palette
+        step = 360 / self.segment_count
+        bbox = [
+            cx - outer_radius,
+            cy - outer_radius,
+            cx + outer_radius,
+            cy + outer_radius,
+        ]
+        for segment_index in range(self.segment_count):
+            color_index = (direction * segment_index) % len(colors)
+            start = phase_deg + segment_index * step
+            draw.pieslice(bbox, start=start, end=start + step + 0.4, fill=colors[color_index])
 
-        Only black tiles are drawn; white tiles are the background.  The outer
-        angular coordinates are shifted relative to the inner coordinates,
-        producing the twisted-cord cue that drives the Fraser illusion.
-        """
-        mid_r = (inner_r + outer_r) / 2
-        n_tiles = max(24, int(2 * math.pi * mid_r / tile_arc_length))
-        step = 2 * math.pi / n_tiles
-        for i in range(n_tiles):
-            if i % 2 == 1:
-                continue
-            inner_a0 = phase + i * step
-            inner_a1 = inner_a0 + black_fraction * step
-            outer_a0 = inner_a0 + slant_rad
-            outer_a1 = inner_a1 + slant_rad
-            draw.polygon(
-                self._annular_tile_points(cx, cy, inner_r, outer_r, inner_a0, inner_a1, outer_a0, outer_a1),
-                fill=(0, 0, 0),
+        inner_radius = max(0, outer_radius - self.ring_width)
+        draw.ellipse(
+            [
+                cx - inner_radius,
+                cy - inner_radius,
+                cx + inner_radius,
+                cy + inner_radius,
+            ],
+            fill=self.background,
+        )
+
+    def _draw_wheel(
+        self,
+        draw: ImageDraw.ImageDraw,
+        cx: int,
+        cy: int,
+        wheel_radius: int,
+        phase_deg: float,
+        direction: int,
+        illusion: bool,
+    ) -> None:
+        for ring_index in range(self.n_rings):
+            outer_radius = wheel_radius - ring_index * (self.ring_width + self.ring_gap)
+            if outer_radius <= self.ring_width:
+                break
+            ring_phase = phase_deg + ring_index * 0.5 * (360 / self.segment_count)
+            self._draw_luminance_ring(
+                draw,
+                cx,
+                cy,
+                outer_radius,
+                ring_phase,
+                direction if ring_index % 2 == 0 else -direction,
+                illusion,
             )
 
     def _make_pair(
         self,
-        n_circles: int,
-        tile_arc_length: int | None = None,
+        wheel_radius: int | None = None,
+        n_rings: int | None = None,
+        segment_count: int | None = None,
         phase: float = 0.0,
-        radius_scale: float = 1.0,
-        slant_deg: float = 22.0,
-        ring_phase_step: float = 0.22,
+        wheel_grid: int = 3,
     ) -> tuple[Image.Image, Image.Image]:
         w, h = self.image_size
-        cx, cy = w // 2, h // 2
-        max_radius = min(cx, cy) - 8
-        tile_len = self.tile_arc_length if tile_arc_length is None else tile_arc_length
-        slant_rad = math.radians(slant_deg)
+        old_n_rings, old_segment_count = self.n_rings, self.segment_count
+        if n_rings is not None:
+            self.n_rings = n_rings
+        if segment_count is not None:
+            self.segment_count = segment_count
+        radius = self.wheel_radius if wheel_radius is None else wheel_radius
+        phase_deg = math.degrees(phase)
 
         illusion = Image.new("RGB", self.image_size, self.background)
         d = ImageDraw.Draw(illusion)
-        outer_max = int(max_radius * radius_scale)
-        total_band = n_circles * self.ring_width + (n_circles - 1) * self.ring_gap
-        inner_start = max(8, outer_max - total_band)
-        for idx in range(n_circles):
-            inner_r = inner_start + idx * (self.ring_width + self.ring_gap)
-            outer_r = inner_r + self.ring_width
-            ring_phase = phase + idx * ring_phase_step
-            self._draw_twisted_ring(
-                d, cx, cy, inner_r, outer_r,
-                tile_arc_length=tile_len,
-                slant_rad=slant_rad,
-                phase=ring_phase,
-            )
-            # Thin circular boundaries reinforce that the physical contour is circular.
-            d.ellipse(
-                [(cx - outer_r, cy - outer_r), (cx + outer_r, cy + outer_r)],
-                outline=(0, 0, 0),
-                width=max(1, self.line_width // 2),
-            )
-
         control = Image.new("RGB", self.image_size, self.background)
         dc = ImageDraw.Draw(control)
-        for idx in range(n_circles):
-            inner_r = inner_start + idx * (self.ring_width + self.ring_gap)
-            outer_r = inner_r + self.ring_width
-            dc.ellipse(
-                [(cx - outer_r, cy - outer_r), (cx + outer_r, cy + outer_r)],
-                outline=(0, 0, 0),
-                width=self.line_width,
-            )
+
+        xs = np.linspace(radius + 18, w - radius - 18, wheel_grid)
+        ys = np.linspace(radius + 18, h - radius - 18, wheel_grid)
+        for row, cy in enumerate(ys):
+            for col, cx in enumerate(xs):
+                direction = 1 if (row + col) % 2 == 0 else -1
+                local_phase = phase_deg + (row * wheel_grid + col) * 17
+                self._draw_wheel(
+                    d,
+                    int(cx),
+                    int(cy),
+                    radius,
+                    local_phase,
+                    direction,
+                    illusion=True,
+                )
+                self._draw_wheel(
+                    dc,
+                    int(cx),
+                    int(cy),
+                    radius,
+                    local_phase,
+                    direction,
+                    illusion=False,
+                )
+
+        self.n_rings, self.segment_count = old_n_rings, old_segment_count
 
         return illusion, control
 
     def generate(self, params: dict[str, Any]) -> StimulusPair:
         illusion, control = self._make_pair(
-            int(params["n_circles"]),
-            tile_arc_length=int(params.get("tile_arc_length", self.tile_arc_length)),
+            wheel_radius=int(params.get("wheel_radius", self.wheel_radius)),
+            n_rings=int(params.get("n_rings", self.n_rings)),
+            segment_count=int(params.get("segment_count", self.segment_count)),
             phase=float(params.get("phase", 0.0)),
-            radius_scale=float(params.get("radius_scale", 1.0)),
-            slant_deg=float(params.get("slant_deg", 22.0)),
-            ring_phase_step=float(params.get("ring_phase_step", 0.22)),
+            wheel_grid=int(params.get("wheel_grid", 3)),
         )
         return StimulusPair(
             illusion=illusion,
@@ -284,23 +310,21 @@ class FraserSpiralGenerator(StimulusGenerator):
 
     def param_grid(
         self,
+        n_levels: int = 16,
         n_repeats: int = 30,
         jitter_seed: int = 50,
     ) -> list[dict[str, Any]]:
         rng = np.random.default_rng(jitter_seed)
-        # Start at 7 rings; fewer are often too sparse to produce a strong
-        # spiral percept.  The sweep remains interpretable as "more rings".
-        n_circles_values = [7, 9, 11, 13, 15, 17]
+        wheel_radii = np.linspace(46, 62, n_levels).astype(int).tolist()
         grid: list[dict[str, Any]] = []
-        for n_circles in n_circles_values:
+        for radius in wheel_radii:
             for rep in range(n_repeats):
                 grid.append({
-                    "n_circles": int(n_circles),
+                    "wheel_radius": int(radius),
                     "repeat": rep,
-                    "tile_arc_length": int(rng.choice([30, 34, 38])),
+                    "n_rings": int(rng.choice([3, 4])),
+                    "segment_count": int(rng.choice([40, 48, 56])),
                     "phase": float(round(rng.uniform(0, 2 * math.pi), 3)),
-                    "radius_scale": float(round(rng.uniform(0.95, 1.0), 3)),
-                    "slant_deg": float(round(rng.uniform(18, 28), 2)),
-                    "ring_phase_step": float(round(rng.uniform(0.16, 0.28), 3)),
+                    "wheel_grid": 3,
                 })
         return grid

@@ -33,7 +33,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from src.stimuli.geometric import MullerLyerGenerator, PonzoGenerator, EbbinghausGenerator
 from src.stimuli.color import SimultaneousContrastGenerator, WhiteIllusionGenerator
 from src.stimuli.angle import ZollnerGenerator, PoggendorffGenerator
-from src.stimuli.motion import ScintillatingGridGenerator, FraserSpiralGenerator
+from src.stimuli.motion import ScintillatingGridGenerator, RotatingSnakesGenerator
 from src.stimuli.base import StimulusGenerator
 from src.stimuli.impossible import ExternalDatasetLoader
 from src.models.cnn import ResNetProber, ConvNeXtProber
@@ -67,7 +67,7 @@ GENERATOR_REGISTRY: dict[str, type[StimulusGenerator]] = {
     "zollner": ZollnerGenerator,
     "poggendorff": PoggendorffGenerator,
     "scintillating_grid": ScintillatingGridGenerator,
-    "fraser_spiral": FraserSpiralGenerator,
+    "rotating_snakes": RotatingSnakesGenerator,
 }
 
 EXTERNAL_DATASETS = {"illusion_vqa", "hallusion_bench"}
@@ -82,7 +82,7 @@ SWEEP_PARAM: dict[str, str] = {
     "zollner": "hatch_angle_deg",
     "poggendorff": "occluder_width",
     "scintillating_grid": "disc_radius",
-    "fraser_spiral": "n_circles",
+    "rotating_snakes": "wheel_radius",
 }
 
 

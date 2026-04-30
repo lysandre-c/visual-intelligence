@@ -43,7 +43,7 @@ full_eval:
     - category: motion
       illusion_type: scintillating_grid
     - category: motion
-      illusion_type: fraser_spiral
+      illusion_type: rotating_snakes
     # External datasets require manual download first
     - category: impossible
       illusion_type: illusion_vqa
