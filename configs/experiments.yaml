@@ -113,5 +113,7 @@ human_baselines:
   motion:     0.70   # PLACEHOLDER — see notes above (use Sun & Dekel 2021)
   impossible: 0.09   # derived from IllusionVQA human accuracy 91.03%
 
-# Control-ceiling threshold for HEAS validity
-control_ceiling_threshold: 0.80
+# Control-ceiling threshold for HEAS validity.
+# Set to -1 to use "argmax mode" (argmax correct = pass).
+# This is calibration-free and essential for contrastive models.
+control_ceiling_threshold: -1

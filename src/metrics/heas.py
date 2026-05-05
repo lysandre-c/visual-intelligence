@@ -7,9 +7,8 @@ Definition (from the proposal)
 where
   - ``m``  is the model identifier,
   - ``c``  is the illusion category,
-  - ``p_model_illusory`` is the fraction of illusion stimuli (for which the
-    model correctly handles the *control*) where the model chose the
-    human-illusory answer,
+  - ``p_model_illusory`` is the fraction of stimuli where the model chose
+    the human-illusory answer (after filtering by control accuracy if applicable),
   - ``p_human_illusory`` is the corresponding human proportion from published
     psychophysics data.
 
@@ -17,12 +16,13 @@ A score of 1.0 means the model fails exactly as often as humans.
 A score of 0.0 means the model's susceptibility rate is as far as possible
 from the human baseline.
 
-Note: HEAS is only meaningful when control accuracy exceeds a ceiling
-threshold; the caller is responsible for pre-filtering.
+Note: HEAS is traditionally meaningful when control accuracy exceeds a ceiling
+threshold. We apply this filter to programmatic categories but skip it for
+the 'impossible' category.
 
 Functions
 ---------
-compute_heas(model_results, human_baselines, control_ceiling_threshold)
+compute_heas(model_results, human_illusory_rate, control_ceiling_threshold, category)
     Compute HEAS for a single (model, category) pair.
 
 heas_table(all_results, human_baselines, control_ceiling_threshold)
@@ -43,6 +43,7 @@ def compute_heas(
     model_results: list[dict[str, Any]],
     human_illusory_rate: float,
     control_ceiling_threshold: float = 0.80,
+    category: str | None = None,
 ) -> dict[str, Any]:
     """Compute HEAS for one (model, category) slice of results.
 
@@ -57,7 +58,9 @@ def compute_heas(
         (from published psychophysics, range [0, 1]).
     control_ceiling_threshold :
         Stimuli whose control-image ``correct`` probability is below this
-        threshold are excluded.  Defaults to 0.80.
+        threshold are excluded.  Defaults to 0.80.  Set to -1 for argmax mode.
+    category :
+        The illusion category. If "impossible", the control check is skipped.
 
     Returns
     -------
@@ -71,15 +74,23 @@ def compute_heas(
     included = []
     excluded = 0
 
+    # Skip control check for impossible category as no physical controls exist
+    # (control_path defaults to illusion_path in the loader).
+    skip_check = (category == "impossible")
+
     for r in model_results:
+        if skip_check:
+            included.append(r)
+            continue
+
         raw = r.get("raw") or {}
         ctrl_probs = raw.get("probs_control") or None
 
         if control_ceiling_threshold < 0:
             # Argmax mode (threshold=-1): pass if the control image's most
-            # confident class is "correct" (index 0).  Used for contrastive
-            # models where raw softmax values are not probability-calibrated.
+            # confident class is "correct" (index 0).
             if ctrl_probs is not None:
+                # Use cached argmax if available, otherwise compute it
                 passes = raw.get("ctrl_argmax_correct", int(ctrl_probs.index(max(ctrl_probs))) == 0)
             else:
                 passes = r.get("correct", 0.0) >= r.get("illusory", 0.0)
@@ -98,7 +109,6 @@ def compute_heas(
 
     n = len(included)
     if n == 0:
-        logger.warning("No stimuli passed the control-ceiling filter (threshold=%.2f).", control_ceiling_threshold)
         return {
             "heas": float("nan"),
             "p_model_illusory": float("nan"),
@@ -131,8 +141,7 @@ def heas_table(
     ----------
     all_results :
         Concatenated results from all models and all categories.
-        Each dict must have ``model``, ``category``, and the
-        response-distribution keys.
+        Each dict must have ``model``, ``category``, and ``predicted_label``.
     human_baselines :
         Mapping ``{category: p_human_illusory}``.
         Categories absent from this dict are skipped.
@@ -143,27 +152,31 @@ def heas_table(
     -------
     pd.DataFrame
         Index = category, columns = model name, values = HEAS score.
-        NaN indicates the model was excluded for that category.
     """
     df = pd.DataFrame(all_results)
+    if df.empty:
+        return pd.DataFrame()
+
     models = df["model"].unique().tolist()
     categories = [c for c in df["category"].unique() if c in human_baselines]
 
-    rows = {}
+    rows = []
     for category in categories:
-        rows[category] = {}
-        h_rate = human_baselines[category]
+        human_rate = human_baselines[category]
+        row = {"category": category}
         for model in models:
-            subset = df[(df["category"] == category) & (df["model"] == model)].to_dict("records")
-            if not subset:
-                rows[category][model] = float("nan")
-                continue
-            result = compute_heas(subset, h_rate, control_ceiling_threshold)
-            rows[category][model] = result["heas"]
-            logger.info(
-                "HEAS[%s, %s] = %.3f  (p_model=%.3f, p_human=%.3f, n=%d, excluded=%d)",
-                category, model, result["heas"], result["p_model_illusory"],
-                result["p_human_illusory"], result["n_stimuli"], result["n_excluded"],
-            )
+            subset_df = df[(df["category"] == category) & (df["model"] == model)]
+            if subset_df.empty:
+                row[model] = float("nan")
+            else:
+                subset_list = subset_df.to_dict("records")
+                res = compute_heas(
+                    subset_list, 
+                    human_rate, 
+                    control_ceiling_threshold,
+                    category=category
+                )
+                row[model] = res["heas"]
+        rows.append(row)
 
-    return pd.DataFrame(rows).T  # rows = categories, columns = models
+    return pd.DataFrame(rows).set_index("category")

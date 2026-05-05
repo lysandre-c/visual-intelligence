@@ -111,16 +111,20 @@ def _is_vlm(model_name: str) -> bool:
     return model_name in {"llava_1.5", "qwen_vl"}
 
 
-def _make_probe_train_data(category: str, n_per_class: int = 150) -> tuple[list, list[int]]:
+def _make_probe_train_data(category: str, n_per_class: int = 400) -> tuple[list, list[int]]:
     """Generate synthetic non-illusion probe training data for a given category."""
     try:
         pdg = ProbeDataGenerator(n_per_class=n_per_class)
+        if category == "geometric":
+            # MullerLyerGenerator is the primary geometric stimulus
+            gen = MullerLyerGenerator()
+            return pdg.muller_lyer_from_generator(gen)
         return pdg.for_category(category)
-    except ValueError:
-        # Fallback for categories without a dedicated generator (motion, impossible)
-        # Use geometric_length as a generic line-drawing proxy
+    except Exception as e:
+        logger.warning("Falling back to generic probe data for %s: %s", category, e)
         pdg = ProbeDataGenerator(n_per_class=n_per_class)
         return pdg.geometric_length(seed=0)
+
 
 
 def _plot_diagnostics(diagnostics_df: pd.DataFrame, out_dir: Path) -> None:

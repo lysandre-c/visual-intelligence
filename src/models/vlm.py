@@ -193,7 +193,7 @@ class LLaVAProber(VLMProber):
             }
         else:
             kwargs = {"device_map": "auto"}
-        self._pipe = pipeline("image-to-text", model=self.hf_model_id, **kwargs)
+        self._pipe = pipeline("image-text-to-text", model=self.hf_model_id, **kwargs)
 
     def _query(self, image: Image.Image, prompt: str) -> str:
         if self._pipe is None:

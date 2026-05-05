@@ -90,7 +90,7 @@ def compute_attention_rollout(
     def make_attn_hook(attn_module):
         original_fwd = attn_module.forward
 
-        def forward_with_attn(x_in):
+        def forward_with_attn(x_in, *args, **kwargs):
             B, N, C = x_in.shape
             qkv = attn_module.qkv(x_in).reshape(
                 B, N, 3, attn_module.num_heads, C // attn_module.num_heads
@@ -98,6 +98,12 @@ def compute_attention_rollout(
             q, k, v = qkv.unbind(0)
             scale = (C // attn_module.num_heads) ** -0.5
             attn_w = (q @ k.transpose(-2, -1)) * scale
+
+            # If an attention mask is provided in kwargs, apply it before softmax
+            attn_mask = kwargs.get("attn_mask", None)
+            if attn_mask is not None:
+                attn_w = attn_w + attn_mask
+
             attn_w = attn_w.softmax(dim=-1)
             attention_matrices.append(attn_w.detach().cpu())
             x_out = (attn_w @ v).transpose(1, 2).reshape(B, N, C)
