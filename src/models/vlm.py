@@ -211,7 +211,7 @@ class LLaVAProber(VLMProber):
 
         processor = AutoProcessor.from_pretrained(self.hf_model_id)
         formatted = processor.apply_chat_template(conversation, add_generation_prompt=True)
-        outputs = self._pipe(image, prompt=formatted, generate_kwargs={"max_new_tokens": 10})
+        outputs = self._pipe(image, text=formatted, generate_kwargs={"max_new_tokens": 10})
         return outputs[0]["generated_text"].strip()
 
 

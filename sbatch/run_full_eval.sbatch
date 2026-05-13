@@ -5,7 +5,7 @@
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
 #SBATCH --gres=gpu:1
-#SBATCH --time=12:00:00
+#SBATCH --time=24:00:00
 #SBATCH --output=logs/full_eval_%j.log
 #SBATCH --error=logs/full_eval_%j.err
 
@@ -25,7 +25,7 @@ mkdir -p logs
 # 2. Run all models on all illusions
 # 3. Compute HEAS metrics
 # 4. Generate the HEAS table heatmap
-python experiments/full_eval.py --device cuda --verbose
+python experiments/full_eval.py --device cuda --verbose --skip-generate
 
 # Generate saliency heatmaps for presentation
 echo "Generating saliency visualizations..."

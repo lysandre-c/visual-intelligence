@@ -1,6 +1,7 @@
 results/
 data/stimuli/
 data/external/
+logs/
 __pycache__/
 *.pyc
 *.pyo

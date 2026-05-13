@@ -257,6 +257,14 @@ def run_full_eval(args: argparse.Namespace) -> None:
                 generator.generate_dataset(stimuli_dir, manifest_path=manifest_path)
                 pairs = generator.load_manifest(manifest_path)
 
+            results_path = out_dir / f"{model_name}_{illusion_type}_results.json"
+            if results_path.exists():
+                logger.info("Loading existing evaluated results for %s on %s from %s", model_name, illusion_type, results_path)
+                with open(results_path, "r") as fh:
+                    results = json.load(fh)
+                all_results.extend(results)
+                continue
+
             logger.info("Probing %d pairs with %s …", len(pairs), model_name)
 
             if _is_vlm(model_name):
@@ -277,6 +285,9 @@ def run_full_eval(args: argparse.Namespace) -> None:
             else:
                 zs = ZeroShotProtocol(prober)
                 results = zs.probe_dataset(pairs, verbose=args.verbose)
+
+            with open(results_path, "w") as fh:
+                json.dump(results, fh, indent=2, default=str)
 
             all_results.extend(results)
 
