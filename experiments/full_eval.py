@@ -297,6 +297,21 @@ def run_full_eval(args: argparse.Namespace) -> None:
             import torch
             torch.cuda.empty_cache()
 
+        # Free disk space to avoid cluster disk quota limits with large VLMs
+        if _is_vlm(model_name):
+            import gc
+            import shutil
+            from huggingface_hub import constants
+            gc.collect()
+            try:
+                hf_cache = Path(constants.HF_HUB_CACHE)
+                for p in hf_cache.glob("models--*"):
+                    if "llava" in p.name.lower() or "qwen" in p.name.lower():
+                        logger.info("Removing HuggingFace cache directory to free disk space: %s", p)
+                        shutil.rmtree(p, ignore_errors=True)
+            except Exception as e:
+                logger.warning("Error removing HF cache: %s", e)
+
     # ------------------------------------------------------------------
     # HEAS table
     # ------------------------------------------------------------------

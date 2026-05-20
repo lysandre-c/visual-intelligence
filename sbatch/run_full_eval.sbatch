@@ -9,6 +9,9 @@
 #SBATCH --output=logs/full_eval_%j.log
 #SBATCH --error=logs/full_eval_%j.err
 
+# Exit immediately if a command exits with a non-zero status.
+set -e
+
 # Load modules (adjust based on your cluster's available modules)
 # module load gcc/11.3.0 python/3.11.2 cuda/11.8.0
 
@@ -28,7 +31,7 @@ mkdir -p logs
 python experiments/full_eval.py --device cuda --verbose --skip-generate
 
 # Generate saliency heatmaps for presentation
-echo "Generating saliency visualizations..."
-python experiments/visualize_saliency.py --device cuda
+# echo "Generating saliency visualizations..."
+# python experiments/visualize_saliency.py --device cuda
 
 echo "Evaluation and visualization complete. Results are in results/full/ and results/visualizations/"
