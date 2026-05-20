@@ -13,7 +13,7 @@ torchvision>=0.17
 timm>=1.0
 
 # Vision-language models
-transformers>=4.40
+transformers==4.37.2
 accelerate>=0.29
 sentencepiece>=0.2
 requests
