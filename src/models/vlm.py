@@ -14,6 +14,11 @@ from typing import Any
 
 from PIL import Image
 
+import transformers.integrations.bitsandbytes
+def skip_check(*args, **kwargs):
+    return True
+transformers.integrations.bitsandbytes.validate_bnb_backend_availability = skip_check
+
 from .base import ModelProber, ResponseDistribution
 
 
@@ -166,15 +171,18 @@ class LLaVAProber(VLMProber):
         seed: int = 42,
         device: str | None = None,
         load_in_4bit: bool = False,
+        adapter_path: str | None = None,
     ) -> None:
         super().__init__(n_orderings, n_framings, seed, device)
         self.hf_model_id = hf_model_id
         self._pipe = None  # Lazy loading
         self._load_in_4bit = load_in_4bit
+        self.adapter_path = adapter_path
 
     def _load_model(self) -> None:
-        from transformers import pipeline, BitsAndBytesConfig  # type: ignore
+        from transformers import pipeline, BitsAndBytesConfig, AutoProcessor  # type: ignore
         import torch
+        self.processor = AutoProcessor.from_pretrained(self.hf_model_id)
 
         # BitsAndBytes quantisation requires CUDA; skip on MPS/CPU.
         if self._load_in_4bit and torch.cuda.is_available():
@@ -193,7 +201,11 @@ class LLaVAProber(VLMProber):
             }
         else:
             kwargs = {"device_map": "auto"}
-        self._pipe = pipeline("image-text-to-text", model=self.hf_model_id, **kwargs)
+        self._pipe = pipeline("image-to-text", model=self.hf_model_id, **kwargs)
+
+        if self.adapter_path is not None:
+            from peft import PeftModel
+            self._pipe.model = PeftModel.from_pretrained(self._pipe.model, self.adapter_path)
 
     def _query(self, image: Image.Image, prompt: str) -> str:
         if self._pipe is None:
@@ -207,11 +219,8 @@ class LLaVAProber(VLMProber):
                 ],
             }
         ]
-        from transformers import AutoProcessor  # type: ignore
-
-        processor = AutoProcessor.from_pretrained(self.hf_model_id)
-        formatted = processor.apply_chat_template(conversation, add_generation_prompt=True)
-        outputs = self._pipe(image, text=formatted, generate_kwargs={"max_new_tokens": 10})
+        formatted = self.processor.apply_chat_template(conversation, add_generation_prompt=True)
+        outputs = self._pipe(image, prompt=formatted, generate_kwargs={"max_new_tokens": 150})
         return outputs[0]["generated_text"].strip()
 
 

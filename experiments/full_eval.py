@@ -96,6 +96,7 @@ def _build_model(model_name: str, device: str | None, out_dir: Path) -> object:
         "clip_vit_b32": lambda: CLIPProber(device=device),
         "dinov2_vit_b14": lambda: DINOv2Prober(device=device),
         "llava_1.5": lambda: LLaVAProber(device=device),
+        "llava_1.5_dpo": lambda: LLaVAProber(device=device, adapter_path="results/rl_alignment/checkpoint-1000"),
         "qwen_vl": lambda: QwenVLProber(device=device),
     }
     if model_name not in registry:
