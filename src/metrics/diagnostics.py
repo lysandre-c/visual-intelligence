@@ -45,7 +45,9 @@ def output_diagnostics(results: list[dict[str, Any]]) -> dict[str, Any]:
     ctrl_ok = 0
     ctrl_total = 0
     for r in results:
-        raw = r.get("raw") or {}
+        raw = r.get("raw")
+        if not isinstance(raw, dict):
+            raw = {}
         ctrl_probs = raw.get("probs_control")
         if ctrl_probs is None:
             continue

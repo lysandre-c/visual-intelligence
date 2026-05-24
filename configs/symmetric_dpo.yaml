@@ -1,0 +1,56 @@
+# Symmetric Polarity-Inverted DPO configuration.
+# This file documents the default hyperparameters for the training script.
+# Pass individual overrides via CLI, e.g.:
+#   python src/rl/dpo_train.py --beta 0.2 --max_steps 2000
+
+# ── Model ───────────────────────────────────────────────────────────────
+model:
+  hf_model_id: llava-hf/llava-1.5-7b-hf
+  lora_r: 64
+  lora_alpha: 16
+  lora_dropout: 0.05
+  lora_target_modules:
+    - q_proj
+    - k_proj
+    - v_proj
+    - o_proj
+    - gate_proj
+    - up_proj
+    - down_proj
+
+# ── Polarity DPO Loss ──────────────────────────────────────────────────
+# L(θ) = L_DPO + γ·L_Sym + λ·L_Margin + η·L_AncPO
+loss:
+  beta: 0.1        # DPO temperature
+  gamma: 1.0       # Symmetric polarity weight
+  lambda: 0.5      # Margin consistency weight
+  eta: 0.1         # Anchored preference weight
+
+# ── Training ────────────────────────────────────────────────────────────
+training:
+  max_steps: 1000
+  per_device_train_batch_size: 1
+  gradient_accumulation_steps: 4
+  learning_rate: 5.0e-5
+  weight_decay: 0.01
+  warmup_ratio: 0.05
+  bf16: true
+  gradient_checkpointing: true
+  save_steps: 100
+  logging_steps: 10
+  report_to: tensorboard
+  max_length: 1024
+
+# ── Data ────────────────────────────────────────────────────────────────
+data:
+  dataset_path: data/rl/dataset.jsonl
+  control_data_ratio: 0.2    # Fraction of non-illusion VQA control data
+  symbol_demo: true           # Replace A/B/C with ♣/♠/♦ (SymDPO)
+  option_shuffle: true        # Randomise MC option order per sample
+  max_per_illusion: 60        # Max stimulus pairs per illusion type
+
+# ── Parameter allocation summary ────────────────────────────────────────
+# Frozen:     vision_tower (CLIP ViT)      ~304M params
+# Trainable:  multi_modal_projector (MLP)   ~4M params
+# Trainable:  LoRA adapters (language LM)   ~20M params (rank 64)
+# Reference:  full frozen copy              ~7B params (no grad)
