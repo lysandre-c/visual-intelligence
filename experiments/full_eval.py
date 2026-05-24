@@ -52,7 +52,7 @@ from src.analysis.plots import plot_heas_table, plot_psychometric_curves, save_f
 logging.basicConfig(level=logging.INFO, format="%(levelname)s  %(message)s")
 logger = logging.getLogger(__name__)
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
+PROJECT_ROOT = Path("/home/herrsche/visual-intelligence/")
 
 # ──────────────────────────────────────────────────────────────────────────────
 # Registry
@@ -286,6 +286,9 @@ def run_full_eval(args: argparse.Namespace) -> None:
             else:
                 zs = ZeroShotProtocol(prober)
                 results = zs.probe_dataset(pairs, verbose=args.verbose)
+
+            for r in results:
+                r["model"] = model_name
 
             with open(results_path, "w") as fh:
                 json.dump(results, fh, indent=2, default=str)

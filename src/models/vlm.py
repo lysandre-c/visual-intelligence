@@ -138,19 +138,19 @@ class VLMProber(ModelProber):
         letters = ["A", "B", "C"]
         label_order = ["correct", "illusory", "other"]
 
-        responses: list[tuple[str, dict[str, str]]] = []
+        # Randomly sample 1 ordering per image to average out bias over the dataset (8x faster)
+        shuffled = list(zip(letters, label_order))
+        self._rng.shuffle(shuffled)
+        options = [(l, descriptions[lbl]) for l, lbl in shuffled]
+        letter_to_label = {l: lbl for l, lbl in shuffled}
 
-        for _ in range(self.n_orderings):
-            shuffled = list(zip(letters, label_order))
-            self._rng.shuffle(shuffled)
-            options = [(l, descriptions[lbl]) for l, lbl in shuffled]
-            letter_to_label = {l: lbl for l, lbl in shuffled}
-
-            for framing in ["neutral", "name_blind"][: self.n_framings]:
-                prompt = self._build_prompt(question, options, framing)
-                raw_out = self._query(illusion, prompt)
-                responses.append((raw_out, letter_to_label))
-
+        # Randomly sample 1 framing per image
+        framing = self._rng.choice(["neutral", "name_blind"])
+        
+        prompt = self._build_prompt(question, options, framing)
+        raw_out = self._query(illusion, prompt)
+        
+        responses = [(raw_out, letter_to_label)]
         return self._aggregate_responses(responses)
 
 
