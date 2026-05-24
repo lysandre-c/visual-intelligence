@@ -14,3 +14,4 @@ build/
 *.pt
 *.pth
 *.safetensors
+sbatch/run_symmetric_dpo.sbatch
