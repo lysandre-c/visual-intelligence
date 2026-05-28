@@ -138,9 +138,9 @@ class VLMProber(ModelProber):
         letters = ["A", "B", "C"]
         label_order = ["correct", "illusory", "other"]
 
-        # Randomly sample 1 ordering per image to average out bias over the dataset (8x faster)
+        # Randomly sample 1 ordering per image to average out bias over the dataset
+        self._rng.shuffle(label_order)
         shuffled = list(zip(letters, label_order))
-        self._rng.shuffle(shuffled)
         options = [(l, descriptions[lbl]) for l, lbl in shuffled]
         letter_to_label = {l: lbl for l, lbl in shuffled}
 
@@ -148,10 +148,37 @@ class VLMProber(ModelProber):
         framing = self._rng.choice(["neutral", "name_blind"])
         
         prompt = self._build_prompt(question, options, framing)
+        
+        # Query illusion image
         raw_out = self._query(illusion, prompt)
         
+        # Query control image (only if not impossible category)
+        ctrl_probs = None
+        ctrl_argmax_correct = False
+        if category != "impossible":
+            raw_out_ctrl = self._query(control, prompt)
+            ctrl_chosen = raw_out_ctrl.strip().upper()[:1]
+            ctrl_label = letter_to_label.get(ctrl_chosen, "other")
+            
+            ctrl_probs = [0.0, 0.0, 0.0]
+            if ctrl_label == "correct":
+                ctrl_probs[0] = 1.0
+            elif ctrl_label == "illusory":
+                ctrl_probs[1] = 1.0
+            else:
+                ctrl_probs[2] = 1.0
+            ctrl_argmax_correct = (ctrl_label == "correct")
+
         responses = [(raw_out, letter_to_label)]
-        return self._aggregate_responses(responses)
+        dist = self._aggregate_responses(responses)
+        
+        if dist.raw is None:
+            dist.raw = {}
+        if ctrl_probs is not None:
+            dist.raw["probs_control"] = ctrl_probs
+            dist.raw["ctrl_argmax_correct"] = ctrl_argmax_correct
+            
+        return dist
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -220,8 +247,11 @@ class LLaVAProber(VLMProber):
             }
         ]
         formatted = self.processor.apply_chat_template(conversation, add_generation_prompt=True)
-        outputs = self._pipe(image, prompt=formatted, generate_kwargs={"max_new_tokens": 150})
-        return outputs[0]["generated_text"].strip()
+        outputs = self._pipe(image, prompt=formatted, generate_kwargs={"max_new_tokens": 16})
+        text = outputs[0]["generated_text"].strip()
+        if "ASSISTANT:" in text:
+            text = text.split("ASSISTANT:")[-1].strip()
+        return text
 
 
 # ──────────────────────────────────────────────────────────────────────────────

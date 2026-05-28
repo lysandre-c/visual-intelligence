@@ -105,6 +105,7 @@ class VLMProtocol:
                     "model": self.prober.model_name,
                     **dist.normalise().as_dict(),
                     "predicted_label": dist.to_label(),
+                    "raw": dist.raw,
                 }
             )
         return results

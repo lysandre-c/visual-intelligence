@@ -110,14 +110,18 @@ def generate_dpo_dataset(output_dir="data/rl"):
             pair = gen.generate(params)
             
             # Save illusion image
-            img_filename = f"{illusion_type}_{i}.png"
+            img_filename = f"{illusion_type}_{i}_illusion.png"
             pair.illusion.save(img_dir / img_filename)
+            
+            # Save control image
+            ctrl_filename = f"{illusion_type}_{i}_control.png"
+            pair.control.save(img_dir / ctrl_filename)
             
             # Construct multiple-choice DPO triplet
             letters = ["A", "B", "C"]
             label_order = ["correct", "illusory", "other"]
+            random.shuffle(label_order)
             shuffled = list(zip(letters, label_order))
-            random.shuffle(shuffled)
             options = [(l, descriptions[lbl]) for l, lbl in shuffled]
             
             # Find which letter maps to illusory and correct
@@ -130,13 +134,26 @@ def generate_dpo_dataset(output_dir="data/rl"):
             # Match LLaVA template syntax used in DPO training
             prompt = f"USER: <image>\n{base_prompt}\nASSISTANT:"
             
+            # Add illusion triplet
             metadata.append({
                 "image": str(Path(output_dir) / "images" / img_filename),
                 "prompt": prompt,
                 "chosen": illusory_letter,
                 "rejected": correct_letter,
                 "category": cat,
-                "illusion_type": illusion_type
+                "illusion_type": illusion_type,
+                "stimulus_type": "illusion"
+            })
+            
+            # Add control triplet (answers flipped)
+            metadata.append({
+                "image": str(Path(output_dir) / "images" / ctrl_filename),
+                "prompt": prompt,
+                "chosen": correct_letter,
+                "rejected": illusory_letter,
+                "category": cat,
+                "illusion_type": illusion_type,
+                "stimulus_type": "control"
             })
 
     # Save metadata as JSONL
