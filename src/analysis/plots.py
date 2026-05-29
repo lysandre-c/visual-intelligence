@@ -208,6 +208,139 @@ def plot_heas_bar(
 
 
 # ──────────────────────────────────────────────────────────────────────────────
+# HEAS comparison: base vs DPO
+# ──────────────────────────────────────────────────────────────────────────────
+
+def plot_heas_comparison_bar(
+    base_heas: dict[str, float],
+    dpo_heas: dict[str, float],
+    categories: list[str] | None = None,
+    figsize: tuple[float, float] = (8, 5),
+    title: str = "HEAS: Base LLaVA vs SymDPO",
+) -> plt.Figure:
+    """Grouped bar chart comparing HEAS scores per category.
+
+    Parameters
+    ----------
+    base_heas : {category: HEAS score} for the base model.
+    dpo_heas  : {category: HEAS score} for the DPO model.
+    categories: Explicit ordering.  Defaults to sorted union of keys.
+    figsize   : Figure size.
+    title     : Figure title.
+
+    Returns
+    -------
+    matplotlib.figure.Figure
+    """
+    if categories is None:
+        categories = sorted(set(base_heas) | set(dpo_heas))
+
+    x = np.arange(len(categories))
+    width = 0.35
+
+    base_vals = [base_heas.get(c, float("nan")) for c in categories]
+    dpo_vals = [dpo_heas.get(c, float("nan")) for c in categories]
+
+    fig, ax = plt.subplots(figsize=figsize)
+    bars1 = ax.bar(x - width / 2, base_vals, width, label="LLaVA-1.5 (base)",
+                   color="#5b9bd5", edgecolor="white")
+    bars2 = ax.bar(x + width / 2, dpo_vals, width, label="LLaVA SymDPO",
+                   color="#ed7d31", edgecolor="white")
+
+    # Annotate delta above each DPO bar
+    for i, (b, d) in enumerate(zip(base_vals, dpo_vals)):
+        if not (np.isnan(b) or np.isnan(d)):
+            delta = d - b
+            sign = "+" if delta >= 0 else ""
+            color = "#2e7d32" if delta >= 0 else "#c62828"
+            y_pos = max(b, d) + 0.02
+            ax.text(x[i] + width / 2, y_pos, f"{sign}{delta:.2f}",
+                    ha="center", va="bottom", fontsize=8, fontweight="bold",
+                    color=color)
+
+    ax.set_ylim(0, 1.15)
+    ax.set_ylabel("HEAS", fontsize=10)
+    ax.set_title(title, fontsize=12)
+    ax.set_xticks(x)
+    ax.set_xticklabels(categories, fontsize=9)
+    ax.axhline(0.5, color="grey", linestyle="--", linewidth=1, alpha=0.5)
+    ax.legend(fontsize=9, loc="upper left")
+    ax.grid(axis="y", alpha=0.3)
+    fig.tight_layout()
+    return fig
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# GradCAM comparison: base vs DPO (3-panel)
+# ──────────────────────────────────────────────────────────────────────────────
+
+def plot_gradcam_comparison(
+    image: Any,  # PIL.Image.Image
+    cam_base: np.ndarray,
+    cam_dpo: np.ndarray,
+    title: str = "",
+    alpha: float = 0.5,
+    cmap: str = "jet",
+    figsize: tuple[float, float] = (15, 5),
+) -> plt.Figure:
+    """Side-by-side GradCAM overlay: original | base CAM | DPO CAM.
+
+    Parameters
+    ----------
+    image    : The stimulus PIL image.
+    cam_base : GradCAM heatmap from the base model, shape (H, W), [0, 1].
+    cam_dpo  : GradCAM heatmap from the DPO model, same shape.
+    title    : Super-title for the figure.
+    alpha    : Overlay transparency.
+    cmap     : Colourmap for the saliency.
+    figsize  : Figure size.
+
+    Returns
+    -------
+    matplotlib.figure.Figure
+    """
+    from PIL import Image as PImage
+
+    img_arr = np.array(image)
+    h, w = img_arr.shape[:2]
+
+    def _resize_cam(cam: np.ndarray) -> np.ndarray:
+        if cam.shape != (h, w):
+            sal_img = PImage.fromarray((cam * 255).astype(np.uint8)).resize(
+                (w, h), resample=PImage.BICUBIC
+            )
+            return np.array(sal_img, dtype=np.float32) / 255.0
+        return cam
+
+    cam_base = _resize_cam(cam_base)
+    cam_dpo = _resize_cam(cam_dpo)
+
+    fig, axes = plt.subplots(1, 3, figsize=figsize)
+
+    # Panel 1: Original image
+    axes[0].imshow(img_arr)
+    axes[0].set_title("Stimulus", fontsize=10)
+    axes[0].axis("off")
+
+    # Panel 2: Base model GradCAM
+    axes[1].imshow(img_arr)
+    axes[1].imshow(cam_base, cmap=cmap, alpha=alpha, vmin=0, vmax=1)
+    axes[1].set_title("LLaVA-1.5 (base)", fontsize=10)
+    axes[1].axis("off")
+
+    # Panel 3: DPO model GradCAM
+    axes[2].imshow(img_arr)
+    axes[2].imshow(cam_dpo, cmap=cmap, alpha=alpha, vmin=0, vmax=1)
+    axes[2].set_title("LLaVA SymDPO", fontsize=10)
+    axes[2].axis("off")
+
+    if title:
+        fig.suptitle(title, fontsize=12, y=1.02)
+    fig.tight_layout()
+    return fig
+
+
+# ──────────────────────────────────────────────────────────────────────────────
 # Convenience: save figure
 # ──────────────────────────────────────────────────────────────────────────────
 
@@ -217,3 +350,4 @@ def save_figure(fig: plt.Figure, path: Path, dpi: int = 150) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(path, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
+

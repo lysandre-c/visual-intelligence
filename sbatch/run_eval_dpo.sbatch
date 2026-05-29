@@ -17,5 +17,5 @@ source .venv/bin/activate
 
 # Evaluate DPO LLaVA
 echo "Starting evaluation of DPO LLaVA..."
-python experiments/full_eval.py --models llava_1.5_dpo
+python experiments/full_eval.py --models llava_symDPO
 echo "Evaluation complete."

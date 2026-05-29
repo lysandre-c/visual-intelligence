@@ -62,11 +62,6 @@ full_eval:
 
 # Human baseline illusory rates per category.
 human_baselines:
-  #geometric:  0.867  # Average of Muller Lyer (95%), Ponzo (75%), Ebbinghaus (90%)
-  #color:      0.915  # Average of Simultaneous Contrast (98%), White's illusion (85%)
-  #angle:      0.875  # Average of Zollner (90%), Poggendorff (85%)
-  #motion:     0.745  # Average of Scintillating Grid (90%), rotating snakes (59%)
-  #impossible: 0.95   # Impossible Objects (95%)
   geometric: 0.88
   color: 0.92
   angle: 0.86
