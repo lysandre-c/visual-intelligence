@@ -57,55 +57,10 @@ full_eval:
     - clip_vit_b32
     - dinov2_vit_b14
     - llava_1.5
-    - qwen_vl
+    - llava_1.5_dpo
   output_dir: results/full
 
 # Human baseline illusory rates per category.
-#
-# WARNING: these are PLACEHOLDERS. Each value must be replaced with a rate
-# derived from psychophysics data collected on stimuli that match yours in
-# spatial parameters (fin length, luminance ratio, hatch angle, etc.).
-# Using a population-level average without parameter matching will produce
-# HEAS scores that are not comparable across illusion strengths.
-#
-# Per-illusion guidance and primary sources:
-#
-#   geometric (Müller-Lyer):
-#     - At full fin strength the effect is near-universal (>90%) in Western
-#       adults: Segall, Campbell & Herskovits (1966), "The Influence of
-#       Culture on Visual Perception", Bobbs-Merrill.
-#     - The swept average across fin lengths 5–80 px will be substantially
-#       lower. Collect or match data from a published parametric study
-#       (e.g. Restle & Decker, 1977, Perception & Psychophysics 21:294).
-#     - Placeholder: 0.75  ← REPLACE with matched-parameter value.
-#
-#   color (simultaneous contrast):
-#     - Effect is near-universal at strong luminance differences.
-#       Heinemann (1955), "Simultaneous brightness induction as a function
-#       of inducing- and test-field luminances", J. Exp. Psychol. 50:89.
-#     - Swept average across your dark_lum / bright_lum grid required.
-#     - Placeholder: 0.80  ← REPLACE with matched-parameter value.
-#
-#   angle (Zöllner):
-#     - >85% susceptibility at standard hatch angle (~30°).
-#       Ninio & O'Regan (1999), "Characterisation of the misalignment and
-#       tilt components in the Poggendorff and Zöllner illusions",
-#       Perception 28:949.
-#     - Placeholder: 0.80  ← REPLACE with matched-parameter value.
-#
-#   motion (scintillating grid):
-#     - Sun & Dekel (2021) [proposal ref 3] report human susceptibility
-#       data directly for this illusion — use their Table 1 / Fig 3 values.
-#       Sun & Dekel (2021), J. Vision 21(11):15. doi:10.1167/jov.21.11.15
-#     - Placeholder: 0.70  ← REPLACE with Sun & Dekel (2021) matched value.
-#
-#   impossible (IllusionVQA / HallusionBench):
-#     - IllusionVQA: humans achieve 91.03% accuracy (Shahgir et al. 2024,
-#       COLM), so the human *illusory error* rate is ~0.09, not 0.60.
-#     - HallusionBench: human question-pair accuracy is not directly
-#       reported as an illusory rate; derive from the paper's Table 2.
-#     - Placeholder: 0.09  ← derived from Shahgir et al. (2024) Table 1.
-#
 human_baselines:
   geometric: 0.88
   color: 0.92
