@@ -14,7 +14,7 @@ We measure **directional** alignment between human and model perceptual errors o
 
 `HEAS(m, c) = 1 - | p_model^illusory(m, c) - p_human^illusory(c) |`
 
-Nine parametric illusion generators plus external VQA datasets; eight models (CNN, ViT, CLIP, DINOv2, LLaVA base, LLaVA + DPO); linear probe, zero-shot, and VLM probing protocols.
+Nine parametric illusion generators plus external VQA datasets; eight models (CNN, ViT, CLIP, DINOv2, LLaVA base, LLaVA + DPO, SymMPO); linear probe, zero-shot, and VLM probing protocols. The codebase also supports **Symmetric Polarity-Inverted DPO (SymMPO)** training.
 
 ---
 
@@ -25,6 +25,8 @@ Nine parametric illusion generators plus external VQA datasets; eight models (CN
 - See [requirements.txt](requirements.txt) for pinned dependencies (tested with `torch>=2.2`, `transformers~=4.46`, `trl>=0.8`, `peft>=0.10`)
 
 ```bash
+git clone https://github.com/lysandre-c/visual-intelligence.git
+cd visual-intelligence
 python -m venv .venv
 source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -U pip
@@ -55,6 +57,7 @@ for gen_cls in [
     ZollnerGenerator, PoggendorffGenerator,
     ScintillatingGridGenerator, RotatingSnakesGenerator,
 ]:
+    print(f"Generating {gen_cls.__name__}...")
     gen_cls().generate_dataset(stimuli_dir)
 print("Done.")
 EOF
@@ -86,13 +89,29 @@ python experiments/full_eval.py --device cuda --skip-generate
 | `figures/heas_heatmap.png` | Heatmap figure |
 | `figures/psychometric_*.png` | Psychometric curves |
 
-### 4. DPO alignment (optional)
+### 4. DPO / SymMPO alignment (optional)
+
+**Classic DPO:**
 
 ```bash
 python src/rl/dataset.py
-python src/rl/dpo_train.py --output_dir results/rl_alignment
+python src/rl/dpo_train.py --output_dir results/classic_dpo --dataset_path data/rl/dataset.jsonl
+```
+
+**Symmetric Polarity DPO (SymMPO):**
+
+```bash
+python src/rl/sym_mpo_train.py --output_dir results/rl_alignment --dataset_path data/rl/dataset.jsonl
+# Hyperparameters: configs/symmetric_dpo.yaml
+```
+
+Re-evaluate aligned VLMs:
+
+```bash
 python experiments/full_eval.py --device cuda --models llava_1.5 llava_1.5_dpo
 ```
+
+**SLURM cluster:** `sbatch sbatch/run_full_eval.sbatch`, `sbatch sbatch/run_symmetric_dpo.sbatch`, etc.
 
 ### 5. Website data export
 
@@ -119,29 +138,30 @@ python experiments/extra_dpo_experiments.py
 ```
 visual-intelligence/
 ├── configs/
-│   ├── experiments.yaml    # Models, stimuli list, human baselines, paths
-│   ├── models.yaml         # Model registry and probe-training hyperparameters
-│   └── stimuli.yaml        # Generator default parameters
+│   ├── experiments.yaml      # Models, stimuli list, human baselines
+│   ├── models.yaml           # Model registry and probe hyperparameters
+│   ├── stimuli.yaml          # Generator defaults
+│   └── symmetric_dpo.yaml    # SymMPO training hyperparameters
 ├── src/
-│   ├── stimuli/            # Parametric illusion generators + external loader
-│   ├── models/             # ResNet, ViT, CLIP, DINOv2, LLaVA probers
-│   ├── probing/            # Linear probe, zero-shot, VLM protocols
-│   ├── metrics/            # HEAS, psychometric, diagnostics
-│   ├── analysis/           # Plots, Grad-CAM, attention
-│   └── rl/                 # DPO dataset + training
+│   ├── stimuli/              # Parametric illusion generators + external loader
+│   ├── models/               # ResNet, ViT, CLIP, DINOv2, LLaVA probers
+│   ├── probing/              # Linear probe, zero-shot, VLM protocols
+│   ├── metrics/              # HEAS, psychometric, diagnostics
+│   ├── analysis/             # Plots, Grad-CAM, attention
+│   └── rl/                   # DPO + SymMPO training
 ├── experiments/
-│   ├── poc.py              # Week-1 PoC
-│   ├── full_eval.py        # Main HEAS evaluation
-│   ├── analysis.py         # Saliency overlays
-│   └── visualize_*.py      # Figure scripts
+│   ├── poc.py                # Week-1 PoC
+│   ├── full_eval.py          # Main HEAS evaluation
+│   └── visualize_*.py        # Figure scripts
 ├── scripts/
 │   └── export_website_data.py
-├── website/                # Project webpage (GitHub Pages)
-│   ├── source/             # HEAS tables + all_results.json for export script
-│   ├── data/               # JSON consumed by the page
-│   └── assets/             # Figures, saliency overlays, stimulus thumbnails
-├── data/                   # Generated stimuli and external datasets (not in git)
-└── results/                # Experiment outputs (not in git)
+├── website/                  # Project webpage (GitHub Pages)
+│   ├── source/               # HEAS tables + all_results.json for export
+│   ├── data/                 # JSON consumed by the page
+│   └── assets/               # Figures, saliency overlays, stimulus thumbnails
+├── sbatch/                   # SLURM job templates
+├── data/                     # Generated stimuli (not in git)
+└── results/                  # Experiment outputs (not in git)
 ```
 
 ---
