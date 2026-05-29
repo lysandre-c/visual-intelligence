@@ -53,4 +53,4 @@ data:
 # Frozen:     vision_tower (CLIP ViT)      ~304M params
 # Trainable:  multi_modal_projector (MLP)   ~4M params
 # Trainable:  LoRA adapters (language LM)   ~20M params (rank 64)
-# Reference:  full frozen copy              ~7B params (no grad)
+# Reference:  via disable_adapter() on policy model (no extra VRAM)

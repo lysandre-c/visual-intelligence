@@ -2,6 +2,9 @@
 
 This module computes GradCAM by tracing the gradients of a target output token
 back to the vision encoder's last feature layer.
+
+Supports both raw ``LlavaForConditionalGeneration`` and PEFT-wrapped models
+(e.g. after DPO fine-tuning with LoRA).
 """
 
 from __future__ import annotations
@@ -10,6 +13,52 @@ import numpy as np
 import torch
 from PIL import Image
 from transformers import AutoProcessor
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Internal helpers
+# ──────────────────────────────────────────────────────────────────────────────
+
+def _resolve_vision_tower(model: torch.nn.Module) -> torch.nn.Module:
+    """Walk through PEFT / Transformers wrapper layers to find the CLIP vision tower.
+
+    Handles multiple layouts:
+      - Transformers v4: model.vision_tower
+      - Transformers v5: model.model.vision_tower
+      - PeftModel:       model.base_model.model.model.vision_tower  (v5)
+                         model.base_model.model.vision_tower        (v4)
+    """
+    # Unpack PeftModel → base_model.model
+    inner = model
+    if hasattr(inner, "base_model"):
+        inner = inner.base_model
+    if hasattr(inner, "model"):
+        inner = inner.model
+
+    # Transformers v5: LlavaForConditionalGeneration.model.vision_tower
+    if hasattr(inner, "model") and hasattr(inner.model, "vision_tower"):
+        return inner.model.vision_tower
+    # Transformers v4: LlavaForConditionalGeneration.vision_tower
+    if hasattr(inner, "vision_tower"):
+        return inner.vision_tower
+
+    raise AttributeError(
+        f"Cannot locate vision_tower on {type(model).__name__}. "
+        "Expected LlavaForConditionalGeneration (raw or PEFT-wrapped)."
+    )
+
+
+def _resolve_device(model: torch.nn.Module) -> torch.device:
+    """Get the device of the first parameter in the model."""
+    try:
+        return next(model.parameters()).device
+    except StopIteration:
+        return torch.device("cpu")
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Public API
+# ──────────────────────────────────────────────────────────────────────────────
 
 def compute_vlm_gradcam(
     model: torch.nn.Module,
@@ -23,7 +72,7 @@ def compute_vlm_gradcam(
     Parameters
     ----------
     model :
-        The VLM model (e.g. LlavaForConditionalGeneration).
+        The VLM model (e.g. LlavaForConditionalGeneration or PeftModel).
     processor :
         The corresponding processor.
     image :
@@ -38,13 +87,15 @@ def compute_vlm_gradcam(
     -------
     np.ndarray of shape (H, W), dtype float32, values in [0, 1].
     """
-    inputs = processor(text=prompt, images=image, return_tensors="pt").to(model.device)
+    device = _resolve_device(model)
+    inputs = processor(text=prompt, images=image, return_tensors="pt").to(device)
 
     if "pixel_values" in inputs:
         inputs["pixel_values"].requires_grad_(True)
 
-    # Heuristic for LLaVA vision tower target layer
-    target_layer = model.vision_tower.vision_model.encoder.layers[-2]
+    # Locate the vision tower through any wrapper layers
+    vision_tower = _resolve_vision_tower(model)
+    target_layer = vision_tower.vision_model.encoder.layers[-2]
 
     activations = []
     gradients = []
@@ -100,12 +151,12 @@ def compute_vlm_gradcam(
     # LLaVA-1.5 pads the image to a square before resizing to 336x336. 
     # Therefore, the 24x24 CAM includes the padding. We must crop it out.
     if w > h:
-        valid_h = max(1, int(24 * (h / w)))
-        pad_h = (24 - valid_h) // 2
+        valid_h = max(1, int(grid_size * (h / w)))
+        pad_h = (grid_size - valid_h) // 2
         cam = cam[pad_h : pad_h + valid_h, :]
     elif h > w:
-        valid_w = max(1, int(24 * (w / h)))
-        pad_w = (24 - valid_w) // 2
+        valid_w = max(1, int(grid_size * (w / h)))
+        pad_w = (grid_size - valid_w) // 2
         cam = cam[:, pad_w : pad_w + valid_w]
 
     from PIL import Image as PImage

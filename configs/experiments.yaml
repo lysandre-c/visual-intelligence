@@ -107,11 +107,11 @@ full_eval:
 #     - Placeholder: 0.09  ← derived from Shahgir et al. (2024) Table 1.
 #
 human_baselines:
-  geometric:  0.75   # PLACEHOLDER — see notes above
-  color:      0.80   # PLACEHOLDER — see notes above
-  angle:      0.80   # PLACEHOLDER — see notes above
-  motion:     0.70   # PLACEHOLDER — see notes above (use Sun & Dekel 2021)
-  impossible: 0.09   # derived from IllusionVQA human accuracy 91.03%
+  geometric: 0.88
+  color: 0.92
+  angle: 0.86
+  motion: 0.70
+  impossible: 0.913
 
 # Control-ceiling threshold for HEAS validity.
 # Set to -1 to use "argmax mode" (argmax correct = pass).

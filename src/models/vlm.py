@@ -201,7 +201,7 @@ class LLaVAProber(VLMProber):
             }
         else:
             kwargs = {"device_map": "auto"}
-        self._pipe = pipeline("image-to-text", model=self.hf_model_id, **kwargs)
+        self._pipe = pipeline("image-text-to-text", model=self.hf_model_id, **kwargs)
 
         if self.adapter_path is not None:
             from peft import PeftModel
@@ -221,7 +221,12 @@ class LLaVAProber(VLMProber):
         ]
         formatted = self.processor.apply_chat_template(conversation, add_generation_prompt=True)
         outputs = self._pipe(image, prompt=formatted, generate_kwargs={"max_new_tokens": 150})
-        return outputs[0]["generated_text"].strip()
+        generated = outputs[0]["generated_text"]
+        # image-text-to-text returns a list of message dicts; extract the
+        # assistant reply.  Fall back to treating it as a plain string.
+        if isinstance(generated, list):
+            generated = generated[-1].get("content", "")
+        return generated.strip()
 
 
 # ──────────────────────────────────────────────────────────────────────────────

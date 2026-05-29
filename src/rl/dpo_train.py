@@ -78,6 +78,11 @@ class ScriptArguments:
         default=None,
         metadata={"help": "HF Hub repository ID to push final weights to (e.g. 'username/llava-dpo')."},
     )
+    resume_checkpoint: Optional[str] = field(
+        default=None,
+        metadata={"help": "Path to a checkpoint directory (e.g. results/rl_alignment/checkpoint-800) to resume training from. "
+                  "The step number is inferred from the directory name. The LR schedule is fast-forwarded to match."},
+    )
 
     # ── Loss hyperparameters ────────────────────────────────────────────
     beta: float = field(default=0.1, metadata={"help": "DPO temperature β."})
@@ -140,11 +145,31 @@ class PolarityDPODataset(Dataset):
 # ────────────────────────────────────────────────────────────────────────
 
 
+def _get_attn_implementation() -> str | None:
+    """Pick the best available attention implementation.
+
+    Priority: flash_attention_2 > sdpa > None (eager).
+    """
+    if not torch.cuda.is_available():
+        return None
+    try:
+        import flash_attn  # noqa: F401
+        logger.info("Using flash_attention_2 (flash-attn package found).")
+        return "flash_attention_2"
+    except ImportError:
+        logger.info(
+            "flash-attn not installed; falling back to sdpa "
+            "(PyTorch scaled dot-product attention)."
+        )
+        return "sdpa"
+
+
 def _load_model_and_processor(
     model_name: str,
     lora_config: LoraConfig,
     device_map: str = "auto",
     torch_dtype: torch.dtype = torch.bfloat16,
+    gradient_checkpointing: bool = False,
 ) -> tuple[nn.Module, Any]:
     """Load LLaVA with frozen vision, unfrozen projector, and LoRA LM.
 
@@ -152,54 +177,60 @@ def _load_model_and_processor(
     """
     from transformers import LlavaForConditionalGeneration
 
-    logger.info("Loading base model: %s", model_name)
+    attn_impl = _get_attn_implementation()
+    logger.info("Loading base model: %s (attn=%s)", model_name, attn_impl)
     model = LlavaForConditionalGeneration.from_pretrained(
         model_name,
         torch_dtype=torch_dtype,
         device_map=device_map,
-        attn_implementation="flash_attention_2" if torch.cuda.is_available() else None,
+        attn_implementation=attn_impl,
     )
     processor = AutoProcessor.from_pretrained(model_name)
 
-    # ── Step 1: Freeze vision tower (CLIP backbone) ─────────────────
-    for param in model.vision_tower.parameters():
+    model.config.use_cache = False
+
+    if gradient_checkpointing:
+        model.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
+        if hasattr(model, "enable_input_require_grads"):
+            model.enable_input_require_grads()
+
+    # ── Step 1: Apply LoRA to the language model only ─────────────────
+    # The regex in target_modules ensures LoRA is NOT applied to the
+    # CLIP vision tower (which also has q/k/v_proj).  This is critical
+    # because disable_adapter() toggles ALL LoRA adapters, and having
+    # LoRA on the vision tower would cause gradient-checkpointing shape
+    # mismatches between the policy forward and backward recomputation.
+    model = get_peft_model(model, lora_config)
+
+    # After wrapping the access path is:
+    #   model.base_model.model          → LlavaForConditionalGeneration
+    #   model.base_model.model.model    → LlavaModel
+    #   ...model.model.vision_tower     → CLIP vision encoder
+    #   ...model.model.multi_modal_projector → MLP projector
+    inner = model.base_model.model.model  # LlavaModel
+
+    # ── Step 2: Freeze vision tower (base weights only, no LoRA here) ─
+    for param in inner.vision_tower.parameters():
         param.requires_grad = False
     logger.info("Frozen vision_tower: %d params",
-                sum(p.numel() for p in model.vision_tower.parameters()))
+                sum(p.numel() for p in inner.vision_tower.parameters()))
 
-    # ── Step 2: Unfreeze MLP projector ──────────────────────────────
-    model.multi_modal_projector.requires_grad_(True)
+    # ── Step 3: Unfreeze MLP projector ──────────────────────────────
+    inner.multi_modal_projector.requires_grad_(True)
     proj_params = sum(
-        p.numel() for p in model.multi_modal_projector.parameters() if p.requires_grad
+        p.numel() for p in inner.multi_modal_projector.parameters() if p.requires_grad
     )
     logger.info("Unfrozen multi_modal_projector: %d trainable params", proj_params)
 
-    # ── Step 3: Apply LoRA to language backbone ─────────────────────
-    model = get_peft_model(model, lora_config)
     model.print_trainable_parameters()
 
     return model, processor
 
 
-def _create_reference_model(
-    model_name: str,
-    torch_dtype: torch.dtype = torch.bfloat16,
-    device_map: str = "auto",
-) -> nn.Module:
-    """Load a separate frozen reference model for DPO log-ratios."""
-    from transformers import LlavaForConditionalGeneration
-
-    logger.info("Loading frozen reference model: %s", model_name)
-    ref_model = LlavaForConditionalGeneration.from_pretrained(
-        model_name,
-        torch_dtype=torch_dtype,
-        device_map=device_map,
-    )
-    ref_model.eval()
-    for param in ref_model.parameters():
-        param.requires_grad = False
-    logger.info("Reference model loaded and frozen.")
-    return ref_model
+# NOTE: We no longer load a separate reference model.
+# Instead, we use policy_model.disable_adapter() to compute reference
+# log-probs from the same base weights, saving ~14 GB of VRAM.
+# See the train() function for the implementation.
 
 
 # ────────────────────────────────────────────────────────────────────────
@@ -265,14 +296,23 @@ def train(
 ) -> None:
     """Main training function."""
     # ── LoRA config ─────────────────────────────────────────────────────
+    # Use a regex to target ONLY the language model's projection layers.
+    # A plain list like ["q_proj", "k_proj", ...] also matches CLIP's
+    # vision tower (which shares those names), causing gradient
+    # checkpointing to fail when disable_adapter() toggles LoRA off
+    # for the reference pass — the vision tower's intermediate tensor
+    # shapes change, breaking checkpointed recomputation in backward.
+    #
+    # Transformers v5 changed the LLaVA module hierarchy:
+    #   v4: language_model.model.layers.N.self_attn.q_proj
+    #   v5: model.language_model.layers.N.self_attn.q_proj
+    # PEFT uses re.fullmatch() against the full module key, so the
+    # regex must match the entire dotted path.
     lora_config = LoraConfig(
         r=script_args.lora_r,
         lora_alpha=script_args.lora_alpha,
         lora_dropout=script_args.lora_dropout,
-        target_modules=[
-            "q_proj", "k_proj", "v_proj", "o_proj",
-            "gate_proj", "up_proj", "down_proj",
-        ],
+        target_modules=r"model\.language_model\.layers\.\d+\.(?:self_attn\.(?:q_proj|k_proj|v_proj|o_proj)|mlp\.(?:gate_proj|up_proj|down_proj))",
         bias="none",
         task_type="CAUSAL_LM",
     )
@@ -281,10 +321,44 @@ def train(
     dtype = torch.bfloat16 if training_args.bf16 else torch.float32
     policy_model, processor = _load_model_and_processor(
         script_args.model_name_or_path, lora_config, torch_dtype=dtype,
+        gradient_checkpointing=training_args.gradient_checkpointing,
     )
-    ref_model = _create_reference_model(
-        script_args.model_name_or_path, torch_dtype=dtype,
-    )
+    # Reference log-probs are computed by disabling LoRA adapters on the
+    # policy model (see forward loop below), so no second model is needed.
+    logger.info("Reference logprobs will be computed via disable_adapter() — no extra model loaded.")
+
+    # ── Resume from checkpoint (load LoRA + projector weights) ──────────
+    resume_step = 0
+    if script_args.resume_checkpoint:
+        from peft import set_peft_model_state_dict
+
+        ckpt_path = Path(script_args.resume_checkpoint)
+        if not ckpt_path.is_absolute():
+            ckpt_path = PROJECT_ROOT / ckpt_path
+
+        # Load LoRA adapter weights
+        adapter_safetensors = ckpt_path / "adapter_model.safetensors"
+        adapter_bin = ckpt_path / "adapter_model.bin"
+        if adapter_safetensors.exists():
+            from safetensors.torch import load_file
+            adapter_state = load_file(str(adapter_safetensors))
+        elif adapter_bin.exists():
+            adapter_state = torch.load(str(adapter_bin), map_location="cpu", weights_only=True)
+        else:
+            raise FileNotFoundError(f"No adapter weights found in {ckpt_path}")
+        set_peft_model_state_dict(policy_model, adapter_state)
+        logger.info("Loaded LoRA adapter weights from %s", ckpt_path)
+
+        # Load projector weights
+        projector_path = ckpt_path / "multi_modal_projector.pt"
+        if projector_path.exists():
+            projector_state = torch.load(str(projector_path), map_location="cpu", weights_only=True)
+            policy_model.base_model.model.model.multi_modal_projector.load_state_dict(projector_state)
+            logger.info("Loaded projector weights from %s", projector_path)
+
+        # Infer resume step from checkpoint directory name (e.g. "checkpoint-800" → 800)
+        resume_step = int(ckpt_path.name.split("-")[-1])
+        logger.info("Resuming training from step %d", resume_step)
 
     # ── Dataset & collator ──────────────────────────────────────────────
     dataset = PolarityDPODataset(script_args.dataset_path)
@@ -328,23 +402,27 @@ def train(
     num_training_steps = training_args.max_steps or (
         len(dataloader) * training_args.num_train_epochs
     )
+    # When resuming, PyTorch's LRScheduler requires 'initial_lr' to be
+    # present in each param group (normally set during the first __init__
+    # with last_epoch=-1).  We set it explicitly from the base LR.
+    if resume_step > 0:
+        for group in optimizer.param_groups:
+            group['initial_lr'] = group['lr']
+
     scheduler = get_cosine_schedule_with_warmup(
         optimizer,
         num_warmup_steps=int(num_training_steps * 0.05),
         num_training_steps=num_training_steps,
+        last_epoch=resume_step - 1 if resume_step > 0 else -1,
     )
 
-    # ── Gradient checkpointing ──────────────────────────────────────────
-    if training_args.gradient_checkpointing:
-        policy_model.gradient_checkpointing_enable(
-            gradient_checkpointing_kwargs={"use_reentrant": False}
-        )
+    # (Gradient checkpointing is now enabled in _load_model_and_processor)
 
     # ── Training state ──────────────────────────────────────────────────
     output_dir = Path(training_args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    global_step = 0
+    global_step = resume_step
     grad_accum_steps = training_args.gradient_accumulation_steps
     max_steps = training_args.max_steps or float("inf")
     save_steps = training_args.save_steps or 100
@@ -429,35 +507,54 @@ def train(
                     batch.get("inv_rejected_pixel_values"),
                 )
 
-            # ── Forward: reference model (no grad) ──────────────────────
-            with torch.no_grad():
+            # ── Forward: reference (disable LoRA adapters, no grad) ────
+            # By disabling the adapters the policy model reverts to the
+            # frozen base weights, giving us π_ref without a second copy.
+            #
+            # IMPORTANT: We must temporarily disable gradient checkpointing
+            # before toggling adapters. Gradient checkpointing records tensor
+            # metadata during forward and replays during backward — if the
+            # adapter state changes in between, the replayed shapes won't match
+            # (LoRA projections reshape internal tensors).  Since the reference
+            # pass is under no_grad() anyway, checkpointing is unnecessary.
+            _gc_was_enabled = getattr(policy_model, "is_gradient_checkpointing", False)
+            if _gc_was_enabled:
+                policy_model.gradient_checkpointing_disable()
+
+            with torch.no_grad(), policy_model.disable_adapter():
                 ref_chosen_logps = compute_sequence_logps(
-                    ref_model,
+                    policy_model,
                     batch["orig_chosen_input_ids"],
                     batch["orig_chosen_attention_mask"],
                     batch["orig_chosen_labels"],
                     batch.get("orig_chosen_pixel_values"),
                 )
                 ref_rejected_logps = compute_sequence_logps(
-                    ref_model,
+                    policy_model,
                     batch["orig_rejected_input_ids"],
                     batch["orig_rejected_attention_mask"],
                     batch["orig_rejected_labels"],
                     batch.get("orig_rejected_pixel_values"),
                 )
                 ref_chosen_logps_inv = compute_sequence_logps(
-                    ref_model,
+                    policy_model,
                     batch["inv_chosen_input_ids"],
                     batch["inv_chosen_attention_mask"],
                     batch["inv_chosen_labels"],
                     batch.get("inv_chosen_pixel_values"),
                 )
                 ref_rejected_logps_inv = compute_sequence_logps(
-                    ref_model,
+                    policy_model,
                     batch["inv_rejected_input_ids"],
                     batch["inv_rejected_attention_mask"],
                     batch["inv_rejected_labels"],
                     batch.get("inv_rejected_pixel_values"),
+                )
+
+            # Re-enable gradient checkpointing for the backward pass
+            if _gc_was_enabled:
+                policy_model.gradient_checkpointing_enable(
+                    gradient_checkpointing_kwargs={"use_reentrant": False}
                 )
 
             # ── Compute joint loss ──────────────────────────────────────
@@ -532,7 +629,7 @@ def train(
                     # Save projector weights separately
                     projector_state = {
                         k: v.cpu()
-                        for k, v in policy_model.base_model.model.multi_modal_projector.state_dict().items()
+                        for k, v in policy_model.base_model.model.model.multi_modal_projector.state_dict().items()
                     }
                     torch.save(
                         projector_state,
@@ -546,7 +643,7 @@ def train(
     policy_model.save_pretrained(str(final_dir))
     projector_state = {
         k: v.cpu()
-        for k, v in policy_model.base_model.model.multi_modal_projector.state_dict().items()
+        for k, v in policy_model.base_model.model.model.multi_modal_projector.state_dict().items()
     }
     torch.save(projector_state, str(final_dir / "multi_modal_projector.pt"))
     logger.info("Training complete. Final model saved to %s", final_dir)
