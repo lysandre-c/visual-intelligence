@@ -1,15 +1,43 @@
-# Visual Intelligence - Quickstart
+# Do Vision Models Fail Like Humans?
 
-## 1) Setup
+**CS-503 Visual Intelligence — EPFL**
+
+Imane Oujja, Jules Herrscher, Matisse Van Schalkwijk, Lysandre Costes
+
+Project webpage (GitHub Pages): enable **Settings → Pages → Source: GitHub Actions**, then visit the deployed URL after the workflow runs. Local preview: `cd website && python -m http.server 8080`.
+
+---
+
+## Overview
+
+We measure **directional** alignment between human and model perceptual errors on visual illusions using the **Human Error Alignment Score (HEAS)**:
+
+`HEAS(m, c) = 1 - | p_model^illusory(m, c) - p_human^illusory(c) |`
+
+Nine parametric illusion generators plus external VQA datasets; eight models (CNN, ViT, CLIP, DINOv2, LLaVA base, LLaVA + DPO); linear probe, zero-shot, and VLM probing protocols.
+
+---
+
+## Requirements
+
+- Python **3.10+**
+- CUDA GPU recommended for full eval and DPO (Apple **MPS** works for smaller runs)
+- See [requirements.txt](requirements.txt) for pinned dependencies (tested with `torch>=2.2`, `transformers~=4.46`, `trl>=0.8`, `peft>=0.10`)
 
 ```bash
 python -m venv .venv
-source .venv/bin/activate
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -U pip
 pip install -r requirements.txt
 ```
 
-## 2) (Optional) Pre-generate all synthetic stimuli
+External datasets for impossible/scene illusions: see [DATA_SETUP.md](DATA_SETUP.md).
+
+---
+
+## Reproduce main results
+
+### 1. Generate stimuli (optional if cached)
 
 ```bash
 python - <<'EOF'
@@ -32,16 +60,95 @@ print("Done.")
 EOF
 ```
 
-## 3) Run experiments
+### 2. Proof-of-concept (Müller-Lyer × ResNet + CLIP)
 
 ```bash
-# Week 1 proof-of-concept
 python experiments/poc.py --device mps
-
-# Full evaluation (all categories/models configured)
-python experiments/full_eval.py --device mps
-
-# Reuse existing generated stimuli
-python experiments/full_eval.py --device mps --skip-generate
+# Outputs: results/poc/
 ```
 
+### 3. Full evaluation (all models × illusions → HEAS table)
+
+```bash
+python experiments/full_eval.py --device cuda
+# Or reuse cached stimuli:
+python experiments/full_eval.py --device cuda --skip-generate
+```
+
+**Outputs** under `results/full/`:
+
+| File | Description |
+|------|-------------|
+| `heas_table.csv` | Category × model HEAS matrix |
+| `spearman_table.csv` | Per-illusion Spearman ρ |
+| `diagnostics_table.csv` | Accuracy and label distributions |
+| `all_results.json` | Per-stimulus probe records |
+| `figures/heas_heatmap.png` | Heatmap figure |
+| `figures/psychometric_*.png` | Psychometric curves |
+
+### 4. DPO alignment (optional)
+
+```bash
+python src/rl/dataset.py
+python src/rl/dpo_train.py --output_dir results/rl_alignment
+python experiments/full_eval.py --device cuda --models llava_1.5 llava_1.5_dpo
+```
+
+### 5. Website data export
+
+```bash
+python scripts/export_website_data.py
+# Writes website/data/*.json from fig/ or results/full/ CSVs
+```
+
+### 6. Saliency / DPO visualizations
+
+```bash
+python experiments/visualize_saliency.py
+python experiments/visualize_vlm_dpo.py
+python experiments/extra_dpo_experiments.py
+```
+
+---
+
+## File hierarchy
+
+```
+visual-intelligence/
+├── configs/
+│   ├── experiments.yaml    # Models, stimuli list, human baselines, paths
+│   ├── models.yaml         # Model registry and probe-training hyperparameters
+│   └── stimuli.yaml        # Generator default parameters
+├── src/
+│   ├── stimuli/            # Parametric illusion generators + external loader
+│   ├── models/             # ResNet, ViT, CLIP, DINOv2, LLaVA probers
+│   ├── probing/            # Linear probe, zero-shot, VLM protocols
+│   ├── metrics/            # HEAS, psychometric, diagnostics
+│   ├── analysis/           # Plots, Grad-CAM, attention
+│   └── rl/                 # DPO dataset + training
+├── experiments/
+│   ├── poc.py              # Week-1 PoC
+│   ├── full_eval.py        # Main HEAS evaluation
+│   ├── analysis.py         # Saliency overlays
+│   └── visualize_*.py      # Figure scripts
+├── scripts/
+│   └── export_website_data.py
+├── website/                # Project webpage (GitHub Pages)
+├── fig/                    # Published figures + tables for the site
+├── data/                   # Generated stimuli and external datasets (not in git)
+└── results/                # Experiment outputs (not in git)
+```
+
+---
+
+## Tests
+
+```bash
+pytest tests/
+```
+
+---
+
+## Citation
+
+If you use this code, please cite the CS-503 project report and repository URL.

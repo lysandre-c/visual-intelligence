@@ -1,0 +1,225 @@
+{
+  "rq1_category_summary": [
+    {
+      "category": "geometric",
+      "p_human": 0.88,
+      "best_model": "vit_l_16",
+      "best_heas": 0.9238852913968548,
+      "best_non_vlm": "vit_l_16",
+      "best_non_vlm_heas": 0.9238852913968548
+    },
+    {
+      "category": "color",
+      "p_human": 0.92,
+      "best_model": "llava_1.5_dpo",
+      "best_heas": 0.92,
+      "best_non_vlm": "vit_l_16",
+      "best_non_vlm_heas": 0.2714893617021277
+    },
+    {
+      "category": "angle",
+      "p_human": 0.86,
+      "best_model": "llava_1.5",
+      "best_heas": 0.8654901960784314,
+      "best_non_vlm": "clip_vit_b32",
+      "best_non_vlm_heas": 0.3556250000000001
+    },
+    {
+      "category": "motion",
+      "p_human": 0.7,
+      "best_model": "llava_1.5_dpo",
+      "best_heas": 0.9116959064327484,
+      "best_non_vlm": "clip_vit_b32",
+      "best_non_vlm_heas": 0.7
+    },
+    {
+      "category": "impossible",
+      "p_human": 0.913,
+      "best_model": "llava_1.5_dpo",
+      "best_heas": 0.96516091954023,
+      "best_non_vlm": "clip_vit_b32",
+      "best_non_vlm_heas": 0.4755057471264368
+    }
+  ],
+  "rq2_family_means": [
+    {
+      "family": "supervised",
+      "mean_heas_over_cells": 0.362,
+      "per_category": {
+        "geometric": 0.864,
+        "color": 0.128,
+        "angle": 0.141,
+        "motion": 0.3
+      }
+    },
+    {
+      "family": "contrastive",
+      "mean_heas_over_cells": 0.246,
+      "per_category": {
+        "geometric": 0.12,
+        "color": 0.08,
+        "angle": 0.248,
+        "motion": 0.5,
+        "impossible": 0.281
+      }
+    },
+    {
+      "family": "vlm",
+      "mean_heas_over_cells": 0.619,
+      "per_category": {
+        "geometric": 0.594,
+        "color": 0.399,
+        "angle": 0.865,
+        "motion": 0.3,
+        "impossible": 0.938
+      }
+    },
+    {
+      "family": "vlm_dpo",
+      "mean_heas_over_cells": 0.908,
+      "per_category": {
+        "geometric": 0.88,
+        "color": 0.92,
+        "angle": 0.862,
+        "motion": 0.912,
+        "impossible": 0.965
+      }
+    }
+  ],
+  "rq3_failure_modes": [
+    {
+      "mode": "correct_avoidant",
+      "model": "resnet50",
+      "illusion_type": "simultaneous_contrast",
+      "category": "color",
+      "label": "Correct-avoidant",
+      "description": "Predicts physically correct on illusion trials; humans report illusory ~92%.",
+      "p_illusory": 0.0,
+      "p_correct": 1.0,
+      "p_other": 0.0,
+      "control_pass": 0.50625
+    },
+    {
+      "mode": "anti_illusory_geometric",
+      "model": "clip_vit_b32",
+      "illusion_type": "muller_lyer",
+      "category": "geometric",
+      "label": "Anti-illusory (geometric)",
+      "description": "P(illusory)\u22480 on M\u00fcller-Lyer despite control success \u2192 HEAS 0.12.",
+      "p_illusory": 0.0,
+      "p_correct": 1.0,
+      "p_other": 0.0,
+      "control_pass": 1.0
+    },
+    {
+      "mode": "other_collapse",
+      "model": "resnet50",
+      "illusion_type": "poggendorff",
+      "category": "angle",
+      "label": "Other-collapse",
+      "description": "~87% 'other' labels on Poggendorff\u2014not human-like convergence.",
+      "p_illusory": 0.0625,
+      "p_correct": 0.06875,
+      "p_other": 0.86875,
+      "control_pass": 0.0
+    },
+    {
+      "mode": "illusory_without_control",
+      "model": "llava_1.5",
+      "illusion_type": "zollner",
+      "category": "angle",
+      "label": "Illusory saturation (weak control)",
+      "description": "P(illusory)\u224897% but control pass \u224811% pre-DPO; HEAS needs control filtering.",
+      "p_illusory": 0.9708333333333332,
+      "p_correct": 0.0291666666666666,
+      "p_other": 0.0,
+      "control_pass": 0.10625
+    },
+    {
+      "mode": "dpo_rescued",
+      "model": "llava_1.5_dpo",
+      "illusion_type": "zollner",
+      "category": "angle",
+      "label": "DPO-rescued interpretability",
+      "description": "Control pass ~90% while retaining illusory dominance on Z\u00f6llner.",
+      "p_illusory": 0.9979166666666668,
+      "p_correct": 0.0020833333333333,
+      "p_other": 0.0,
+      "control_pass": 0.9020833333333332
+    }
+  ],
+  "dpo_delta": [
+    {
+      "category": "geometric",
+      "llava_base": 0.5936842105263158,
+      "llava_dpo": 0.88,
+      "delta": 0.2863157894736842,
+      "human_baseline": 0.88
+    },
+    {
+      "category": "color",
+      "llava_base": 0.3992771084337349,
+      "llava_dpo": 0.92,
+      "delta": 0.5207228915662652,
+      "human_baseline": 0.92
+    },
+    {
+      "category": "angle",
+      "llava_base": 0.8654901960784314,
+      "llava_dpo": 0.8622675736961452,
+      "delta": -0.003222622382286211,
+      "human_baseline": 0.86
+    },
+    {
+      "category": "motion",
+      "llava_base": 0.3,
+      "llava_dpo": 0.9116959064327484,
+      "delta": 0.6116959064327485,
+      "human_baseline": 0.7
+    },
+    {
+      "category": "impossible",
+      "llava_base": 0.937574712643678,
+      "llava_dpo": 0.96516091954023,
+      "delta": 0.027586206896552,
+      "human_baseline": 0.913
+    }
+  ],
+  "explorer_presets": [
+    {
+      "id": "clip_geometric",
+      "label": "CLIP \u00d7 geometric (anti-human)",
+      "category": "geometric",
+      "model": "clip_vit_b32"
+    },
+    {
+      "id": "resnet_color",
+      "label": "ResNet \u00d7 color (correct-avoidant)",
+      "category": "color",
+      "model": "resnet50"
+    },
+    {
+      "id": "dpo_color",
+      "label": "LLaVA+DPO \u00d7 color (aligned)",
+      "category": "color",
+      "model": "llava_1.5_dpo"
+    },
+    {
+      "id": "vitl_geometric",
+      "label": "ViT-L \u00d7 geometric (best CNN/ViT)",
+      "category": "geometric",
+      "model": "vit_l_16"
+    },
+    {
+      "id": "llava_angle",
+      "label": "LLaVA base \u00d7 angle",
+      "category": "angle",
+      "model": "llava_1.5"
+    }
+  ],
+  "coverage_gaps": [
+    "ResNet-50: not evaluated on motion or impossible (empty HEAS cells).",
+    "CNN/ViT families: not evaluated on impossible scene-level stimuli.",
+    "HEAS uses one reference illusory-response rate per category."
+  ]
+}

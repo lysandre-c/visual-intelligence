@@ -1,0 +1,78 @@
+{
+  "categories": [
+    "geometric",
+    "color",
+    "angle",
+    "motion",
+    "impossible"
+  ],
+  "models": [
+    "resnet50",
+    "convnext_base",
+    "vit_b_16",
+    "vit_l_16",
+    "clip_vit_b32",
+    "dinov2_vit_b14",
+    "llava_1.5",
+    "llava_1.5_dpo"
+  ],
+  "values": {
+    "geometric": {
+      "resnet50": 0.8683333333333333,
+      "convnext_base": 0.8373507462686567,
+      "vit_b_16": 0.8250691244239631,
+      "vit_l_16": 0.9238852913968548,
+      "clip_vit_b32": 0.12,
+      "dinov2_vit_b14": 0.12,
+      "llava_1.5": 0.5936842105263158,
+      "llava_1.5_dpo": 0.88
+    },
+    "color": {
+      "resnet50": 0.0799999999999999,
+      "convnext_base": 0.0799999999999999,
+      "vit_b_16": 0.0799999999999999,
+      "vit_l_16": 0.2714893617021277,
+      "clip_vit_b32": 0.0799999999999999,
+      "dinov2_vit_b14": 0.0799999999999999,
+      "llava_1.5": 0.3992771084337349,
+      "llava_1.5_dpo": 0.92
+    },
+    "angle": {
+      "resnet50": 0.14,
+      "convnext_base": 0.1413440860215054,
+      "vit_b_16": 0.1441666666666666,
+      "vit_l_16": 0.14,
+      "clip_vit_b32": 0.3556250000000001,
+      "dinov2_vit_b14": 0.14,
+      "llava_1.5": 0.8654901960784314,
+      "llava_1.5_dpo": 0.8622675736961452
+    },
+    "motion": {
+      "resnet50": null,
+      "convnext_base": 0.3,
+      "vit_b_16": 0.3,
+      "vit_l_16": 0.3,
+      "clip_vit_b32": 0.7,
+      "dinov2_vit_b14": 0.3,
+      "llava_1.5": 0.3,
+      "llava_1.5_dpo": 0.9116959064327484
+    },
+    "impossible": {
+      "resnet50": null,
+      "convnext_base": null,
+      "vit_b_16": null,
+      "vit_l_16": null,
+      "clip_vit_b32": 0.4755057471264368,
+      "dinov2_vit_b14": 0.0869999999999999,
+      "llava_1.5": 0.937574712643678,
+      "llava_1.5_dpo": 0.96516091954023
+    }
+  },
+  "human_baselines": {
+    "geometric": 0.88,
+    "color": 0.92,
+    "angle": 0.86,
+    "motion": 0.7,
+    "impossible": 0.913
+  }
+}

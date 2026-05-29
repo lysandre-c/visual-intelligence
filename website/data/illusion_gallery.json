@@ -1,0 +1,505 @@
+{
+  "illusions": [
+    {
+      "id": "ebbinghaus",
+      "label": "Ebbinghaus",
+      "category": "geometric",
+      "description": "Central discs with different surrounding circle sizes.",
+      "human_effect": "The disc with larger surrounds appears smaller than an equal disc with small surrounds.",
+      "params": {
+        "large_sat_radius": 35,
+        "small_sat_radius": 12
+      },
+      "sweep_param": "large_sat_radius",
+      "programmatic": true,
+      "controls": [
+        {
+          "param": "center_radius",
+          "label": "Centre disc radius (px)",
+          "type": "range",
+          "min": 27,
+          "max": 33,
+          "step": 1
+        },
+        {
+          "param": "large_sat_radius",
+          "label": "Large satellite radius (px)",
+          "type": "range",
+          "min": 30,
+          "max": 40,
+          "step": 1
+        },
+        {
+          "param": "satellite_distance",
+          "label": "Satellite orbit (px)",
+          "type": "range",
+          "min": 71,
+          "max": 87,
+          "step": 1
+        },
+        {
+          "param": "x_jitter",
+          "label": "Horizontal jitter (px)",
+          "type": "range",
+          "min": -7,
+          "max": 8,
+          "step": 1
+        },
+        {
+          "param": "y_jitter",
+          "label": "Vertical jitter (px)",
+          "type": "range",
+          "min": -8,
+          "max": 8,
+          "step": 1
+        }
+      ],
+      "derived_params": [
+        "small_sat_radius"
+      ],
+      "illusion_image": "./assets/stimuli/ebbinghaus/illusion.png",
+      "control_image": "./assets/stimuli/ebbinghaus/control.png",
+      "control_note": "Control uses the same satellite radius on both flanks (mean of large/small), so changing the sweep updates both panels\u2014this matches src/stimuli/geometric.py, not a UI bug."
+    },
+    {
+      "id": "muller_lyer",
+      "label": "M\u00fcller-Lyer",
+      "category": "geometric",
+      "description": "Two equal horizontal shafts; arrow fins bias perceived length.",
+      "human_effect": "Humans typically judge the top line longer when fins point inward on top and outward on bottom.",
+      "params": {
+        "fin_length": 40.0,
+        "fin_angle_deg": 30.0
+      },
+      "sweep_param": "fin_length",
+      "programmatic": true,
+      "controls": [
+        {
+          "param": "fin_angle_deg",
+          "label": "Fin angle (\u00b0)",
+          "type": "select",
+          "values": [
+            20.0,
+            30.0,
+            45.0
+          ]
+        },
+        {
+          "param": "fin_length",
+          "label": "Fin length (px)",
+          "type": "range",
+          "min": 6.0,
+          "max": 80.0,
+          "step": 0.74
+        },
+        {
+          "param": "shaft_scale",
+          "label": "Shaft scale",
+          "type": "range",
+          "min": 0.852,
+          "max": 1.143,
+          "step": 0.001
+        },
+        {
+          "param": "x_jitter",
+          "label": "Horizontal jitter (px)",
+          "type": "range",
+          "min": -29,
+          "max": 30,
+          "step": 1
+        },
+        {
+          "param": "y_jitter",
+          "label": "Vertical jitter (px)",
+          "type": "range",
+          "min": -15,
+          "max": 15,
+          "step": 1
+        }
+      ],
+      "derived_params": [],
+      "illusion_image": "./assets/stimuli/muller_lyer/illusion.png",
+      "control_image": "./assets/stimuli/muller_lyer/control.png",
+      "control_note": null
+    },
+    {
+      "id": "ponzo",
+      "label": "Ponzo",
+      "category": "geometric",
+      "description": "Equal bars between converging rails (depth cue).",
+      "human_effect": "The upper bar appears longer because of perspective context.",
+      "params": {
+        "convergence_deg": 37.5
+      },
+      "sweep_param": "convergence_deg",
+      "programmatic": true,
+      "controls": [
+        {
+          "param": "bar_scale",
+          "label": "Bar scale",
+          "type": "range",
+          "min": 0.863,
+          "max": 1.134,
+          "step": 0.001
+        },
+        {
+          "param": "convergence_deg",
+          "label": "Rail convergence (\u00b0)",
+          "type": "range",
+          "min": 15.0,
+          "max": 60.0,
+          "step": 0.5
+        },
+        {
+          "param": "vp_y_frac",
+          "label": "Vanishing-point height (frac.)",
+          "type": "range",
+          "min": 0.071,
+          "max": 0.13,
+          "step": 0.001
+        },
+        {
+          "param": "y_shift",
+          "label": "Vertical shift (px)",
+          "type": "range",
+          "min": -18,
+          "max": 17,
+          "step": 1
+        }
+      ],
+      "derived_params": [],
+      "illusion_image": "./assets/stimuli/ponzo/illusion.png",
+      "control_image": "./assets/stimuli/ponzo/control.png",
+      "control_note": null
+    },
+    {
+      "id": "simultaneous_contrast",
+      "label": "Simultaneous contrast",
+      "category": "color",
+      "description": "Identical grey patches on dark vs. bright surrounds.",
+      "human_effect": "The patch on the dark surround looks lighter than the patch on the bright surround.",
+      "params": {
+        "dark_lum": 46,
+        "bright_lum": 174,
+        "contrast_delta": 82
+      },
+      "sweep_param": "contrast_delta",
+      "programmatic": true,
+      "controls": [
+        {
+          "param": "contrast_delta",
+          "label": "Surround contrast (\u0394)",
+          "type": "range",
+          "min": 50,
+          "max": 115,
+          "step": 1
+        },
+        {
+          "param": "patch_size",
+          "label": "Patch size (px)",
+          "type": "range",
+          "min": 70,
+          "max": 91,
+          "step": 1
+        },
+        {
+          "param": "target_luminance",
+          "label": "Patch grey level",
+          "type": "range",
+          "min": 120,
+          "max": 136,
+          "step": 1
+        },
+        {
+          "param": "x_jitter",
+          "label": "Horizontal jitter (px)",
+          "type": "range",
+          "min": -11,
+          "max": 11,
+          "step": 1
+        },
+        {
+          "param": "y_jitter",
+          "label": "Vertical jitter (px)",
+          "type": "range",
+          "min": -10,
+          "max": 8,
+          "step": 1
+        }
+      ],
+      "derived_params": [
+        "dark_lum",
+        "bright_lum"
+      ],
+      "illusion_image": "./assets/stimuli/simultaneous_contrast/illusion.png",
+      "control_image": "./assets/stimuli/simultaneous_contrast/control.png",
+      "control_note": null
+    },
+    {
+      "id": "whites_illusion",
+      "label": "White's illusion",
+      "category": "color",
+      "description": "Grey patches embedded in black/white stripe surrounds.",
+      "human_effect": "Patches in white stripes appear darker than patches in black stripes (same physical grey).",
+      "params": {
+        "stripe_height": 48
+      },
+      "sweep_param": "stripe_height",
+      "programmatic": true,
+      "controls": [
+        {
+          "param": "patch_width",
+          "label": "Patch width (px)",
+          "type": "range",
+          "min": 34,
+          "max": 48,
+          "step": 1
+        },
+        {
+          "param": "phase_offset",
+          "label": "Stripe phase (px)",
+          "type": "range",
+          "min": 2,
+          "max": 26,
+          "step": 1
+        },
+        {
+          "param": "stripe_height",
+          "label": "Stripe height (px)",
+          "type": "range",
+          "min": 20,
+          "max": 76,
+          "step": 1
+        }
+      ],
+      "derived_params": [],
+      "illusion_image": "./assets/stimuli/whites_illusion/illusion.png",
+      "control_image": "./assets/stimuli/whites_illusion/control.png",
+      "control_note": null
+    },
+    {
+      "id": "poggendorff",
+      "label": "Poggendorff",
+      "category": "angle",
+      "description": "A single oblique line interrupted by a rectangular occluder.",
+      "human_effect": "The visible segments appear misaligned across the occluder.",
+      "params": {
+        "occluder_width": 105
+      },
+      "sweep_param": "occluder_width",
+      "programmatic": true,
+      "controls": [
+        {
+          "param": "line_angle_deg",
+          "label": "Line angle (\u00b0)",
+          "type": "select",
+          "values": [
+            25.0,
+            30.0,
+            35.0
+          ]
+        },
+        {
+          "param": "occluder_width",
+          "label": "Occluder width (px)",
+          "type": "range",
+          "min": 45,
+          "max": 165,
+          "step": 1
+        },
+        {
+          "param": "y_shift",
+          "label": "Vertical shift (px)",
+          "type": "range",
+          "min": -10,
+          "max": 9,
+          "step": 1
+        }
+      ],
+      "derived_params": [],
+      "illusion_image": "./assets/stimuli/poggendorff/illusion.png",
+      "control_image": "./assets/stimuli/poggendorff/control.png",
+      "control_note": null
+    },
+    {
+      "id": "zollner",
+      "label": "Z\u00f6llner",
+      "category": "angle",
+      "description": "Parallel main lines with alternating oblique hatch marks.",
+      "human_effect": "Hatched lines appear non-parallel; strength grows with hatch angle.",
+      "params": {
+        "main_angle_deg": 30.0,
+        "hatch_angle_deg": 47.5
+      },
+      "sweep_param": "hatch_angle_deg",
+      "programmatic": true,
+      "controls": [
+        {
+          "param": "hatch_angle_deg",
+          "label": "Hatch angle (\u00b0)",
+          "type": "range",
+          "min": 20.0,
+          "max": 75.0,
+          "step": 0.5
+        },
+        {
+          "param": "hatch_length",
+          "label": "Hatch length (px)",
+          "type": "range",
+          "min": 13,
+          "max": 19,
+          "step": 1
+        },
+        {
+          "param": "hatch_spacing",
+          "label": "Hatch spacing (px)",
+          "type": "range",
+          "min": 17,
+          "max": 23,
+          "step": 1
+        },
+        {
+          "param": "main_angle_deg",
+          "label": "Main line angle (\u00b0)",
+          "type": "select",
+          "values": [
+            25.0,
+            30.0,
+            35.0
+          ]
+        }
+      ],
+      "derived_params": [],
+      "illusion_image": "./assets/stimuli/zollner/illusion.png",
+      "control_image": "./assets/stimuli/zollner/control.png",
+      "control_note": null
+    },
+    {
+      "id": "rotating_snakes",
+      "label": "Rotating snakes",
+      "category": "motion",
+      "description": "Coloured annular segments in a wheel layout.",
+      "human_effect": "Peripheral wheels appear to rotate (motion from static).",
+      "params": {
+        "wheel_radius": 54
+      },
+      "sweep_param": "wheel_radius",
+      "programmatic": true,
+      "controls": [
+        {
+          "param": "n_rings",
+          "label": "Number of rings",
+          "type": "select",
+          "values": [
+            3,
+            4
+          ]
+        },
+        {
+          "param": "phase",
+          "label": "Wheel phase (rad)",
+          "type": "range",
+          "min": 0.386,
+          "max": 6.186,
+          "step": 0.01
+        },
+        {
+          "param": "segment_count",
+          "label": "Segments per ring",
+          "type": "select",
+          "values": [
+            40,
+            48,
+            56
+          ]
+        },
+        {
+          "param": "wheel_radius",
+          "label": "Wheel radius (px)",
+          "type": "range",
+          "min": 46,
+          "max": 62,
+          "step": 1
+        }
+      ],
+      "derived_params": [],
+      "illusion_image": "./assets/stimuli/rotating_snakes/illusion.png",
+      "control_image": "./assets/stimuli/rotating_snakes/control.png",
+      "control_note": null
+    },
+    {
+      "id": "scintillating_grid",
+      "label": "Scintillating grid",
+      "category": "motion",
+      "description": "Grey discs at grid intersections on a black grid.",
+      "human_effect": "Flickering dark spots appear at intersections (motion from static).",
+      "params": {
+        "disc_radius": 9
+      },
+      "sweep_param": "disc_radius",
+      "programmatic": true,
+      "controls": [
+        {
+          "param": "disc_radius",
+          "label": "Disc radius (px)",
+          "type": "range",
+          "min": 6,
+          "max": 13,
+          "step": 1
+        },
+        {
+          "param": "grid_spacing",
+          "label": "Grid spacing (px)",
+          "type": "select",
+          "values": [
+            44,
+            48,
+            52
+          ]
+        }
+      ],
+      "derived_params": [
+        "grid_line_width"
+      ],
+      "illusion_image": "./assets/stimuli/scintillating_grid/illusion.png",
+      "control_image": "./assets/stimuli/scintillating_grid/control.png",
+      "control_note": null
+    },
+    {
+      "id": "hallusion_bench",
+      "label": "HallusionBench (external)",
+      "category": "impossible",
+      "description": "Fixed example from HallusionBench VD/illusion: two related frames used in their illusion-vs-reference protocol (not parametric).",
+      "human_effect": "Humans typically accept the illusory reading on these scene items; VLMs are scored with MCQ.",
+      "params": {
+        "source_illusion": "hallusion_bench/VD/illusion/18_0.png",
+        "source_control": "hallusion_bench/VD/illusion/18_1.png"
+      },
+      "external": true,
+      "illusion_image": "./assets/stimuli/hallusion_bench/illusion.png",
+      "control_image": "./assets/stimuli/hallusion_bench/control.png",
+      "control_note": "Static preview: HallusionBench item 18 (illusion frame vs. reference frame). Evaluation uses the full downloaded manifest, not this single pair."
+    },
+    {
+      "id": "illusion_vqa",
+      "label": "IllusionVQA (external)",
+      "category": "impossible",
+      "description": "Scene-level impossible or ambiguous objects from IllusionVQA.",
+      "human_effect": "Humans report perceptual conflict or impossible interpretations.",
+      "params": {
+        "source_id": "3"
+      },
+      "external": true,
+      "illusion_image": "./assets/stimuli/illusion_vqa/illusion.png",
+      "control_image": "./assets/stimuli/illusion_vqa/control.png",
+      "control_note": "No separate control image in manifest; same frame shown."
+    }
+  ],
+  "category_order": [
+    "geometric",
+    "color",
+    "angle",
+    "motion",
+    "impossible"
+  ]
+}

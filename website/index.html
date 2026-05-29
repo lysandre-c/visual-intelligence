@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Do vision models fail like humans? A systematic study of directional perceptual error alignment using the Human Error Alignment Score (HEAS).">
+  <title>Do Vision Models Fail Like Humans? | Visual Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <!-- GitHub Pages: enable Settings → Pages → Source: GitHub Actions (see .github/workflows/deploy-pages.yml) -->
+
+  <nav class="site-nav" aria-label="Main">
+    <div class="site-nav-inner">
+      <a href="#abstract">Abstract</a>
+      <a href="#introduction">Introduction</a>
+      <a href="#related-work">Related Work</a>
+      <a href="#method">Method</a>
+      <a href="#experiments">Experiments</a>
+      <a href="#conclusion-and-limitations">Conclusion and Limitations</a>
+      <a href="#individual-contributions">Individual contributions</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <h1>Do Vision Models Fail Like Humans?</h1>
+    <p class="subtitle">A systematic study of directional perceptual error alignment across classical illusions and modern vision architectures</p>
+    <p class="authors">Jules Herrscher · Matisse Van Schalkwijk · Lysandre Costes · Imane Oujja</p>
+    <p class="affiliation">EPFL, CS-503 Visual Intelligence: Machines and Minds</p>
+    <div class="hero-links">
+      <a href="https://github.com/lysandre-c/visual-intelligence">Code</a>
+    </div>
+  </header>
+
+  <main>
+    <section id="abstract">
+      <h2>Abstract</h2>
+      <div class="abstract-box">
+        <p>
+          Visual illusions are stimuli on which the human visual system makes systematic, reproducible errors, and are
+          arguably the cleanest probe we have into the inductive biases of human vision. Prior work has shown that some
+          deep vision models also misperceive certain illusions, but most studies measure raw accuracy and confuse
+          “the model is wrong” with “the model is wrong in the same direction as a human.”
+        </p>
+        <p>
+          We present a systematic study quantifying, across five families of classical illusions and four model families,
+          the directional alignment between human and model perceptual errors. That is, not whether models fail, but
+          whether they fail like us. Our key contribution is a unified
+          Human Error Alignment Score (HEAS) that distinguishes human-like illusion susceptibility from
+          generic non-robustness, and an analysis of which architectural and training choices push models toward
+          human-like perception. On LLaVA-1.5 we also study preference alignment with DPO
+          <a href="#ref-16" class="cite">[16]</a> and SymMPO (symmetric polarity optimization), motivated when DPO raised HEAS but showed semantic overfitting.
+        </p>
+        <p>
+          <strong>Key results:</strong> human-like illusion bias is <em>category-specific</em>, not a global property of “deep vision.”
+          Supervised ViTs can reach high HEAS on geometric length (up to ≈ 0.92) while staying near the floor on color and angle
+          (often ≈ 0.08–0.14); contrastive encoders remain largely anti-illusory on geometry (HEAS ≈ 0.12). Preference-tuned LLaVA
+          can raise reported illusory rates: DPO reaches mean HEAS ≈ 0.91 on evaluated VLM cells, but saliency and control checks
+          suggest this can reflect language shortcuts as much as visual grounding. Failures are structured (correct-avoidant,
+          anti-illusory, and “other”-collapse), not random.
+        </p>
+      </div>
+    </section>
+
+    <section id="introduction">
+      <h2>Introduction</h2>
+      <p>
+        Visual illusions are signatures of the inductive biases the human visual system uses to resolve ambiguous
+        inputs. For visual intelligence, the central question is whether modern models exhibit these same systematic
+        errors when trained on natural images.
+      </p>
+      <p>
+        Prior work has answered “sometimes yes” for individual illusions and individual models
+        <a href="#ref-1" class="cite">[1]</a>, <a href="#ref-2" class="cite">[2]</a>, <a href="#ref-3" class="cite">[3]</a>,
+        <a href="#ref-4" class="cite">[4]</a>, <a href="#ref-5" class="cite">[5]</a>, and recent benchmarks
+        <a href="#ref-6" class="cite">[6]</a>, <a href="#ref-7" class="cite">[7]</a> report that vision–language models
+        perform far below humans on illusion VQA.
+        Two questions remain only partially answered:
+      </p>
+      <ol>
+        <li>
+          <strong>Direction, not just accuracy.</strong> Most evaluations measure whether the model gives the physically
+          correct answer. This confuses two opposite findings: a model that says “the lines are equal” is less human-like
+          than one that says “the top line is longer” (the human illusion). Being right for the wrong reason is not
+          human-like, and neither is being wrong in an arbitrary direction.
+        </li>
+        <li>
+          <strong>Cross-architecture systematicity.</strong> Existing studies typically test one illusion family on one
+          model class. We lacked a per-illusion, per-architecture map of which biases transfer from human to artificial
+          vision.
+        </li>
+      </ol>
+      <p>We pose three concrete research questions:</p>
+      <ul>
+        <li><strong>RQ1:</strong> On which illusion categories do contemporary vision models exhibit the same directional bias as humans?</li>
+        <li><strong>RQ2:</strong> Does this human-likeness correlate with architecture or pretraining objective (supervised, contrastive, self-supervised, language-aligned)?</li>
+        <li><strong>RQ3:</strong> For illusions where models do not match humans, what are they doing instead: failing randomly, using basic data patterns, or following a different bias?</li>
+      </ul>
+      <h3>Why this matters</h3>
+      <p>
+        Illusions are a way to reverse-engineer how vision works. If a model falls for the same illusions we do, it
+        probably shares our visual biases; if it does not, its internal logic may be fundamentally different. Standard
+        benchmarks such as ImageNet-C <a href="#ref-19" class="cite">[19]</a> or ObjectNet
+        <a href="#ref-20" class="cite">[20]</a> test how models handle blurry or noisy photos; illusions test their
+        core priors: a signal that many robustness studies ignore. This also matters for VLM hallucination, as recent
+        results <a href="#ref-7" class="cite">[7]</a> show: we need to know whether a model fails because it has a human-like
+        visual prior or because it repeats a memorized caption. A
+        per-category alignment score gives a concrete way to compare which models behave more like human vision.
+      </p>
+      <p><strong>Our contributions consist of:</strong></p>
+      <ul>
+        <li>The <strong>Human Error Alignment Score (HEAS)</strong> for comparing model vs. human illusory-response <em>rates</em>, not accuracy alone.</li>
+        <li>A unified benchmark across <strong>five illusion categories</strong>, <strong>eight models</strong>, and parametric psychometric sweeps.</li>
+        <li>Evidence that supervised, contrastive, and language-aligned models diverge systematically in <em>how</em> they fail.</li>
+        <li>VLM alignment on base LLaVA with DPO <a href="#ref-16" class="cite">[16]</a> and SymMPO (symmetric polarity preference optimization).</li>
+      </ul>
+      <div class="pipeline-wrap">
+        <img
+          src="./assets/pipeline.svg"
+          alt="Evaluation pipeline: stimuli, eight models, family-specific probing, control filtering, HEAS scoring, and optional VLM alignment (DPO and SymMPO on LLaVA). Supplementary analyses include psychometric sweeps and saliency maps."
+          class="pipeline-fig"
+          width="1000"
+          height="172"
+          decoding="async"
+        >
+      </div>
+    </section>
+
+    <section id="related-work">
+      <h2>Related Work</h2>
+      <h3>Illusions in vision models</h3>
+      <p>
+        Gomez-Villa et al. <a href="#ref-1" class="cite">[1]</a>, <a href="#ref-2" class="cite">[2]</a> showed CNNs trained for
+        low-level tasks reproduce certain brightness and color illusions; Ward <a href="#ref-4" class="cite">[4]</a>
+        reported similar effects for shape illusions; Sun and Dekel <a href="#ref-3" class="cite">[3]</a> found
+        illusion-like responses to the scintillating grid in ImageNet networks; Benjamin et al.
+        <a href="#ref-11" class="cite">[11]</a> measured shared illusions at small scale.
+        These studies are typically per-illusion, per-model, and report accuracy rather than directional alignment.
+      </p>
+      <h3>Illusions in VLMs</h3>
+      <p>
+        Zhang et al. <a href="#ref-5" class="cite">[5]</a> first probed VLMs on illusions through language. IllusionVQA
+        <a href="#ref-6" class="cite">[6]</a> and HallusionBench <a href="#ref-7" class="cite">[7]</a> are large
+        benchmarks reporting that VLMs underperform humans, but they treat illusions as a failure mode (model vs. ground
+        truth) rather than as an alignment probe (model vs. human). Our framing inverts this.
+      </p>
+      <h3>Human–machine alignment</h3>
+      <p>
+        Geirhos et al. <a href="#ref-12" class="cite">[12]</a>, <a href="#ref-13" class="cite">[13]</a> compared human and model
+        error patterns under naturalistic distortions and showed models are texture-biased while humans are shape-biased.
+        We extend this from naturalistic distortions to designed perceptual stimuli where the human “error pattern” is
+        itself the object of study. Our model panel includes supervised CNNs and ViTs
+        <a href="#ref-8" class="cite">[8]</a>, contrastive encoders (CLIP <a href="#ref-10" class="cite">[10]</a>, DINOv2
+        <a href="#ref-9" class="cite">[9]</a>), and LLaVA-1.5 <a href="#ref-17" class="cite">[17]</a> as a vision–language model.
+      </p>
+      <p><strong>What we add:</strong></p>
+      <ol type="i">
+        <li>A directional alignment score, not raw accuracy.</li>
+        <li>Coverage of five illusion categories on the same model panel.</li>
+        <li>Architecture-vs.-training disentanglement.</li>
+        <li>A reusable stimulus generator and open materials to reproduce the full benchmark.</li>
+      </ol>
+    </section>
+
+    <section id="method">
+      <h2>Method</h2>
+      <p>
+        We treat illusion evaluation as a <em>directional alignment</em> problem: each model answers a three-way probe
+        (physically correct, human-illusory, other) on matched illusion/control pairs. Below we justify stimulus design,
+        architecture-specific probing, the HEAS metric, and VLM alignment with DPO and SymMPO (from base LLaVA), evaluated in
+        <a href="#alignment">Experiments</a>.
+      </p>
+
+      <h3>Stimulus design</h3>
+      <p>
+        We evaluate whether vision models exhibit the same <em>directional</em> errors as humans on classical illusions.
+        Each trial presents a three-way choice: physically <code>correct</code>, human-<code>illusory</code>, or
+        <code>other</code> (any response that is neither the physical truth nor the human-illusory direction, e.g. refusals,
+        off-topic answers, or probe failures). Programmatic generators yield about <strong>4,400</strong> synthetic
+        illusion–control pairs across nine illusion types with parametric sweeps; scene-level impossible objects come from
+        IllusionVQA <a href="#ref-6" class="cite">[6]</a> and HallusionBench <a href="#ref-7" class="cite">[7]</a>
+        (~435 items); motion-from-static illusions follow Sun and Dekel <a href="#ref-3" class="cite">[3]</a>.
+        For <strong>impossible</strong> scenes we evaluate only VLMs and contrastive models: these items are language-heavy
+        VQA without matched visual controls, so CNN/ViT linear-probe protocols do not apply.
+      </p>
+      <table class="data-table method-design-table">
+        <thead>
+          <tr><th>Category</th><th>Illusions</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Geometric</td><td>Müller-Lyer, Ponzo, Ebbinghaus</td></tr>
+          <tr><td>Color</td><td>Simultaneous contrast, White’s</td></tr>
+          <tr><td>Angle</td><td>Zöllner, Poggendorff</td></tr>
+          <tr><td>Motion</td><td>Scintillating grid, rotating snakes</td></tr>
+          <tr><td>Impossible</td><td>IllusionVQA <a href="#ref-6" class="cite">[6]</a>, HallusionBench <a href="#ref-7" class="cite">[7]</a></td></tr>
+        </tbody>
+      </table>
+
+      <div id="illusion-lab">
+        <h4>Interactive stimulus gallery</h4>
+        <p>
+          Browse the same illusion families used in the benchmark. Each type is shown as an <strong>illusion</strong> next to
+          its <strong>control</strong> (the version with the misleading cue removed). Use the sliders to change parameters
+          across the same ranges as in the full study. Fixed photographs from IllusionVQA and HallusionBench illustrate
+          scene-level items that are not generated parametrically.
+        </p>
+        <div class="interactive-panel">
+          <div class="controls-row">
+            <label>
+              Category
+              <select id="illusion-category-select" aria-label="Illusion category"></select>
+            </label>
+            <label>
+              Illusion type
+              <select id="illusion-type-select" aria-label="Illusion type"></select>
+            </label>
+          </div>
+          <p id="illusion-type-desc" class="illusion-type-desc"></p>
+          <p id="illusion-human-effect" class="illusion-human-effect"></p>
+
+          <div id="illusion-param-controls" class="controls-row illusion-param-controls"></div>
+
+          <div id="illusion-canvas-view" class="illusion-lab-canvas-row">
+            <div class="illusion-lab-canvas-wrap">
+              <h4>Illusion</h4>
+              <canvas id="illusion-canvas" width="512" height="256"></canvas>
+            </div>
+            <div class="illusion-lab-canvas-wrap">
+              <h4>Control</h4>
+              <canvas id="illusion-control-canvas" width="512" height="256"></canvas>
+            </div>
+          </div>
+
+          <div id="illusion-static-view" class="illusion-lab-canvas-row is-hidden">
+            <div class="illusion-lab-canvas-wrap">
+              <h4>Illusion</h4>
+              <img id="illusion-gallery-illusion" class="illusion-gallery-img" alt="">
+            </div>
+            <div class="illusion-lab-canvas-wrap">
+              <h4>Control / reference</h4>
+              <img id="illusion-gallery-control" class="illusion-gallery-img" alt="">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Matched controls and sanity checks</h3>
+      <p>
+        Each programmatic trial is an <strong>illusion / control</strong> pair: the control removes the biasing cue while
+        keeping layout and luminance. We only score an illusion image if the model answers <code>correct</code> on its paired
+        control (except impossible-scene items, which often lack true controls). CNN/ViT probes must reach ≥80% accuracy on
+        controls before illusion scoring; CLIP and LLaVA use the same text prompt on both images of a pair.
+      </p>
+
+      <h3>Probing protocols and bias controls</h3>
+      <ul>
+        <li><strong>CNN / ViT (supervised):</strong> Frozen ImageNet backbone + 3-way linear probe trained on synthetic
+          <em>non-illusion</em> images only (no illusion labels in training). Vision is tested via frozen features; this
+          avoids label leakage but may miss illusion-specific fine-tuning effects.</li>
+        <li><strong>CLIP (contrastive):</strong> Zero-shot image–text matching with short descriptions tailored to each
+          illusion (e.g. “looks longer”, “looks darker”) rather than naming the effect. The same three phrases score both
+          illusion and control images.</li>
+        <li><strong>DINOv2 (self-supervised):</strong> Image–image similarity to reference patches per answer class (vision-only;
+          no text tower).</li>
+        <li><strong>LLaVA-1.5 <a href="#ref-17" class="cite">[17]</a> (language-aligned):</strong> Multiple-choice VQA. Following HallusionBench’s diagnosis of
+          position bias <a href="#ref-7" class="cite">[7]</a>, each trial <em>randomizes</em> the A/B/C option order and draws one of two
+          framings: <strong>neutral</strong> (“answer about the image”) vs. <strong>name-blind</strong> (explicitly avoids
+          illusion names). Bias is mitigated across the dataset by varying order/framing per stimulus; the model is queried
+          once per image per pass (same prompt on the paired control). IllusionVQA items use dataset-provided questions when
+          available.</li>
+      </ul>
+
+      <h3>HEAS metric and validity</h3>
+      <div class="formula">
+        HEAS(m, c) = 1 − | p<sub>model</sub><sup>illusory</sup>(m, c) − p<sub>human</sub><sup>illusory</sup>(c) |
+      </div>
+      <p>
+        p<sub>model</sub><sup>illusory</sup> is the fraction of illusion trials (after control filtering) where the model
+        chooses the human-<code>illusory</code> answer. p<sub>human</sub><sup>illusory</sup>(c) is one reference rate per illusion
+        category used in the score. HEAS = 1 means the model’s illusory-response rate matches that reference; HEAS ≈ 0 means
+        opposite or absent illusion bias. Category aggregation is a deliberate simplification (see
+        <a href="#conclusion-and-limitations">Limitations</a>).
+      </p>
+
+      <h3>Design choices and alternatives</h3>
+      <p>
+        We chose synthetic illusion images for controlled sweeps and reproducibility; alternatives such as photo-realistic
+        renders or in-the-wild images would improve ecological validity but complicate parametric psychometrics. A binary
+        correct/incorrect probe would be simpler but cannot separate human-like from anti-illusory failures,hence the
+        three-way design. For VLMs we use multiple-choice text rather than free-form answers to reduce parsing ambiguity;
+        for CNNs/ViTs we use linear probes on frozen features rather than end-to-end fine-tuning on illusions, which would
+        conflate alignment with illusion-specific overfitting.
+      </p>
+
+      <h3>Preference alignment overview</h3>
+      <p>
+        Base LLaVA-1.5 <a href="#ref-17" class="cite">[17]</a> often under-reports illusory answers relative to our reference rates. We first applied
+        direct preference optimization (DPO) <a href="#ref-16" class="cite">[16]</a>: roughly 1,000 preference pairs where human-illusory multiple-choice
+        responses are preferred over physically correct ones on illusion images (reversed on controls), with a LoRA
+        <a href="#ref-18" class="cite">[18]</a> adapter on the language backbone (rank 16 on the legacy training run). The released checkpoint is
+        <a href="https://huggingface.co/Jukess/llava_illusions_dpo" rel="noopener noreferrer">Jukess/llava_illusions_dpo</a>
+        on Hugging Face. DPO raised category-level HEAS, but qualitative analysis suggested <strong>semantic overfitting</strong>. The
+        frozen vision encoder cannot change what the model sees, so the language head may learn to output “illusory” labels from
+        prompt wording rather than from visual evidence.
+      </p>
+      <p>
+        We therefore developed <strong>SymMPO</strong> (Symmetric Multimodal Preference Optimization), also trained from base
+        LLaVA-1.5. Public weights:
+        <a href="https://huggingface.co/Matisse6410/LlaVa-1.5-SDPO" rel="noopener noreferrer">Matisse6410/LlaVa-1.5-SDPO</a>
+        on Hugging Face. SymMPO keeps the same illusory-alignment goal but adds
+        polarity-inverted prompts on the <em>same</em> image, margin consistency between those prompts, anchored preference
+        regularisation, factual control VQA to limit catastrophic forgetting, and a trainable multimodal projector so visual
+        features can be remapped into text space. Full loss and data details follow; HEAS re-evaluation is reported when the
+        SymMPO checkpoint is available (<a href="#symmpo-results">results</a>).
+      </p>
+
+      <h4>SymMPO dataset (polarity-paired preferences)</h4>
+      <p>
+        Training pairs are drawn from programmatic geometric, color, angle, and motion illusions (no impossible-scene items).
+        For each illusion image we include two opposing text prompts on the <strong>same static image</strong>:
+      </p>
+      <ul>
+        <li><strong>Original polarity</strong>: e.g. “Which line appears longer?” with chosen = human-illusory answer and
+          rejected = physically correct / equal.</li>
+        <li><strong>Inverted polarity</strong>: e.g. “Which line appears shorter?” with chosen and rejected flipped so the
+          human-illusory interpretation stays consistent with the image.</li>
+      </ul>
+      <p>
+        Approximately <strong>20%</strong> of samples are non-illusion <strong>control VQA</strong>: factual questions
+        (“How many lines are shown?”) with the correct answer preferred, to limit catastrophic forgetting of basic VQA.
+      </p>
+
+      <h4>SymMPO training setup</h4>
+      <p>
+        Training starts from base LLaVA-1.5 <a href="#ref-17" class="cite">[17]</a>:
+      </p>
+      <ul>
+        <li><strong>Frozen CLIP vision tower</strong>: preserves pretrained visual features.</li>
+        <li><strong>Trainable multimodal projector</strong>: the MLP that maps vision tokens into the language model space.</li>
+        <li><strong>LoRA on the language backbone</strong> <a href="#ref-18" class="cite">[18]</a>: rank 64 on attention and MLP layers (vision layers excluded).</li>
+        <li><strong>Reference model</strong>: log-probabilities for the DPO ratio are computed from the same weights with adapters
+          disabled, avoiding a second full model in memory.</li>
+      </ul>
+      <p>
+        The collator applies <strong>symbol demonstration</strong> (option letters A/B/C mapped to ♣/♠/♦) and <strong>dynamic option
+        shuffling</strong>, analogous in spirit to the evaluation-time MCQ debiasing inspired by HallusionBench
+        <a href="#ref-7" class="cite">[7]</a>.
+      </p>
+
+      <h4>SymMPO loss</h4>
+      <p>
+        Instead of a single DPO term, SymMPO minimises a four-part objective. Because the image <em>I</em> is held fixed
+        within each term, standard DPO partition functions cancel in the multimodal setting:
+      </p>
+      <div class="formula">
+        L(θ) = L<sub>DPO_m</sub>(θ) + γ L<sub>Symmetric</sub>(θ) + λ L<sub>Margin</sub>(θ) + η L<sub>AncPO</sub>(θ)
+      </div>
+      <ul>
+        <li><strong>L<sub>DPO_m</sub></strong>: standard multimodal DPO log-sigmoid loss on the original prompt (β = 0.1).</li>
+        <li><strong>L<sub>Symmetric</sub></strong>: identical DPO loss on the polarity-inverted prompt (γ = 1.0).</li>
+        <li><strong>L<sub>Margin</sub></strong>: mean squared error between the original and inverted preference margins, encouraging
+          symmetric relative preference strength (λ = 0.5).</li>
+        <li><strong>L<sub>AncPO</sub></strong>: negative log-likelihood of chosen completions on both polarities, stabilising absolute
+          log-probabilities during training (η = 0.1).</li>
+      </ul>
+    </section>
+
+    <section id="experiments">
+      <h2>Experiments</h2>
+
+      <h3>Experimental setup</h3>
+      <p>
+        We evaluate eight publicly available vision models spanning four training paradigms. These models serve as
+        <strong>baselines</strong> representative of how the field typically obtains visual representations, not because any
+        one is a perfect stand-in for human vision, but because together they let us ask whether human-like illusion
+        susceptibility tracks architecture scale, supervised ImageNet training, contrastive language alignment, or VLM
+        instruction tuning.
+      </p>
+      <table class="data-table method-design-table">
+        <thead>
+          <tr><th>Model</th><th>Family</th><th>Role in comparison</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>ResNet-50 <a href="#ref-22" class="cite">[22]</a>, ConvNeXt-Base <a href="#ref-23" class="cite">[23]</a></td><td>Supervised CNN</td><td>Classic ImageNet classifiers; linear probe on frozen features</td></tr>
+          <tr><td>ViT-B/16, ViT-L/16</td><td>Supervised ViT</td><td>Transformer backbones with the same probing protocol as CNNs</td></tr>
+          <tr><td>CLIP ViT-B/32</td><td>Contrastive (language-aligned)</td><td>Zero-shot text prompts; tests whether language priors help or hurt</td></tr>
+          <tr><td>DINOv2 ViT-B/14</td><td>Self-supervised</td><td>Vision-only references; isolates pretraining without text</td></tr>
+          <tr><td>LLaVA-1.5 <a href="#ref-17" class="cite">[17]</a> (base &amp; +DPO <a href="#ref-16" class="cite">[16]</a>)</td><td>Vision–language</td><td>MCQ probing; DPO ablation on the same backbone</td></tr>
+        </tbody>
+      </table>
+      <p>
+        Each model answers the same three-way probe on the programmatic pairs above plus external impossible-scene items where
+        applicable. Primary metric:
+        <strong>HEAS</strong> per (model, category). Below we report HEAS tables and an interactive heatmap, psychometric curves,
+        saliency maps, and DPO alignment results; SymMPO is described in Method with benchmark numbers
+        <a href="#symmpo-results">pending</a>.
+      </p>
+
+      <h3>Quantitative evaluation</h3>
+      <div class="rq-block" id="findings">
+        <h4>Overview of results</h4>
+        <p>
+          The tables below summarize category-level HEAS and failure patterns. Interactive explorers and static figures
+          follow in the subsections.
+        </p>
+
+      <div class="rq-block" id="category-alignment">
+        <h4>Category-dependent alignment</h4>
+        <p>
+          Human-like directional bias is <em>not universal</em>. It is reliable only for
+          <strong>geometric length</strong> in supervised CNNs/ViTs, largely absent for <strong>color</strong> and
+          <strong>angle</strong> in those families, and selectively restored by <strong>language-aligned</strong> models
+          (especially LLaVA + DPO) on color, motion, and geometry.
+        </p>
+        <table class="data-table findings-table">
+          <thead>
+            <tr><th>Category</th><th>Best model</th><th>HEAS</th><th>Best non-VLM</th><th>Pattern</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Geometric</td><td>ViT-L/16</td><td>0.92</td><td>ViT-L/16 (0.92)</td><td>Supervised alignment</td></tr>
+            <tr><td>Color</td><td>LLaVA+DPO</td><td>0.92</td><td>ViT-L/16 (0.27)</td><td>CNNs anti-illusory (~0.08)</td></tr>
+            <tr><td>Angle</td><td>LLaVA base</td><td>0.87</td><td>CLIP (0.36)</td><td>VLMs high; CNNs ~0.14</td></tr>
+            <tr><td>Motion</td><td>LLaVA+DPO</td><td>0.91</td><td>CLIP (0.70)</td><td>CLIP strong on motion; DPO best</td></tr>
+            <tr><td>Impossible</td><td>LLaVA+DPO</td><td>0.97</td><td>CLIP (0.48)</td><td>VLMs only evaluated</td></tr>
+          </tbody>
+        </table>
+        <p class="table-note">“Best model” rows use the DPO checkpoint where noted; SymMPO results are <a href="#symmpo-results">pending</a>.</p>
+        <p>
+          Geometric alignment does not transfer: the same ResNet that reaches HEAS 0.87 on length scores 0.08 on color, while humans
+          still report strong simultaneous-contrast illusions. Thus “fails like humans” must be stated per category, not
+          per model globally.
+        </p>
+      </div>
+
+      <div class="rq-block" id="training-objective">
+        <h4>Training objective vs. architecture scale</h4>
+        <p>
+          HEAS clusters by <em>training interface</em> more than by depth. Supervised models share
+          high geometric / low color-angle profiles. Contrastive models are anti-illusory on geometry (HEAS 0.12 for CLIP and
+          DINOv2). VLMs with DPO achieve the highest mean alignment (~0.91 mean HEAS over evaluated cells).
+        </p>
+        <table class="data-table findings-table">
+          <thead>
+            <tr><th>Family</th><th>Mean HEAS</th><th>Geometric</th><th>Color</th><th>Angle</th><th>Motion</th><th>Impossible</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Supervised CNN/ViT</td><td>0.36</td><td>0.86</td><td>0.13</td><td>0.14</td><td>0.30</td><td>N/A</td></tr>
+            <tr><td>Contrastive</td><td>0.25</td><td>0.12</td><td>0.08</td><td>0.25</td><td>0.50</td><td>0.28</td></tr>
+            <tr><td>LLaVA base</td><td>0.62</td><td>0.59</td><td>0.40</td><td>0.87</td><td>0.30</td><td>0.94</td></tr>
+            <tr><td>LLaVA + DPO</td><td>0.91</td><td>0.88</td><td>0.92</td><td>0.86</td><td>0.91</td><td>0.97</td></tr>
+          </tbody>
+        </table>
+        <p class="table-note">Family means are averages over all evaluated category–model cells in that family. Overview tables reflect the archived <strong>DPO</strong> checkpoint; SymMPO evaluation is <a href="#symmpo-results">pending</a>.</p>
+        <p>
+          DPO (archive) shifts HEAS most where base LLaVA under-shoots: <strong>color +0.52</strong>, <strong>motion +0.61</strong>,
+          <strong>geometric +0.29</strong>. Angle and impossible were already high pre-DPO; gains are smaller but control
+          reliability improves (see <a href="#interpretability">saliency</a> and <a href="#dpo" class="open-details-link">DPO supplementary figures</a>).
+        </p>
+      </div>
+
+      <div class="rq-block" id="failure-modes">
+        <h4>Failure modes when models misalign</h4>
+        <p>
+          Failures are structured, not random. We identify four recurring modes from the evaluation:
+        </p>
+        <table class="data-table findings-table">
+          <thead>
+            <tr><th>Mode</th><th>Example</th><th>Evidence</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Correct-avoidant</td>
+              <td>ResNet × simultaneous contrast</td>
+              <td>P(correct)=1.0, P(illusory)=0.0 → HEAS 0.08</td>
+            </tr>
+            <tr>
+              <td>Anti-illusory geometric</td>
+              <td>CLIP × Müller-Lyer</td>
+              <td>P(illusory)≈0, control pass 1.0 → HEAS 0.12</td>
+            </tr>
+            <tr>
+              <td>Other-collapse</td>
+              <td>ResNet × Poggendorff</td>
+              <td>P(other)≈0.87; non-human failure axis</td>
+            </tr>
+            <tr>
+              <td>Illusory without control</td>
+              <td>LLaVA base × Zöllner</td>
+              <td>P(illusory)≈0.97, control pass ≈11%</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>
+          Psychometric curves (see <a href="#results-psych">below</a>) show <em>shape</em> mismatch: CNNs stay flat and low
+          while humans plateau high; DPO raises LLaVA’s curve on Müller-Lyer and simultaneous contrast. We report curve
+          shape qualitatively from plots, not rank correlation (Spearman), because we compare against a single reference
+          rate per category rather than a full human psychometric curve.
+        </p>
+        <p>
+          Grad-CAM <a href="#ref-14" class="cite">[14]</a> and occlusion sensitivity maps
+          <a href="#ref-15" class="cite">[15]</a> (<a href="#interpretability">interpretability</a>) suggest DPO increases attention to
+          fins and contrast patches, but this is suggestive, not proof of human-like mechanisms.
+        </p>
+      </div>
+      </div>
+
+      <h4 id="results-heas">HEAS explorer</h4>
+      <p>
+        Category × model HEAS scores (see <a href="#findings">overview tables</a> above). Alignment is category- and
+        family-dependent; empty cells are unevaluated pairs, not zero alignment. Click a cell for per-illusion breakdowns,
+        or use <strong>Compare two models</strong> for a bar chart across categories.
+      </p>
+
+      <div class="interactive-panel" id="heas-explorer-panel">
+        <p class="heas-explorer-hint">Click any cell to see <em>why</em> that HEAS score looks the way it does: reference vs. model illusory rates and per-illusion breakdown.</p>
+        <div id="heas-explorer-tabs" class="tab-bar heas-mode-tabs">
+          <button type="button" class="active" data-mode="explore">Drill down</button>
+          <button type="button" data-mode="compare">Compare two models</button>
+        </div>
+        <div id="heas-mode-explore">
+          <div id="heas-heatmap" class="heas-grid"></div>
+          <div id="heas-detail-panel" class="heas-detail-panel">
+            <p class="heas-detail-empty">Click a cell above to inspect illusory rates and per-illusion behavior.</p>
+          </div>
+        </div>
+        <div id="heas-mode-compare" hidden>
+          <div class="controls-row">
+            <label>Model A <select id="heas-compare-a"></select></label>
+            <label>Model B <select id="heas-compare-b"></select></label>
+          </div>
+          <div class="chart-container" style="height:300px">
+            <canvas id="heas-compare-chart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <h3>Qualitative evaluation</h3>
+      <h4 id="results-psych">Psychometric curves</h4>
+      <p>
+        HEAS is a single rate; psychometric curves show how
+        P(<code>illusory</code>) changes with illusion strength (e.g. fin length 6–80 px). We plot each model’s reported
+        illusory rate across the sweep for qualitative comparison of curve shape.
+      </p>
+      <p>
+        Müller-Lyer: supervised curves stay low across fin length; DPO lifts LLaVA’s curve upward. Simultaneous contrast:
+        CNNs stay near zero illusory probability; DPO approaches ~1.0, consistent with the color HEAS jump above.
+      </p>
+
+      <div class="interactive-panel">
+        <h3>Interactive psychometric explorer</h3>
+        <div class="controls-row">
+          <label>
+            Illusion
+            <select id="psych-illusion-select"></select>
+          </label>
+        </div>
+        <div id="psych-model-checkboxes" class="model-checkboxes"></div>
+        <div class="chart-container">
+          <canvas id="psych-chart"></canvas>
+        </div>
+        <p>
+          <a id="psych-static-link" class="static-figure-link"
+             href="./assets/figures/psychometric_muller_lyer.png"
+             target="_blank" rel="noopener noreferrer">
+            View static figure (opens in new tab)
+          </a>
+        </p>
+      </div>
+
+      <button type="button" id="toggle-psych-gallery" class="btn-gallery-toggle"
+              aria-expanded="false" aria-controls="psych-static-gallery">
+        Show all static psychometric figures
+      </button>
+      <div id="psych-static-gallery" class="psych-gallery is-collapsed">
+        <figure><img src="./assets/figures/psychometric_muller_lyer.png" alt="Müller-Lyer psychometric"><figcaption>Müller-Lyer</figcaption></figure>
+        <figure><img src="./assets/figures/psychometric_ponzo.png" alt="Ponzo"><figcaption>Ponzo</figcaption></figure>
+        <figure><img src="./assets/figures/psychometric_ebbinghaus.png" alt="Ebbinghaus"><figcaption>Ebbinghaus</figcaption></figure>
+        <figure><img src="./assets/figures/psychometric_simultaneous_contrast.png" alt="Simultaneous contrast"><figcaption>Simultaneous contrast</figcaption></figure>
+        <figure><img src="./assets/figures/psychometric_whites_illusion.png" alt="White's illusion"><figcaption>White's illusion</figcaption></figure>
+        <figure><img src="./assets/figures/psychometric_zollner.png" alt="Zöllner"><figcaption>Zöllner</figcaption></figure>
+        <figure><img src="./assets/figures/psychometric_poggendorff.png" alt="Poggendorff"><figcaption>Poggendorff</figcaption></figure>
+        <figure><img src="./assets/figures/psychometric_scintillating_grid.png" alt="Scintillating grid"><figcaption>Scintillating grid</figcaption></figure>
+        <figure><img src="./assets/figures/psychometric_rotating_snakes.png" alt="Rotating snakes"><figcaption>Rotating snakes</figcaption></figure>
+      </div>
+
+      <h4 id="interpretability">Saliency and interpretability</h4>
+      <p>
+        Grad-CAM <a href="#ref-14" class="cite">[14]</a>, ViT attention rollout
+        <a href="#ref-21" class="cite">[21]</a>, and LLaVA token-level maps offer <em>hypotheses</em> for why models misalign, not causal proof.
+        DPO increases saliency on fins (Müller-Lyer) and contrast patches (simultaneous contrast), consistent
+        with higher illusory rates but not demonstrating human-identical processing.
+      </p>
+
+      <div id="saliency-gallery" class="interactive-panel">
+        <div class="tab-bar">
+          <button type="button" class="active" data-panel="sal-ml">Müller-Lyer</button>
+          <button type="button" data-panel="sal-sc">Simultaneous contrast</button>
+          <button type="button" data-panel="sal-zollner">Zöllner</button>
+          <button type="button" data-panel="sal-grid">Scintillating grid</button>
+        </div>
+
+        <div id="sal-ml" class="saliency-panel">
+          <div class="saliency-grid">
+            <figure><img src="./assets/visualizations/muller_lyer_strong_resnet_gradcam.png" alt="ResNet GradCAM"><figcaption>ResNet Grad-CAM</figcaption></figure>
+            <figure><img src="./assets/visualizations/muller_lyer_strong_vit_attention.png" alt="ViT attention"><figcaption>ViT attention</figcaption></figure>
+            <figure><img src="./assets/visualizations/muller_lyer_strong_llava_base_gradcam.png" alt="LLaVA base"><figcaption>LLaVA base</figcaption></figure>
+            <figure><img src="./assets/visualizations/muller_lyer_strong_llava_dpo_gradcam.png" alt="LLaVA DPO"><figcaption>LLaVA + DPO</figcaption></figure>
+          </div>
+        </div>
+        <div id="sal-sc" class="saliency-panel" hidden>
+          <div class="saliency-grid">
+            <figure><img src="./assets/visualizations/simultaneous_contrast_default_resnet_gradcam.png" alt=""><figcaption>ResNet</figcaption></figure>
+            <figure><img src="./assets/visualizations/simultaneous_contrast_default_vit_attention.png" alt=""><figcaption>ViT</figcaption></figure>
+            <figure><img src="./assets/visualizations/simultaneous_contrast_default_llava_base_gradcam.png" alt=""><figcaption>LLaVA base</figcaption></figure>
+            <figure><img src="./assets/visualizations/simultaneous_contrast_default_llava_dpo_gradcam.png" alt=""><figcaption>LLaVA + DPO</figcaption></figure>
+          </div>
+        </div>
+        <div id="sal-zollner" class="saliency-panel" hidden>
+          <div class="saliency-grid">
+            <figure><img src="./assets/visualizations/zollner_40deg_resnet_gradcam.png" alt="Zöllner illusion, ResNet Grad-CAM at 40° hatch angle"><figcaption>ResNet (40° hatch)</figcaption></figure>
+            <figure><img src="./assets/visualizations/zollner_40deg_vit_attention.png" alt="Zöllner illusion, ViT attention at 40° hatch angle"><figcaption>ViT (40° hatch)</figcaption></figure>
+          </div>
+        </div>
+        <div id="sal-grid" class="saliency-panel" hidden>
+          <div class="saliency-grid">
+            <figure><img src="./assets/visualizations/scintillating_grid_default_resnet_gradcam.png" alt=""><figcaption>ResNet</figcaption></figure>
+            <figure><img src="./assets/visualizations/scintillating_grid_default_vit_attention.png" alt=""><figcaption>ViT</figcaption></figure>
+          </div>
+        </div>
+      </div>
+
+      <h3 id="alignment">Ablation: VLM alignment (DPO and SymMPO)</h3>
+      <p>
+        Base LLaVA-1.5 starts with patchy illusion alignment: strong on some scene and angle items, weak on color and motion
+        (see overview tables above). We asked whether <strong>preference training</strong> could raise illusory-response rates without
+        retraining the vision backbone. We first applied <strong>DPO</strong> <a href="#ref-16" class="cite">[16]</a>, which moves HEAS sharply upward; qualitative
+        follow-up then motivated <strong>SymMPO</strong> when those gains looked better on paper than in the image.
+      </p>
+
+      <h4>DPO: what we tried and what we found</h4>
+      <p>
+        We fine-tuned LLaVA-1.5 with DPO on roughly 1,000 illusion/control preference pairs (illusory answers preferred on illusion
+        images, reversed on controls; LoRA rank 16 on the language model; frozen CLIP encoder). Weights are public as
+        <a href="https://huggingface.co/Jukess/llava_illusions_dpo" rel="noopener noreferrer">Jukess/llava_illusions_dpo</a>
+        (<code>llava_1.5_dpo</code> in our benchmark).
+      </p>
+      <p>
+        <strong>What improved.</strong> DPO was our first evidence that a VLM <em>can</em> be steered toward human-like illusory rates.
+        Mean HEAS over evaluated VLM cells rose from <strong>0.62</strong> (base) to <strong>0.91</strong> (DPO). The largest jumps
+        were where base LLaVA under-reported illusion most: <strong>color +0.52</strong>, <strong>motion +0.61</strong>, and
+        <strong>geometric +0.29</strong>. Psychometric sweeps show the effect clearly on Müller-Lyer and simultaneous contrast: the
+        model’s illusory-response curve moves upward when illusion strength increases, not only on a single prompt template.
+      </p>
+      <table class="data-table findings-table alignment-story-table">
+        <thead>
+          <tr><th>Category</th><th>LLaVA base HEAS</th><th>LLaVA + DPO HEAS</th><th>Δ vs. base</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Geometric</td><td>0.59</td><td>0.88</td><td>+0.29</td></tr>
+          <tr><td>Color</td><td>0.40</td><td>0.92</td><td>+0.52</td></tr>
+          <tr><td>Angle</td><td>0.87</td><td>0.86</td><td>≈0</td></tr>
+          <tr><td>Motion</td><td>0.30</td><td>0.91</td><td>+0.61</td></tr>
+          <tr><td>Impossible</td><td>0.94</td><td>0.97</td><td>+0.03</td></tr>
+        </tbody>
+      </table>
+
+      <div class="interactive-panel">
+        <div class="chart-container" style="height:280px">
+          <canvas id="dpo-delta-chart"></canvas>
+        </div>
+      </div>
+
+      <p>
+        <strong>What worried us.</strong> High HEAS alone is not enough if the model is not using the image. Follow-up analysis
+        and saliency checks (<a href="#dpo" class="open-details-link">supplementary figures below</a>) pointed to three issues that motivate SymMPO:
+      </p>
+      <ol class="alignment-concerns">
+        <li><strong>Perception gap.</strong> With the vision tower frozen, alignment can only change how features are <em>described</em>,
+          not what is perceived.</li>
+        <li><strong>Semantic overfitting.</strong> The model often answers “illusory” in a systematic way, as if it learned to
+          <em>guess</em> from prompt wording rather than to <em>see</em> the illusion.</li>
+        <li><strong>Blind high HEAS.</strong> Green cells on the heatmap can mask a “hallucination of alignment”: satisfying the
+          preference loss without reliable grounding in visual evidence.</li>
+      </ol>
+
+
+      <details class="collapsible-block" id="dpo">
+        <summary>DPO supplementary figures (psychometric, saliency)</summary>
+        <div class="collapsible-inner">
+          <p class="table-note">
+            Category-level HEAS for LLaVA base vs. DPO is in the <a href="#results-heas">HEAS explorer</a> and the
+            <a href="#dpo-delta-chart">DPO delta chart</a> in this section.
+          </p>
+          <figure>
+            <img src="./assets/visualizations/psychometric_curve.png" alt="LLaVA psychometric before and after DPO">
+            <figcaption>
+              On Müller-Lyer, DPO shifts LLaVA’s illusory-response curve upward across fin-length sweeps.
+            </figcaption>
+          </figure>
+          <h4>Base vs. DPO: Grad-CAM &amp; occlusion</h4>
+          <div class="compare-two">
+            <figure>
+              <img src="./assets/visualizations/muller_lyer_strong_llava_base_gradcam.png" alt="Base GradCAM">
+              <figcaption>LLaVA base: Grad-CAM</figcaption>
+            </figure>
+            <figure>
+              <img src="./assets/visualizations/muller_lyer_strong_llava_dpo_gradcam.png" alt="DPO GradCAM">
+              <figcaption>LLaVA + DPO: Grad-CAM</figcaption>
+            </figure>
+          </div>
+          <div class="compare-two">
+            <figure>
+              <img src="./assets/visualizations/muller_lyer_strong_llava_base_occlusion.png" alt="Base occlusion">
+              <figcaption>LLaVA base: occlusion sensitivity</figcaption>
+            </figure>
+            <figure>
+              <img src="./assets/visualizations/muller_lyer_strong_llava_dpo_occlusion.png" alt="DPO occlusion">
+              <figcaption>LLaVA + DPO: occlusion sensitivity</figcaption>
+            </figure>
+          </div>
+        </div>
+      </details>
+
+      <h4>SymMPO: why we changed the objective</h4>
+      <p>
+        SymMPO targets language-prior overfitting directly. On the <strong>same image</strong>, we train on both an original and a
+        polarity-inverted question (e.g. “longer?” vs. “shorter?”) with consistent human-illusory choices. A symmetric DPO term,
+        margin-consistency loss, and anchored preference regularisation penalise shortcut solutions that only work for one wording.
+        We also train the <strong>multimodal projector</strong> (not only LoRA on text), add ~20% factual control VQA to limit
+        catastrophic forgetting, and apply symbol demonstration plus option shuffling during training. Full specification:
+        <a href="#method">Method</a>. Training weights:
+        <a href="https://huggingface.co/Matisse6410/LlaVa-1.5-SDPO" rel="noopener noreferrer">Matisse6410/LlaVa-1.5-SDPO</a>
+        on Hugging Face (repo name uses “SDPO”; same symmetric polarity objective as SymMPO on this site).
+      </p>
+
+      <h4 id="symmpo-results">SymMPO: benchmark results</h4>
+      <div id="symmpo-results-panel" class="results-pending interactive-panel">
+        <p class="results-pending-msg">
+          The SymMPO checkpoint is on Hugging Face; full HEAS re-evaluation and comparison charts (base vs. DPO vs. SymMPO) will be
+          added here when the benchmark run is merged into this site.
+        </p>
+        <div class="symmpo-figure-grid">
+          <figure class="symmpo-slot" data-slot="symmpo-heas-heatmap">
+            <img src="./assets/visualizations/symmpo/heas_heatmap.png" alt="" hidden>
+            <figcaption>HEAS heatmap (base / DPO / SymMPO)</figcaption>
+          </figure>
+          <figure class="symmpo-slot" data-slot="symmpo-psychometric">
+            <img src="./assets/visualizations/symmpo/psychometric_curve.png" alt="" hidden>
+            <figcaption>Psychometric curve (SymMPO vs. base)</figcaption>
+          </figure>
+        </div>
+        <div class="chart-container symmpo-chart-wrap" style="height:280px" hidden>
+          <canvas id="symmpo-delta-chart"></canvas>
+        </div>
+        <div class="symmpo-figure-grid">
+          <figure class="symmpo-slot" data-slot="symmpo-gradcam">
+            <img src="./assets/visualizations/symmpo/muller_lyer_gradcam.png" alt="" hidden>
+            <figcaption>Grad-CAM (SymMPO)</figcaption>
+          </figure>
+          <figure class="symmpo-slot" data-slot="symmpo-occlusion">
+            <img src="./assets/visualizations/symmpo/muller_lyer_occlusion.png" alt="" hidden>
+            <figcaption>Occlusion sensitivity (SymMPO)</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section id="conclusion-and-limitations">
+      <h2>Conclusion and Limitations</h2>
+      <p>
+        Comparing <em>directional</em> illusory-response rates with HEAS, not raw accuracy, shows that modern vision models do not
+        “fail like humans” in one global sense. Alignment appears only in specific category×model cells; nowhere does a single
+        architecture track human bias across all five illusion families.
+      </p>
+      <p>
+        The clearest pattern is <strong>category specificity</strong>. Supervised CNNs and ViTs can reach high HEAS on geometric
+        length (best cells ≈ 0.92) yet often sit near the floor on color and angle (≈ 0.08–0.14), where humans remain strongly
+        illusory. Vision–language models are uneven out of the box; DPO <a href="#ref-16" class="cite">[16]</a> pushes mean HEAS on evaluated VLM cells to ≈ 0.91,
+        especially on color and motion, but control checks and saliency suggest part of that lift may reflect language shortcuts
+        as much as visual grounding. SymMPO <a href="#symmpo-results">still awaits full HEAS evaluation</a>.
+      </p>
+      <p>
+        These differences line up less with parameter count than with <strong>how representations were learned</strong>. Supervised
+        models share a high-geometric / low-color fingerprint; contrastive encoders (CLIP, DINOv2) can pass controls yet stay
+        anti-illusory on geometry (~0.12). Preference tuning on LLaVA moves reported illusion rates more than swapping among
+        similar-scale supervised backbones, a reminder that the training interface matters as much as the backbone class.
+      </p>
+      <p>
+        Where models miss humans, the errors are <strong>structured, not random</strong>: correct-avoidant color responding,
+        anti-illusory geometry, <code>other</code>-collapse on difficult angle trials, and, before control filtering, illusory
+        saturation on some VLM items without reliable control competence. Psychometric curves and saliency maps help read these
+        modes qualitatively; they are not evidence of human-identical internal processing.
+      </p>
+      <p>
+        Several limits bound how far to generalize. HEAS uses one reference illusory rate per category, so a model can match the
+        score while diverging on curve shape or individual illusions; we judge psychometric shape by eye, not rank correlation.
+        The evaluation grid is sparse in places (e.g. no ResNet on motion; no CNN/ViT on impossible scenes), and empty heatmap cells
+        mean unevaluated, not zero alignment. Each model family is probed differently (linear probes, CLIP zero-shot, DINOv2
+        matching, debiased LLaVA MCQ per HallusionBench <a href="#ref-7" class="cite">[7]</a>), so low HEAS may partly reflect protocol mismatch.
+        Impossible-scene benchmarks <a href="#ref-6" class="cite">[6]</a>, <a href="#ref-7" class="cite">[7]</a> lack the tight illusion–control pairing of our programmatic
+        stimuli; alignment on LLaVA with DPO and SymMPO is a case study on one VLM <a href="#ref-17" class="cite">[17]</a>. Grad-CAM
+        <a href="#ref-14" class="cite">[14]</a> and occlusion maps <a href="#ref-15" class="cite">[15]</a> show where models look, not why they answer as they do.
+      </p>
+      <p>
+        The fair claim is cautious: under explicit directional metrics, some models align with human error patterns on some
+        illusion types, and many do not. Filling the sparse grid, finishing SymMPO benchmarking, and adding rank-based psychometric
+        statistics would sharpen that picture further.
+      </p>
+    </section>
+
+    <section id="individual-contributions">
+      <h2>Individual contributions</h2>
+      <p>
+        All authors contributed to project design and manuscript preparation.
+      </p>
+      <ul>
+        <li><strong>Jules Herrscher:</strong> Evaluation pipeline, DPO training and VLM runs, analysis.</li>
+        <li><strong>Matisse Van Schalkwijk:</strong>Evaluation pipeline, SymMPO training and VLM runs, analysis.</li>
+        <li><strong>Lysandre Costes:</strong> Stimulus design and generation, models and vizualization implementation, website, analysis.</li>
+        <li><strong>Imane Oujja:</strong> Literature review and related work.</li>
+      </ul>
+    </section>
+
+    <section id="references" class="supplementary-section">
+      <h2>References</h2>
+      <ol class="references-list">
+        <li id="ref-1">
+          A. Gomez-Villa, A. Martín, J. Vazquez-Corral, and M. Bertalmío,
+          “Convolutional neural networks can be deceived by visual illusions,”
+          in <em>Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)</em>, 2019, pp. 12309–12317.
+        </li>
+        <li id="ref-2">
+          A. Gomez-Villa, A. Martín, J. Vazquez-Corral, M. Bertalmío, and J. Malo,
+          “Color illusions also deceive CNNs for low-level vision tasks: Analysis and implications,”
+          <em>Vision Research</em>, vol. 176, pp. 156–174, 2020.
+        </li>
+        <li id="ref-3">
+          E. D. Sun and R. Dekel,
+          “ImageNet-trained deep neural networks exhibit illusion-like response to the scintillating grid,”
+          <em>Journal of Vision</em>, vol. 21, no. 11, pp. 15–15, 2021.
+        </li>
+        <li id="ref-4">
+          E. J. Ward,
+          “Exploring perceptual illusions in deep neural networks,”
+          <em>Journal of Vision</em>, vol. 19, no. 10, pp. 34b–34b, 2019.
+        </li>
+        <li id="ref-5">
+          Y. Zhang, J. Pan, Y. Zhou, R. Pan, and J. Chai,
+          “Grounding visual illusions in language: Do vision-language models perceive illusions like humans?”
+          in <em>Proceedings of the Conference on Empirical Methods in Natural Language Processing (EMNLP)</em>, 2023.
+        </li>
+        <li id="ref-6">
+          H. S. Shahgir, K. S. Sayeed, A. Bhattacharjee, W. U. Ahmad, Y. Dong, and R. Shahriyar,
+          “IllusionVQA: A challenging optical illusion dataset for vision language models,”
+          in <em>Conference on Language Modeling (COLM)</em>, 2024.
+        </li>
+        <li id="ref-7">
+          T. Guan, F. Liu, X. Wu, R. Xian, Z. Li, X. Liu, X. Wang, L. Chen, F. Huang, Y. Yacoob <em>et al.</em>,
+          “HallusionBench: An advanced diagnostic suite for entangled language hallucination and visual illusion in large vision-language models,”
+          in <em>Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)</em>, 2024.
+        </li>
+        <li id="ref-8">
+          A. Dosovitskiy, L. Beyer, A. Kolesnikov, D. Weissenborn, X. Zhai, T. Unterthiner, M. Dehghani, M. Minderer, G. Heigold, S. Gelly <em>et al.</em>,
+          “An image is worth 16×16 words: Transformers for image recognition at scale,”
+          in <em>International Conference on Learning Representations (ICLR)</em>, 2021.
+        </li>
+        <li id="ref-9">
+          M. Oquab, T. Darcet, T. Moutakanni, H. Vo, M. Szafraniec, V. Khalidov, P. Fernandez, D. Haziza, F. Massa, A. El-Nouby <em>et al.</em>,
+          “DINOv2: Learning robust visual features without supervision,”
+          <em>Transactions on Machine Learning Research (TMLR)</em>, 2024.
+        </li>
+        <li id="ref-10">
+          A. Radford, J. W. Kim, C. Hallacy, A. Ramesh, G. Goh, S. Agarwal, G. Sastry, A. Askell, P. Mishkin, J. Clark <em>et al.</em>,
+          “Learning transferable visual models from natural language supervision,”
+          in <em>International Conference on Machine Learning (ICML)</em>, 2021.
+        </li>
+        <li id="ref-11">
+          A. Benjamin, C. Qiu, L.-Q. Zhang, K. Kording, and A. Stocker,
+          “Shared visual illusions between humans and artificial neural networks,”
+          in <em>Conference on Cognitive Computational Neuroscience (CCN)</em>, 2019.
+        </li>
+        <li id="ref-12">
+          R. Geirhos, P. Rubisch, C. Michaelis, M. Bethge, F. A. Wichmann, and W. Brendel,
+          “ImageNet-trained CNNs are biased towards texture; increasing shape bias improves accuracy and robustness,”
+          in <em>International Conference on Learning Representations (ICLR)</em>, 2019.
+        </li>
+        <li id="ref-13">
+          R. Geirhos, K. Narayanappa, B. Mitzkus, T. Thieringer, M. Bethge, F. A. Wichmann, and W. Brendel,
+          “Partial success in closing the gap between human and machine vision,”
+          in <em>Advances in Neural Information Processing Systems (NeurIPS)</em>, 2021.
+        </li>
+        <li id="ref-14">
+          R. R. Selvaraju, M. Cogswell, A. Das, R. Vedantam, D. Parikh, and D. Batra,
+          “Grad-CAM: Visual explanations from deep networks via gradient-based localization,”
+          in <em>Proceedings of the IEEE International Conference on Computer Vision (ICCV)</em>, 2017, pp. 618–626.
+        </li>
+        <li id="ref-15">
+          M. D. Zeiler and R. Fergus,
+          “Visualizing and understanding convolutional networks,”
+          in <em>Proceedings of the European Conference on Computer Vision (ECCV)</em>, 2014, pp. 818–833.
+        </li>
+        <li id="ref-16">
+          R. Rafailov, A. Sharma, E. Mitchell, C. D. Manning, S. Ermon, and C. Finn,
+          “Direct preference optimization: Your language model is secretly a reward model,”
+          in <em>Advances in Neural Information Processing Systems (NeurIPS)</em>, 2023.
+        </li>
+        <li id="ref-17">
+          H. Liu, C. Li, Y. Li, and Y. J. Lee,
+          “Improved baselines with visual instruction tuning,”
+          in <em>Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)</em>, 2024, pp. 26296–26306.
+        </li>
+        <li id="ref-18">
+          E. J. Hu, Y. Shen, P. Wallis, Z. Allen-Zhu, Y. Li, S. Wang, L. Wang, and W. Chen,
+          “LoRA: Low-rank adaptation of large language models,”
+          in <em>International Conference on Learning Representations (ICLR)</em>, 2022.
+        </li>
+        <li id="ref-19">
+          D. Hendrycks and T. Dietterich,
+          “Benchmarking neural network robustness to common corruptions and perturbations,”
+          in <em>International Conference on Learning Representations (ICLR)</em>, 2019.
+        </li>
+        <li id="ref-20">
+          A. Barbu, D. Mayo, J. Alverio, W. Luo, C. Wang, D. Gutfreund, J. Tenenbaum, and B. Katz,
+          “ObjectNet: A large-scale bias-controlled dataset for pushing the limits of object recognition models,”
+          in <em>Advances in Neural Information Processing Systems (NeurIPS)</em>, 2019, pp. 9453–9463.
+        </li>
+        <li id="ref-21">
+          S. Abnar and W. Zuidema,
+          “Quantifying attention flow in transformers,”
+          in <em>Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics (ACL)</em>, 2020, pp. 4190–4197.
+        </li>
+        <li id="ref-22">
+          K. He, X. Zhang, S. Ren, and J. Sun,
+          “Deep residual learning for image recognition,”
+          in <em>Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)</em>, 2016, pp. 770–778.
+        </li>
+        <li id="ref-23">
+          Z. Liu, H. Mao, C.-Y. Wu, C. Feichtenhofer, T. Darrell, and S. Xie,
+          “A ConvNet for the 2020s,”
+          in <em>Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)</em>, 2022, pp. 11976–11986.
+        </li>
+      </ol>
+    </section>
+  </main>
+
+  <footer>
+    <p>CS-503 Visual Intelligence · EPFL · 2025</p>
+    <p>Code and step-by-step reproduction instructions are in the project repository (linked above).</p>
+  </footer>
+
+  <script src="./js/utils.js"></script>
+  <script src="./js/chart-theme.js"></script>
+  <script src="./js/main.js"></script>
+  <script src="./js/illusion-renderers.js"></script>
+  <script src="./js/heas-explorer.js"></script>
+  <script src="./js/psychometric-explorer.js"></script>
+  <script src="./js/illusion-lab.js"></script>
+  <script src="./js/dpo-delta.js"></script>
+  <script src="./js/symmpo-results.js"></script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "model_labels": {
+    "resnet50": "ResNet-50",
+    "convnext_base": "ConvNeXt-B",
+    "vit_b_16": "ViT-B/16",
+    "vit_l_16": "ViT-L/16",
+    "clip_vit_b32": "CLIP ViT-B/32",
+    "dinov2_vit_b14": "DINOv2 ViT-B/14",
+    "llava_1.5": "LLaVA-1.5",
+    "llava_1.5_dpo": "LLaVA-1.5 + DPO",
+    "llava_1.5_symmpo": "LLaVA-1.5 + SymMPO"
+  },
+  "category_labels": {
+    "geometric": "Geometric / length",
+    "color": "Color / brightness",
+    "angle": "Angle / orientation",
+    "motion": "Motion-from-static",
+    "impossible": "Impossible / scene-level"
+  }
+}

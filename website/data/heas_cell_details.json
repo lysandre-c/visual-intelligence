@@ -1,0 +1,928 @@
+{
+  "angle|clip_vit_b32": {
+    "illusions": [
+      {
+        "illusion_type": "poggendorff",
+        "p_illusory": 0.43125,
+        "p_correct": 0.56875,
+        "p_other": 0.0,
+        "control_pass_rate": 1.0
+      },
+      {
+        "illusion_type": "zollner",
+        "p_illusory": 0.0,
+        "p_correct": 1.0,
+        "p_other": 0.0,
+        "control_pass_rate": 1.0
+      }
+    ],
+    "category": "angle",
+    "model": "clip_vit_b32",
+    "heas": 0.3556250000000001,
+    "p_human": 0.86,
+    "p_model": 0.215625,
+    "alignment_gap": 0.6443749999999999,
+    "interpretation": "under_illusory"
+  },
+  "angle|convnext_base": {
+    "illusions": [
+      {
+        "illusion_type": "poggendorff",
+        "p_illusory": 0.0,
+        "p_correct": 0.0,
+        "p_other": 1.0,
+        "control_pass_rate": 0.55
+      },
+      {
+        "illusion_type": "zollner",
+        "p_illusory": 0.0020833333333333,
+        "p_correct": 0.9979166666666668,
+        "p_other": 0.0,
+        "control_pass_rate": 1.0
+      }
+    ],
+    "category": "angle",
+    "model": "convnext_base",
+    "heas": 0.1413440860215054,
+    "p_human": 0.86,
+    "p_model": 0.00104166666666665,
+    "alignment_gap": 0.8589583333333334,
+    "interpretation": "under_illusory"
+  },
+  "angle|dinov2_vit_b14": {
+    "illusions": [
+      {
+        "illusion_type": "poggendorff",
+        "p_illusory": 0.0,
+        "p_correct": 1.0,
+        "p_other": 0.0,
+        "control_pass_rate": null
+      },
+      {
+        "illusion_type": "zollner",
+        "p_illusory": 0.0,
+        "p_correct": 1.0,
+        "p_other": 0.0,
+        "control_pass_rate": null
+      }
+    ],
+    "category": "angle",
+    "model": "dinov2_vit_b14",
+    "heas": 0.14,
+    "p_human": 0.86,
+    "p_model": 0.0,
+    "alignment_gap": 0.86,
+    "interpretation": "under_illusory"
+  },
+  "angle|llava_1.5": {
+    "illusions": [
+      {
+        "illusion_type": "poggendorff",
+        "p_illusory": 1.0,
+        "p_correct": 0.0,
+        "p_other": 0.0,
+        "control_pass_rate": 0.0
+      },
+      {
+        "illusion_type": "zollner",
+        "p_illusory": 0.9708333333333332,
+        "p_correct": 0.0291666666666666,
+        "p_other": 0.0,
+        "control_pass_rate": 0.10625
+      }
+    ],
+    "category": "angle",
+    "model": "llava_1.5",
+    "heas": 0.8654901960784314,
+    "p_human": 0.86,
+    "p_model": 0.9854166666666666,
+    "alignment_gap": 0.12541666666666662,
+    "interpretation": "moderate_mismatch"
+  },
+  "angle|llava_1.5_dpo": {
+    "illusions": [
+      {
+        "illusion_type": "poggendorff",
+        "p_illusory": 1.0,
+        "p_correct": 0.0,
+        "p_other": 0.0,
+        "control_pass_rate": 0.0166666666666666
+      },
+      {
+        "illusion_type": "zollner",
+        "p_illusory": 0.9979166666666668,
+        "p_correct": 0.0020833333333333,
+        "p_other": 0.0,
+        "control_pass_rate": 0.9020833333333332
+      }
+    ],
+    "category": "angle",
+    "model": "llava_1.5_dpo",
+    "heas": 0.8622675736961452,
+    "p_human": 0.86,
+    "p_model": 0.9989583333333334,
+    "alignment_gap": 0.1389583333333334,
+    "interpretation": "moderate_mismatch"
+  },
+  "angle|resnet50": {
+    "illusions": [
+      {
+        "illusion_type": "poggendorff",
+        "p_illusory": 0.0625,
+        "p_correct": 0.06875,
+        "p_other": 0.86875,
+        "control_pass_rate": 0.0
+      },
+      {
+        "illusion_type": "zollner",
+        "p_illusory": 0.0,
+        "p_correct": 0.8520833333333333,
+        "p_other": 0.1479166666666666,
+        "control_pass_rate": 1.0
+      }
+    ],
+    "category": "angle",
+    "model": "resnet50",
+    "heas": 0.14,
+    "p_human": 0.86,
+    "p_model": 0.03125,
+    "alignment_gap": 0.82875,
+    "interpretation": "under_illusory"
+  },
+  "angle|vit_b_16": {
+    "illusions": [
+      {
+        "illusion_type": "poggendorff",
+        "p_illusory": 0.1770833333333333,
+        "p_correct": 0.0020833333333333,
+        "p_other": 0.8208333333333333,
+        "control_pass_rate": 0.0
+      },
+      {
+        "illusion_type": "zollner",
+        "p_illusory": 0.0041666666666666,
+        "p_correct": 0.9958333333333332,
+        "p_other": 0.0,
+        "control_pass_rate": 1.0
+      }
+    ],
+    "category": "angle",
+    "model": "vit_b_16",
+    "heas": 0.1441666666666666,
+    "p_human": 0.86,
+    "p_model": 0.09062499999999994,
+    "alignment_gap": 0.769375,
+    "interpretation": "under_illusory"
+  },
+  "angle|vit_l_16": {
+    "illusions": [
+      {
+        "illusion_type": "poggendorff",
+        "p_illusory": 0.1979166666666666,
+        "p_correct": 0.0166666666666666,
+        "p_other": 0.7854166666666667,
+        "control_pass_rate": 0.0
+      },
+      {
+        "illusion_type": "zollner",
+        "p_illusory": 0.0,
+        "p_correct": 1.0,
+        "p_other": 0.0,
+        "control_pass_rate": 1.0
+      }
+    ],
+    "category": "angle",
+    "model": "vit_l_16",
+    "heas": 0.14,
+    "p_human": 0.86,
+    "p_model": 0.0989583333333333,
+    "alignment_gap": 0.7610416666666667,
+    "interpretation": "under_illusory"
+  },
+  "color|clip_vit_b32": {
+    "illusions": [
+      {
+        "illusion_type": "simultaneous_contrast",
+        "p_illusory": 0.0,
+        "p_correct": 1.0,
+        "p_other": 0.0,
+        "control_pass_rate": 1.0
+      },
+      {
+        "illusion_type": "whites_illusion",
+        "p_illusory": 0.9354166666666668,
+        "p_correct": 0.0,
+        "p_other": 0.0645833333333333,
+        "control_pass_rate": 0.0
+      }
+    ],
+    "category": "color",
+    "model": "clip_vit_b32",
+    "heas": 0.0799999999999999,
+    "p_human": 0.92,
+    "p_model": 0.4677083333333334,
+    "alignment_gap": 0.45229166666666665,
+    "interpretation": "under_illusory"
+  },
+  "color|convnext_base": {
+    "illusions": [
+      {
+        "illusion_type": "simultaneous_contrast",
+        "p_illusory": 0.0,
+        "p_correct": 1.0,
+        "p_other": 0.0,
+        "control_pass_rate": 0.44375
+      },
+      {
+        "illusion_type": "whites_illusion",
+        "p_illusory": 0.0,
+        "p_correct": 1.0,
+        "p_other": 0.0,
+        "control_pass_rate": 0.0
+      }
+    ],
+    "category": "color",
+    "model": "convnext_base",
+    "heas": 0.0799999999999999,
+    "p_human": 0.92,
+    "p_model": 0.0,
+    "alignment_gap": 0.92,
+    "interpretation": "under_illusory"
+  },
+  "color|dinov2_vit_b14": {
+    "illusions": [
+      {
+        "illusion_type": "simultaneous_contrast",
+        "p_illusory": 0.0,
+        "p_correct": 1.0,
+        "p_other": 0.0,
+        "control_pass_rate": null
+      },
+      {
+        "illusion_type": "whites_illusion",
+        "p_illusory": 0.0,
+        "p_correct": 1.0,
+        "p_other": 0.0,
+        "control_pass_rate": null
+      }
+    ],
+    "category": "color",
+    "model": "dinov2_vit_b14",
+    "heas": 0.0799999999999999,
+    "p_human": 0.92,
+    "p_model": 0.0,
+    "alignment_gap": 0.92,
+    "interpretation": "under_illusory"
+  },
+  "color|llava_1.5": {
+    "illusions": [
+      {
+        "illusion_type": "simultaneous_contrast",
+        "p_illusory": 0.5708333333333333,
+        "p_correct": 0.03125,
+        "p_other": 0.3979166666666666,
+        "control_pass_rate": 0.1333333333333333
+      },
+      {
+        "illusion_type": "whites_illusion",
+        "p_illusory": 0.3291666666666666,
+        "p_correct": 0.1645833333333333,
+        "p_other": 0.50625,
+        "control_pass_rate": 0.2125
+      }
+    ],
+    "category": "color",
+    "model": "llava_1.5",
+    "heas": 0.3992771084337349,
+    "p_human": 0.92,
+    "p_model": 0.44999999999999996,
+    "alignment_gap": 0.4700000000000001,
+    "interpretation": "under_illusory"
+  },
+  "color|llava_1.5_dpo": {
+    "illusions": [
+      {
+        "illusion_type": "simultaneous_contrast",
+        "p_illusory": 1.0,
+        "p_correct": 0.0,
+        "p_other": 0.0,
+        "control_pass_rate": 0.7520833333333333
+      },
+      {
+        "illusion_type": "whites_illusion",
+        "p_illusory": 1.0,
+        "p_correct": 0.0,
+        "p_other": 0.0,
+        "control_pass_rate": 1.0
+      }
+    ],
+    "category": "color",
+    "model": "llava_1.5_dpo",
+    "heas": 0.92,
+    "p_human": 0.92,
+    "p_model": 1.0,
+    "alignment_gap": 0.07999999999999996,
+    "interpretation": "moderate_mismatch"
+  },
+  "color|resnet50": {
+    "illusions": [
+      {
+        "illusion_type": "simultaneous_contrast",
+        "p_illusory": 0.0,
+        "p_correct": 1.0,
+        "p_other": 0.0,
+        "control_pass_rate": 0.50625
+      },
+      {
+        "illusion_type": "whites_illusion",
+        "p_illusory": 0.0,
+        "p_correct": 1.0,
+        "p_other": 0.0,
+        "control_pass_rate": 0.0
+      }
+    ],
+    "category": "color",
+    "model": "resnet50",
+    "heas": 0.0799999999999999,
+    "p_human": 0.92,
+    "p_model": 0.0,
+    "alignment_gap": 0.92,
+    "interpretation": "under_illusory"
+  },
+  "color|vit_b_16": {
+    "illusions": [
+      {
+        "illusion_type": "simultaneous_contrast",
+        "p_illusory": 0.0,
+        "p_correct": 1.0,
+        "p_other": 0.0,
+        "control_pass_rate": 0.0729166666666666
+      },
+      {
+        "illusion_type": "whites_illusion",
+        "p_illusory": 0.25,
+        "p_correct": 0.75,
+        "p_other": 0.0,
+        "control_pass_rate": 0.0
+      }
+    ],
+    "category": "color",
+    "model": "vit_b_16",
+    "heas": 0.0799999999999999,
+    "p_human": 0.92,
+    "p_model": 0.125,
+    "alignment_gap": 0.795,
+    "interpretation": "under_illusory"
+  },
+  "color|vit_l_16": {
+    "illusions": [
+      {
+        "illusion_type": "simultaneous_contrast",
+        "p_illusory": 0.2,
+        "p_correct": 0.8,
+        "p_other": 0.0,
+        "control_pass_rate": 0.6854166666666667
+      },
+      {
+        "illusion_type": "whites_illusion",
+        "p_illusory": 0.0,
+        "p_correct": 0.9916666666666668,
+        "p_other": 0.0083333333333333,
+        "control_pass_rate": 0.0
+      }
+    ],
+    "category": "color",
+    "model": "vit_l_16",
+    "heas": 0.2714893617021277,
+    "p_human": 0.92,
+    "p_model": 0.1,
+    "alignment_gap": 0.8200000000000001,
+    "interpretation": "under_illusory"
+  },
+  "geometric|clip_vit_b32": {
+    "illusions": [
+      {
+        "illusion_type": "ebbinghaus",
+        "p_illusory": 0.0,
+        "p_correct": 1.0,
+        "p_other": 0.0,
+        "control_pass_rate": 0.8208333333333333
+      },
+      {
+        "illusion_type": "muller_lyer",
+        "p_illusory": 0.0,
+        "p_correct": 1.0,
+        "p_other": 0.0,
+        "control_pass_rate": 1.0
+      },
+      {
+        "illusion_type": "ponzo",
+        "p_illusory": 0.0,
+        "p_correct": 0.0,
+        "p_other": 1.0,
+        "control_pass_rate": 0.26875
+      }
+    ],
+    "category": "geometric",
+    "model": "clip_vit_b32",
+    "heas": 0.12,
+    "p_human": 0.88,
+    "p_model": 0.0,
+    "alignment_gap": 0.88,
+    "interpretation": "under_illusory"
+  },
+  "geometric|convnext_base": {
+    "illusions": [
+      {
+        "illusion_type": "ebbinghaus",
+        "p_illusory": 0.7145833333333333,
+        "p_correct": 0.2854166666666666,
+        "p_other": 0.0,
+        "control_pass_rate": 0.9833333333333332
+      },
+      {
+        "illusion_type": "muller_lyer",
+        "p_illusory": 0.7233333333333334,
+        "p_correct": 0.275,
+        "p_other": 0.0016666666666666,
+        "control_pass_rate": 1.0
+      },
+      {
+        "illusion_type": "ponzo",
+        "p_illusory": 1.0,
+        "p_correct": 0.0,
+        "p_other": 0.0,
+        "control_pass_rate": 0.0
+      }
+    ],
+    "category": "geometric",
+    "model": "convnext_base",
+    "heas": 0.8373507462686567,
+    "p_human": 0.88,
+    "p_model": 0.8126388888888889,
+    "alignment_gap": 0.0673611111111111,
+    "interpretation": "moderate_mismatch"
+  },
+  "geometric|dinov2_vit_b14": {
+    "illusions": [
+      {
+        "illusion_type": "ebbinghaus",
+        "p_illusory": 0.0,
+        "p_correct": 1.0,
+        "p_other": 0.0,
+        "control_pass_rate": null
+      },
+      {
+        "illusion_type": "muller_lyer",
+        "p_illusory": 0.0,
+        "p_correct": 1.0,
+        "p_other": 0.0,
+        "control_pass_rate": null
+      },
+      {
+        "illusion_type": "ponzo",
+        "p_illusory": 0.0,
+        "p_correct": 1.0,
+        "p_other": 0.0,
+        "control_pass_rate": null
+      }
+    ],
+    "category": "geometric",
+    "model": "dinov2_vit_b14",
+    "heas": 0.12,
+    "p_human": 0.88,
+    "p_model": 0.0,
+    "alignment_gap": 0.88,
+    "interpretation": "under_illusory"
+  },
+  "geometric|llava_1.5": {
+    "illusions": [
+      {
+        "illusion_type": "ebbinghaus",
+        "p_illusory": 0.5666666666666667,
+        "p_correct": 0.0,
+        "p_other": 0.4333333333333333,
+        "control_pass_rate": 0.0
+      },
+      {
+        "illusion_type": "muller_lyer",
+        "p_illusory": 0.8783333333333333,
+        "p_correct": 0.0216666666666666,
+        "p_other": 0.1,
+        "control_pass_rate": 0.0316666666666666
+      },
+      {
+        "illusion_type": "ponzo",
+        "p_illusory": 0.9583333333333334,
+        "p_correct": 0.0,
+        "p_other": 0.0416666666666666,
+        "control_pass_rate": 0.0
+      }
+    ],
+    "category": "geometric",
+    "model": "llava_1.5",
+    "heas": 0.5936842105263158,
+    "p_human": 0.88,
+    "p_model": 0.8011111111111111,
+    "alignment_gap": 0.0788888888888889,
+    "interpretation": "moderate_mismatch"
+  },
+  "geometric|llava_1.5_dpo": {
+    "illusions": [
+      {
+        "illusion_type": "ebbinghaus",
+        "p_illusory": 1.0,
+        "p_correct": 0.0,
+        "p_other": 0.0,
+        "control_pass_rate": 0.0
+      },
+      {
+        "illusion_type": "muller_lyer",
+        "p_illusory": 1.0,
+        "p_correct": 0.0,
+        "p_other": 0.0,
+        "control_pass_rate": 0.205
+      },
+      {
+        "illusion_type": "ponzo",
+        "p_illusory": 1.0,
+        "p_correct": 0.0,
+        "p_other": 0.0,
+        "control_pass_rate": 0.0
+      }
+    ],
+    "category": "geometric",
+    "model": "llava_1.5_dpo",
+    "heas": 0.88,
+    "p_human": 0.88,
+    "p_model": 1.0,
+    "alignment_gap": 0.12,
+    "interpretation": "moderate_mismatch"
+  },
+  "geometric|resnet50": {
+    "illusions": [
+      {
+        "illusion_type": "ebbinghaus",
+        "p_illusory": 1.0,
+        "p_correct": 0.0,
+        "p_other": 0.0,
+        "control_pass_rate": 0.0
+      },
+      {
+        "illusion_type": "muller_lyer",
+        "p_illusory": 0.7483333333333333,
+        "p_correct": 0.245,
+        "p_other": 0.0066666666666666,
+        "control_pass_rate": 1.0
+      },
+      {
+        "illusion_type": "ponzo",
+        "p_illusory": 1.0,
+        "p_correct": 0.0,
+        "p_other": 0.0,
+        "control_pass_rate": 0.0
+      }
+    ],
+    "category": "geometric",
+    "model": "resnet50",
+    "heas": 0.8683333333333333,
+    "p_human": 0.88,
+    "p_model": 0.916111111111111,
+    "alignment_gap": 0.03611111111111098,
+    "interpretation": "near_human"
+  },
+  "geometric|vit_b_16": {
+    "illusions": [
+      {
+        "illusion_type": "ebbinghaus",
+        "p_illusory": 0.0875,
+        "p_correct": 0.0,
+        "p_other": 0.9125,
+        "control_pass_rate": 0.0
+      },
+      {
+        "illusion_type": "muller_lyer",
+        "p_illusory": 0.705,
+        "p_correct": 0.295,
+        "p_other": 0.0,
+        "control_pass_rate": 1.0
+      },
+      {
+        "illusion_type": "ponzo",
+        "p_illusory": 0.6604166666666667,
+        "p_correct": 0.0375,
+        "p_other": 0.3020833333333333,
+        "control_pass_rate": 0.10625
+      }
+    ],
+    "category": "geometric",
+    "model": "vit_b_16",
+    "heas": 0.8250691244239631,
+    "p_human": 0.88,
+    "p_model": 0.48430555555555554,
+    "alignment_gap": 0.39569444444444446,
+    "interpretation": "under_illusory"
+  },
+  "geometric|vit_l_16": {
+    "illusions": [
+      {
+        "illusion_type": "ebbinghaus",
+        "p_illusory": 0.7,
+        "p_correct": 0.0625,
+        "p_other": 0.2375,
+        "control_pass_rate": 0.0395833333333333
+      },
+      {
+        "illusion_type": "muller_lyer",
+        "p_illusory": 0.8416666666666667,
+        "p_correct": 0.1583333333333333,
+        "p_other": 0.0,
+        "control_pass_rate": 1.0
+      },
+      {
+        "illusion_type": "ponzo",
+        "p_illusory": 0.75,
+        "p_correct": 0.0,
+        "p_other": 0.25,
+        "control_pass_rate": 0.9625
+      }
+    ],
+    "category": "geometric",
+    "model": "vit_l_16",
+    "heas": 0.9238852913968548,
+    "p_human": 0.88,
+    "p_model": 0.7638888888888888,
+    "alignment_gap": 0.11611111111111116,
+    "interpretation": "moderate_mismatch"
+  },
+  "impossible|clip_vit_b32": {
+    "illusions": [
+      {
+        "illusion_type": "illusion_vqa",
+        "p_illusory": 0.3885057471264367,
+        "p_correct": 0.3471264367816092,
+        "p_other": 0.264367816091954,
+        "control_pass_rate": 0.3471264367816092
+      }
+    ],
+    "category": "impossible",
+    "model": "clip_vit_b32",
+    "heas": 0.4755057471264368,
+    "p_human": 0.913,
+    "p_model": 0.3885057471264367,
+    "alignment_gap": 0.5244942528735633,
+    "interpretation": "under_illusory"
+  },
+  "impossible|dinov2_vit_b14": {
+    "illusions": [
+      {
+        "illusion_type": "illusion_vqa",
+        "p_illusory": 0.0,
+        "p_correct": 1.0,
+        "p_other": 0.0,
+        "control_pass_rate": null
+      }
+    ],
+    "category": "impossible",
+    "model": "dinov2_vit_b14",
+    "heas": 0.0869999999999999,
+    "p_human": 0.913,
+    "p_model": 0.0,
+    "alignment_gap": 0.913,
+    "interpretation": "under_illusory"
+  },
+  "impossible|llava_1.5": {
+    "illusions": [
+      {
+        "illusion_type": "illusion_vqa",
+        "p_illusory": 0.8505747126436781,
+        "p_correct": 0.1471264367816092,
+        "p_other": 0.0022988505747126,
+        "control_pass_rate": null
+      }
+    ],
+    "category": "impossible",
+    "model": "llava_1.5",
+    "heas": 0.937574712643678,
+    "p_human": 0.913,
+    "p_model": 0.8505747126436781,
+    "alignment_gap": 0.06242528735632191,
+    "interpretation": "moderate_mismatch"
+  },
+  "impossible|llava_1.5_dpo": {
+    "illusions": [
+      {
+        "illusion_type": "illusion_vqa",
+        "p_illusory": 0.8781609195402299,
+        "p_correct": 0.0988505747126436,
+        "p_other": 0.0229885057471264,
+        "control_pass_rate": null
+      }
+    ],
+    "category": "impossible",
+    "model": "llava_1.5_dpo",
+    "heas": 0.96516091954023,
+    "p_human": 0.913,
+    "p_model": 0.8781609195402299,
+    "alignment_gap": 0.03483908045977013,
+    "interpretation": "near_human"
+  },
+  "motion|clip_vit_b32": {
+    "illusions": [
+      {
+        "illusion_type": "rotating_snakes",
+        "p_illusory": 1.0,
+        "p_correct": 0.0,
+        "p_other": 0.0,
+        "control_pass_rate": 0.01875
+      },
+      {
+        "illusion_type": "scintillating_grid",
+        "p_illusory": 0.7666666666666667,
+        "p_correct": 0.2333333333333333,
+        "p_other": 0.0,
+        "control_pass_rate": 0.0
+      }
+    ],
+    "category": "motion",
+    "model": "clip_vit_b32",
+    "heas": 0.7,
+    "p_human": 0.7,
+    "p_model": 0.8833333333333333,
+    "alignment_gap": 0.18333333333333335,
+    "interpretation": "over_illusory"
+  },
+  "motion|convnext_base": {
+    "illusions": [
+      {
+        "illusion_type": "rotating_snakes",
+        "p_illusory": 0.0,
+        "p_correct": 1.0,
+        "p_other": 0.0,
+        "control_pass_rate": 1.0
+      },
+      {
+        "illusion_type": "scintillating_grid",
+        "p_illusory": 0.0,
+        "p_correct": 0.0708333333333333,
+        "p_other": 0.9291666666666668,
+        "control_pass_rate": 0.0208333333333333
+      }
+    ],
+    "category": "motion",
+    "model": "convnext_base",
+    "heas": 0.3,
+    "p_human": 0.7,
+    "p_model": 0.0,
+    "alignment_gap": 0.7,
+    "interpretation": "under_illusory"
+  },
+  "motion|dinov2_vit_b14": {
+    "illusions": [
+      {
+        "illusion_type": "rotating_snakes",
+        "p_illusory": 0.0,
+        "p_correct": 1.0,
+        "p_other": 0.0,
+        "control_pass_rate": null
+      },
+      {
+        "illusion_type": "scintillating_grid",
+        "p_illusory": 0.0,
+        "p_correct": 1.0,
+        "p_other": 0.0,
+        "control_pass_rate": null
+      }
+    ],
+    "category": "motion",
+    "model": "dinov2_vit_b14",
+    "heas": 0.3,
+    "p_human": 0.7,
+    "p_model": 0.0,
+    "alignment_gap": 0.7,
+    "interpretation": "under_illusory"
+  },
+  "motion|llava_1.5": {
+    "illusions": [
+      {
+        "illusion_type": "rotating_snakes",
+        "p_illusory": 0.0,
+        "p_correct": 1.0,
+        "p_other": 0.0,
+        "control_pass_rate": 0.9625
+      },
+      {
+        "illusion_type": "scintillating_grid",
+        "p_illusory": 0.0,
+        "p_correct": 1.0,
+        "p_other": 0.0,
+        "control_pass_rate": 1.0
+      }
+    ],
+    "category": "motion",
+    "model": "llava_1.5",
+    "heas": 0.3,
+    "p_human": 0.7,
+    "p_model": 0.0,
+    "alignment_gap": 0.7,
+    "interpretation": "under_illusory"
+  },
+  "motion|llava_1.5_dpo": {
+    "illusions": [
+      {
+        "illusion_type": "rotating_snakes",
+        "p_illusory": 1.0,
+        "p_correct": 0.0,
+        "p_other": 0.0,
+        "control_pass_rate": 0.78125
+      },
+      {
+        "illusion_type": "scintillating_grid",
+        "p_illusory": 0.6229166666666667,
+        "p_correct": 0.3770833333333333,
+        "p_other": 0.0,
+        "control_pass_rate": 1.0
+      }
+    ],
+    "category": "motion",
+    "model": "llava_1.5_dpo",
+    "heas": 0.9116959064327484,
+    "p_human": 0.7,
+    "p_model": 0.8114583333333334,
+    "alignment_gap": 0.11145833333333344,
+    "interpretation": "moderate_mismatch"
+  },
+  "motion|resnet50": {
+    "illusions": [
+      {
+        "illusion_type": "rotating_snakes",
+        "p_illusory": 0.0,
+        "p_correct": 0.0,
+        "p_other": 1.0,
+        "control_pass_rate": 0.0
+      },
+      {
+        "illusion_type": "scintillating_grid",
+        "p_illusory": 0.0,
+        "p_correct": 0.3541666666666667,
+        "p_other": 0.6458333333333334,
+        "control_pass_rate": 0.0
+      }
+    ],
+    "category": "motion",
+    "model": "resnet50",
+    "heas": null,
+    "p_human": 0.7,
+    "p_model": 0.0
+  },
+  "motion|vit_b_16": {
+    "illusions": [
+      {
+        "illusion_type": "rotating_snakes",
+        "p_illusory": 0.0,
+        "p_correct": 0.0291666666666666,
+        "p_other": 0.9708333333333332,
+        "control_pass_rate": 0.375
+      },
+      {
+        "illusion_type": "scintillating_grid",
+        "p_illusory": 0.0,
+        "p_correct": 0.6354166666666666,
+        "p_other": 0.3645833333333333,
+        "control_pass_rate": 0.9416666666666668
+      }
+    ],
+    "category": "motion",
+    "model": "vit_b_16",
+    "heas": 0.3,
+    "p_human": 0.7,
+    "p_model": 0.0,
+    "alignment_gap": 0.7,
+    "interpretation": "under_illusory"
+  },
+  "motion|vit_l_16": {
+    "illusions": [
+      {
+        "illusion_type": "rotating_snakes",
+        "p_illusory": 0.0,
+        "p_correct": 1.0,
+        "p_other": 0.0,
+        "control_pass_rate": 1.0
+      },
+      {
+        "illusion_type": "scintillating_grid",
+        "p_illusory": 0.0,
+        "p_correct": 1.0,
+        "p_other": 0.0,
+        "control_pass_rate": 1.0
+      }
+    ],
+    "category": "motion",
+    "model": "vit_l_16",
+    "heas": 0.3,
+    "p_human": 0.7,
+    "p_model": 0.0,
+    "alignment_gap": 0.7,
+    "interpretation": "under_illusory"
+  }
+}

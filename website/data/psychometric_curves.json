@@ -1,0 +1,5190 @@
+{
+  "illusions": {
+    "ebbinghaus": {
+      "category": "geometric",
+      "sweep_param": "large_sat_radius",
+      "human_rate": 0.88,
+      "param_values": [
+        30.0,
+        31.0,
+        32.0,
+        33.0,
+        34.0,
+        35.0,
+        36.0,
+        37.0,
+        38.0,
+        39.0,
+        40.0
+      ],
+      "models": {
+        "clip_vit_b32": [
+          {
+            "param": 30.0,
+            "illusory_rate": 0.3234310663974951
+          },
+          {
+            "param": 31.0,
+            "illusory_rate": 0.32290425655098187
+          },
+          {
+            "param": 32.0,
+            "illusory_rate": 0.3109954354980487
+          },
+          {
+            "param": 33.0,
+            "illusory_rate": 0.31031944381269283
+          },
+          {
+            "param": 34.0,
+            "illusory_rate": 0.2899533200777033
+          },
+          {
+            "param": 35.0,
+            "illusory_rate": 0.27662081189263704
+          },
+          {
+            "param": 36.0,
+            "illusory_rate": 0.26435367895403616
+          },
+          {
+            "param": 37.0,
+            "illusory_rate": 0.2588153362624014
+          },
+          {
+            "param": 38.0,
+            "illusory_rate": 0.2487255810461115
+          },
+          {
+            "param": 39.0,
+            "illusory_rate": 0.25103707137423387
+          },
+          {
+            "param": 40.0,
+            "illusory_rate": 0.24147074328724924
+          }
+        ],
+        "convnext_base": [
+          {
+            "param": 30.0,
+            "illusory_rate": 0.8654817483567793
+          },
+          {
+            "param": 31.0,
+            "illusory_rate": 0.8264724123405841
+          },
+          {
+            "param": 32.0,
+            "illusory_rate": 0.7989865365079061
+          },
+          {
+            "param": 33.0,
+            "illusory_rate": 0.7515640333570222
+          },
+          {
+            "param": 34.0,
+            "illusory_rate": 0.7072010112403307
+          },
+          {
+            "param": 35.0,
+            "illusory_rate": 0.6106710738581388
+          },
+          {
+            "param": 36.0,
+            "illusory_rate": 0.5819104218465116
+          },
+          {
+            "param": 37.0,
+            "illusory_rate": 0.5279367394723379
+          },
+          {
+            "param": 38.0,
+            "illusory_rate": 0.36797845384477557
+          },
+          {
+            "param": 39.0,
+            "illusory_rate": 0.29934099399301756
+          },
+          {
+            "param": 40.0,
+            "illusory_rate": 0.24323182082766753
+          }
+        ],
+        "dinov2_vit_b14": [
+          {
+            "param": 30.0,
+            "illusory_rate": 0.3333333333333332
+          },
+          {
+            "param": 31.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 32.0,
+            "illusory_rate": 0.3333333333333332
+          },
+          {
+            "param": 33.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 34.0,
+            "illusory_rate": 0.3333333333333332
+          },
+          {
+            "param": 35.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 36.0,
+            "illusory_rate": 0.3333333333333332
+          },
+          {
+            "param": 37.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 38.0,
+            "illusory_rate": 0.3333333333333332
+          },
+          {
+            "param": 39.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 40.0,
+            "illusory_rate": 0.3333333333333334
+          }
+        ],
+        "llava_1.5": [
+          {
+            "param": 30.0,
+            "illusory_rate": 0.5166666666666667
+          },
+          {
+            "param": 31.0,
+            "illusory_rate": 0.4666666666666667
+          },
+          {
+            "param": 32.0,
+            "illusory_rate": 0.5333333333333333
+          },
+          {
+            "param": 33.0,
+            "illusory_rate": 0.6
+          },
+          {
+            "param": 34.0,
+            "illusory_rate": 0.6
+          },
+          {
+            "param": 35.0,
+            "illusory_rate": 0.5333333333333333
+          },
+          {
+            "param": 36.0,
+            "illusory_rate": 0.65
+          },
+          {
+            "param": 37.0,
+            "illusory_rate": 0.5
+          },
+          {
+            "param": 38.0,
+            "illusory_rate": 0.6333333333333333
+          },
+          {
+            "param": 39.0,
+            "illusory_rate": 0.6
+          },
+          {
+            "param": 40.0,
+            "illusory_rate": 0.5
+          }
+        ],
+        "llava_1.5_dpo": [
+          {
+            "param": 30.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 31.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 32.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 33.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 34.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 35.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 36.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 37.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 38.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 39.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 40.0,
+            "illusory_rate": 1.0
+          }
+        ],
+        "resnet50": [
+          {
+            "param": 30.0,
+            "illusory_rate": 0.8906365169804924
+          },
+          {
+            "param": 31.0,
+            "illusory_rate": 0.8905427735100668
+          },
+          {
+            "param": 32.0,
+            "illusory_rate": 0.8873010842364307
+          },
+          {
+            "param": 33.0,
+            "illusory_rate": 0.897749516057828
+          },
+          {
+            "param": 34.0,
+            "illusory_rate": 0.8266635941559042
+          },
+          {
+            "param": 35.0,
+            "illusory_rate": 0.8450259565040846
+          },
+          {
+            "param": 36.0,
+            "illusory_rate": 0.8608926293571499
+          },
+          {
+            "param": 37.0,
+            "illusory_rate": 0.8336134032588974
+          },
+          {
+            "param": 38.0,
+            "illusory_rate": 0.8649342323916563
+          },
+          {
+            "param": 39.0,
+            "illusory_rate": 0.8389115269475441
+          },
+          {
+            "param": 40.0,
+            "illusory_rate": 0.8557892332095399
+          }
+        ],
+        "vit_b_16": [
+          {
+            "param": 30.0,
+            "illusory_rate": 0.13057292661005618
+          },
+          {
+            "param": 31.0,
+            "illusory_rate": 0.14564285344008018
+          },
+          {
+            "param": 32.0,
+            "illusory_rate": 0.14935035833987848
+          },
+          {
+            "param": 33.0,
+            "illusory_rate": 0.18068901235502086
+          },
+          {
+            "param": 34.0,
+            "illusory_rate": 0.12908852811629995
+          },
+          {
+            "param": 35.0,
+            "illusory_rate": 0.15184681227102892
+          },
+          {
+            "param": 36.0,
+            "illusory_rate": 0.2160276984549248
+          },
+          {
+            "param": 37.0,
+            "illusory_rate": 0.23047768568746083
+          },
+          {
+            "param": 38.0,
+            "illusory_rate": 0.2988026586196242
+          },
+          {
+            "param": 39.0,
+            "illusory_rate": 0.416810816344252
+          },
+          {
+            "param": 40.0,
+            "illusory_rate": 0.33798130679886096
+          }
+        ],
+        "vit_l_16": [
+          {
+            "param": 30.0,
+            "illusory_rate": 0.37637822746686667
+          },
+          {
+            "param": 31.0,
+            "illusory_rate": 0.3717271806114895
+          },
+          {
+            "param": 32.0,
+            "illusory_rate": 0.3964008410038072
+          },
+          {
+            "param": 33.0,
+            "illusory_rate": 0.390143579195056
+          },
+          {
+            "param": 34.0,
+            "illusory_rate": 0.40534997071615136
+          },
+          {
+            "param": 35.0,
+            "illusory_rate": 0.42778684434683567
+          },
+          {
+            "param": 36.0,
+            "illusory_rate": 0.4356505376403682
+          },
+          {
+            "param": 37.0,
+            "illusory_rate": 0.4623979765286309
+          },
+          {
+            "param": 38.0,
+            "illusory_rate": 0.47232283284774135
+          },
+          {
+            "param": 39.0,
+            "illusory_rate": 0.4868237907675041
+          },
+          {
+            "param": 40.0,
+            "illusory_rate": 0.46429232449676416
+          }
+        ]
+      }
+    },
+    "muller_lyer": {
+      "category": "geometric",
+      "sweep_param": "fin_length",
+      "human_rate": 0.88,
+      "param_values": [
+        6.0,
+        6.88,
+        7.88,
+        9.03,
+        10.35,
+        11.86,
+        13.6,
+        15.58,
+        17.86,
+        20.47,
+        23.45,
+        26.88,
+        30.81,
+        35.31,
+        40.46,
+        46.37,
+        53.15,
+        60.91,
+        69.8,
+        80.0
+      ],
+      "models": {
+        "clip_vit_b32": [
+          {
+            "param": 6.0,
+            "illusory_rate": 0.0024336493946865057
+          },
+          {
+            "param": 6.88,
+            "illusory_rate": 0.0023074196701569783
+          },
+          {
+            "param": 7.88,
+            "illusory_rate": 0.0027245749391457607
+          },
+          {
+            "param": 9.03,
+            "illusory_rate": 0.0036580575950328816
+          },
+          {
+            "param": 10.35,
+            "illusory_rate": 0.0040447065407902315
+          },
+          {
+            "param": 11.86,
+            "illusory_rate": 0.004140698813531443
+          },
+          {
+            "param": 13.6,
+            "illusory_rate": 0.005309502451027314
+          },
+          {
+            "param": 15.58,
+            "illusory_rate": 0.004902078515032903
+          },
+          {
+            "param": 17.86,
+            "illusory_rate": 0.0049026066480150265
+          },
+          {
+            "param": 20.47,
+            "illusory_rate": 0.004906189160264839
+          },
+          {
+            "param": 23.45,
+            "illusory_rate": 0.003997684617509844
+          },
+          {
+            "param": 26.88,
+            "illusory_rate": 0.004226429591927647
+          },
+          {
+            "param": 30.81,
+            "illusory_rate": 0.0036256546199723194
+          },
+          {
+            "param": 35.31,
+            "illusory_rate": 0.0031525965639368028
+          },
+          {
+            "param": 40.46,
+            "illusory_rate": 0.00332410767739001
+          },
+          {
+            "param": 46.37,
+            "illusory_rate": 0.0036319590324372136
+          },
+          {
+            "param": 53.15,
+            "illusory_rate": 0.0037945295121428533
+          },
+          {
+            "param": 60.91,
+            "illusory_rate": 0.0039044935156228714
+          },
+          {
+            "param": 69.8,
+            "illusory_rate": 0.0038708521035490323
+          },
+          {
+            "param": 80.0,
+            "illusory_rate": 0.004310014484904557
+          }
+        ],
+        "convnext_base": [
+          {
+            "param": 6.0,
+            "illusory_rate": 0.031174000487528716
+          },
+          {
+            "param": 6.88,
+            "illusory_rate": 0.03338062418220176
+          },
+          {
+            "param": 7.88,
+            "illusory_rate": 0.10895054417133035
+          },
+          {
+            "param": 9.03,
+            "illusory_rate": 0.20465653409713686
+          },
+          {
+            "param": 10.35,
+            "illusory_rate": 0.2790882457749613
+          },
+          {
+            "param": 11.86,
+            "illusory_rate": 0.4429451333625224
+          },
+          {
+            "param": 13.6,
+            "illusory_rate": 0.6300783150750168
+          },
+          {
+            "param": 15.58,
+            "illusory_rate": 0.804618670311474
+          },
+          {
+            "param": 17.86,
+            "illusory_rate": 0.9219030416759129
+          },
+          {
+            "param": 20.47,
+            "illusory_rate": 0.9437189370788536
+          },
+          {
+            "param": 23.45,
+            "illusory_rate": 0.9635575625248651
+          },
+          {
+            "param": 26.88,
+            "illusory_rate": 0.985790586305524
+          },
+          {
+            "param": 30.81,
+            "illusory_rate": 0.9941823233757442
+          },
+          {
+            "param": 35.31,
+            "illusory_rate": 0.9986584245818345
+          },
+          {
+            "param": 40.46,
+            "illusory_rate": 0.9977609921121772
+          },
+          {
+            "param": 46.37,
+            "illusory_rate": 0.9991389757397723
+          },
+          {
+            "param": 53.15,
+            "illusory_rate": 0.9991391892262163
+          },
+          {
+            "param": 60.91,
+            "illusory_rate": 0.9992859265778371
+          },
+          {
+            "param": 69.8,
+            "illusory_rate": 0.9962274596018487
+          },
+          {
+            "param": 80.0,
+            "illusory_rate": 0.9918656980085313
+          }
+        ],
+        "dinov2_vit_b14": [
+          {
+            "param": 6.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 6.88,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 7.88,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 9.03,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 10.35,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 11.86,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 13.6,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 15.58,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 17.86,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 20.47,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 23.45,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 26.88,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 30.81,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 35.31,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 40.46,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 46.37,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 53.15,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 60.91,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 69.8,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 80.0,
+            "illusory_rate": 0.3333333333333334
+          }
+        ],
+        "llava_1.5": [
+          {
+            "param": 6.0,
+            "illusory_rate": 0.9
+          },
+          {
+            "param": 6.88,
+            "illusory_rate": 0.7333333333333333
+          },
+          {
+            "param": 7.88,
+            "illusory_rate": 0.9333333333333333
+          },
+          {
+            "param": 9.03,
+            "illusory_rate": 0.9666666666666667
+          },
+          {
+            "param": 10.35,
+            "illusory_rate": 0.9333333333333333
+          },
+          {
+            "param": 11.86,
+            "illusory_rate": 0.8333333333333334
+          },
+          {
+            "param": 13.6,
+            "illusory_rate": 0.9666666666666667
+          },
+          {
+            "param": 15.58,
+            "illusory_rate": 0.9333333333333333
+          },
+          {
+            "param": 17.86,
+            "illusory_rate": 0.8666666666666667
+          },
+          {
+            "param": 20.47,
+            "illusory_rate": 0.8333333333333334
+          },
+          {
+            "param": 23.45,
+            "illusory_rate": 0.8
+          },
+          {
+            "param": 26.88,
+            "illusory_rate": 0.9
+          },
+          {
+            "param": 30.81,
+            "illusory_rate": 0.9
+          },
+          {
+            "param": 35.31,
+            "illusory_rate": 0.8
+          },
+          {
+            "param": 40.46,
+            "illusory_rate": 0.8666666666666667
+          },
+          {
+            "param": 46.37,
+            "illusory_rate": 0.8666666666666667
+          },
+          {
+            "param": 53.15,
+            "illusory_rate": 0.8333333333333334
+          },
+          {
+            "param": 60.91,
+            "illusory_rate": 0.9
+          },
+          {
+            "param": 69.8,
+            "illusory_rate": 0.8333333333333334
+          },
+          {
+            "param": 80.0,
+            "illusory_rate": 0.9666666666666667
+          }
+        ],
+        "llava_1.5_dpo": [
+          {
+            "param": 6.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 6.88,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 7.88,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 9.03,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 10.35,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 11.86,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 13.6,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 15.58,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 17.86,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 20.47,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 23.45,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 26.88,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 30.81,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 35.31,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 40.46,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 46.37,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 53.15,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 60.91,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 69.8,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 80.0,
+            "illusory_rate": 1.0
+          }
+        ],
+        "resnet50": [
+          {
+            "param": 6.0,
+            "illusory_rate": 0.13937883202120574
+          },
+          {
+            "param": 6.88,
+            "illusory_rate": 0.17940038986095372
+          },
+          {
+            "param": 7.88,
+            "illusory_rate": 0.19264570991113325
+          },
+          {
+            "param": 9.03,
+            "illusory_rate": 0.2992877959678967
+          },
+          {
+            "param": 10.35,
+            "illusory_rate": 0.30535539655084964
+          },
+          {
+            "param": 11.86,
+            "illusory_rate": 0.5708106093429248
+          },
+          {
+            "param": 13.6,
+            "illusory_rate": 0.6654506438575916
+          },
+          {
+            "param": 15.58,
+            "illusory_rate": 0.8777115985563453
+          },
+          {
+            "param": 17.86,
+            "illusory_rate": 0.8778900791210934
+          },
+          {
+            "param": 20.47,
+            "illusory_rate": 0.9405725187767202
+          },
+          {
+            "param": 23.45,
+            "illusory_rate": 0.9727426566135395
+          },
+          {
+            "param": 26.88,
+            "illusory_rate": 0.9797791091764381
+          },
+          {
+            "param": 30.81,
+            "illusory_rate": 0.9799404585690236
+          },
+          {
+            "param": 35.31,
+            "illusory_rate": 0.9965150605561597
+          },
+          {
+            "param": 40.46,
+            "illusory_rate": 0.993963564629002
+          },
+          {
+            "param": 46.37,
+            "illusory_rate": 0.9989732083611885
+          },
+          {
+            "param": 53.15,
+            "illusory_rate": 0.9984910973629478
+          },
+          {
+            "param": 60.91,
+            "illusory_rate": 0.9989550126683255
+          },
+          {
+            "param": 69.8,
+            "illusory_rate": 0.9981733660390233
+          },
+          {
+            "param": 80.0,
+            "illusory_rate": 0.9917841986281737
+          }
+        ],
+        "vit_b_16": [
+          {
+            "param": 6.0,
+            "illusory_rate": 0.018767946349268823
+          },
+          {
+            "param": 6.88,
+            "illusory_rate": 0.026964501047221423
+          },
+          {
+            "param": 7.88,
+            "illusory_rate": 0.07621094218544747
+          },
+          {
+            "param": 9.03,
+            "illusory_rate": 0.16893173666339145
+          },
+          {
+            "param": 10.35,
+            "illusory_rate": 0.32184728609113594
+          },
+          {
+            "param": 11.86,
+            "illusory_rate": 0.5081208115108385
+          },
+          {
+            "param": 13.6,
+            "illusory_rate": 0.6436354168939696
+          },
+          {
+            "param": 15.58,
+            "illusory_rate": 0.7992060272806919
+          },
+          {
+            "param": 17.86,
+            "illusory_rate": 0.9073128702610728
+          },
+          {
+            "param": 20.47,
+            "illusory_rate": 0.9295258615196528
+          },
+          {
+            "param": 23.45,
+            "illusory_rate": 0.9755358815721932
+          },
+          {
+            "param": 26.88,
+            "illusory_rate": 0.9865080441365012
+          },
+          {
+            "param": 30.81,
+            "illusory_rate": 0.9938188500591889
+          },
+          {
+            "param": 35.31,
+            "illusory_rate": 0.9997156781756164
+          },
+          {
+            "param": 40.46,
+            "illusory_rate": 0.9997057033009245
+          },
+          {
+            "param": 46.37,
+            "illusory_rate": 0.9997203128604679
+          },
+          {
+            "param": 53.15,
+            "illusory_rate": 0.9999122308657724
+          },
+          {
+            "param": 60.91,
+            "illusory_rate": 0.9999382109696104
+          },
+          {
+            "param": 69.8,
+            "illusory_rate": 0.999942800745456
+          },
+          {
+            "param": 80.0,
+            "illusory_rate": 0.9999587491135905
+          }
+        ],
+        "vit_l_16": [
+          {
+            "param": 6.0,
+            "illusory_rate": 0.16936876665100964
+          },
+          {
+            "param": 6.88,
+            "illusory_rate": 0.23780542693894852
+          },
+          {
+            "param": 7.88,
+            "illusory_rate": 0.43352969441018097
+          },
+          {
+            "param": 9.03,
+            "illusory_rate": 0.5541885129427773
+          },
+          {
+            "param": 10.35,
+            "illusory_rate": 0.6772294369782711
+          },
+          {
+            "param": 11.86,
+            "illusory_rate": 0.8937811113574881
+          },
+          {
+            "param": 13.6,
+            "illusory_rate": 0.8395901340437679
+          },
+          {
+            "param": 15.58,
+            "illusory_rate": 0.9499142316981196
+          },
+          {
+            "param": 17.86,
+            "illusory_rate": 0.9820293387538825
+          },
+          {
+            "param": 20.47,
+            "illusory_rate": 0.9761452668802927
+          },
+          {
+            "param": 23.45,
+            "illusory_rate": 0.9970815453590369
+          },
+          {
+            "param": 26.88,
+            "illusory_rate": 0.9969086992848014
+          },
+          {
+            "param": 30.81,
+            "illusory_rate": 0.9991384396757456
+          },
+          {
+            "param": 35.31,
+            "illusory_rate": 0.9997959086315046
+          },
+          {
+            "param": 40.46,
+            "illusory_rate": 0.9999046949253428
+          },
+          {
+            "param": 46.37,
+            "illusory_rate": 0.9999530591207239
+          },
+          {
+            "param": 53.15,
+            "illusory_rate": 0.9999854459846023
+          },
+          {
+            "param": 60.91,
+            "illusory_rate": 0.9999887207648542
+          },
+          {
+            "param": 69.8,
+            "illusory_rate": 0.9999924192305414
+          },
+          {
+            "param": 80.0,
+            "illusory_rate": 0.9999942965655738
+          }
+        ]
+      }
+    },
+    "poggendorff": {
+      "category": "angle",
+      "sweep_param": "occluder_width",
+      "human_rate": 0.86,
+      "param_values": [
+        45.0,
+        53.0,
+        61.0,
+        69.0,
+        77.0,
+        85.0,
+        93.0,
+        101.0,
+        109.0,
+        117.0,
+        125.0,
+        133.0,
+        141.0,
+        149.0,
+        157.0,
+        165.0
+      ],
+      "models": {
+        "clip_vit_b32": [
+          {
+            "param": 45.0,
+            "illusory_rate": 0.48171643009925913
+          },
+          {
+            "param": 53.0,
+            "illusory_rate": 0.46944209321914826
+          },
+          {
+            "param": 61.0,
+            "illusory_rate": 0.47297464060327155
+          },
+          {
+            "param": 69.0,
+            "illusory_rate": 0.49503442985494683
+          },
+          {
+            "param": 77.0,
+            "illusory_rate": 0.46830345489130676
+          },
+          {
+            "param": 85.0,
+            "illusory_rate": 0.4889124819246277
+          },
+          {
+            "param": 93.0,
+            "illusory_rate": 0.4837557498683898
+          },
+          {
+            "param": 101.0,
+            "illusory_rate": 0.483239597429951
+          },
+          {
+            "param": 109.0,
+            "illusory_rate": 0.46944184309747
+          },
+          {
+            "param": 117.0,
+            "illusory_rate": 0.43893879750602605
+          },
+          {
+            "param": 125.0,
+            "illusory_rate": 0.41390262510611275
+          },
+          {
+            "param": 133.0,
+            "illusory_rate": 0.4123402325695146
+          },
+          {
+            "param": 141.0,
+            "illusory_rate": 0.419121105782563
+          },
+          {
+            "param": 149.0,
+            "illusory_rate": 0.42994314170067377
+          },
+          {
+            "param": 157.0,
+            "illusory_rate": 0.4084640606417573
+          },
+          {
+            "param": 165.0,
+            "illusory_rate": 0.42907984416570333
+          }
+        ],
+        "convnext_base": [
+          {
+            "param": 45.0,
+            "illusory_rate": 0.18732216243310465
+          },
+          {
+            "param": 53.0,
+            "illusory_rate": 0.1783872565952472
+          },
+          {
+            "param": 61.0,
+            "illusory_rate": 0.1653053543948485
+          },
+          {
+            "param": 69.0,
+            "illusory_rate": 0.13445634622281594
+          },
+          {
+            "param": 77.0,
+            "illusory_rate": 0.13374240680321678
+          },
+          {
+            "param": 85.0,
+            "illusory_rate": 0.11161779252940869
+          },
+          {
+            "param": 93.0,
+            "illusory_rate": 0.11032877407065379
+          },
+          {
+            "param": 101.0,
+            "illusory_rate": 0.09027683535082319
+          },
+          {
+            "param": 109.0,
+            "illusory_rate": 0.10829023233384616
+          },
+          {
+            "param": 117.0,
+            "illusory_rate": 0.09842810662557172
+          },
+          {
+            "param": 125.0,
+            "illusory_rate": 0.10022498987267997
+          },
+          {
+            "param": 133.0,
+            "illusory_rate": 0.07764660055212083
+          },
+          {
+            "param": 141.0,
+            "illusory_rate": 0.06635681847996185
+          },
+          {
+            "param": 149.0,
+            "illusory_rate": 0.07145399175388922
+          },
+          {
+            "param": 157.0,
+            "illusory_rate": 0.06217671724510555
+          },
+          {
+            "param": 165.0,
+            "illusory_rate": 0.04252497697369654
+          }
+        ],
+        "dinov2_vit_b14": [
+          {
+            "param": 45.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 53.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 61.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 69.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 77.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 85.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 93.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 101.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 109.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 117.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 125.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 133.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 141.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 149.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 157.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 165.0,
+            "illusory_rate": 0.3333333333333334
+          }
+        ],
+        "llava_1.5": [
+          {
+            "param": 45.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 53.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 61.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 69.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 77.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 85.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 93.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 101.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 109.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 117.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 125.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 133.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 141.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 149.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 157.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 165.0,
+            "illusory_rate": 1.0
+          }
+        ],
+        "llava_1.5_dpo": [
+          {
+            "param": 45.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 53.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 61.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 69.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 77.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 85.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 93.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 101.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 109.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 117.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 125.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 133.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 141.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 149.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 157.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 165.0,
+            "illusory_rate": 1.0
+          }
+        ],
+        "resnet50": [
+          {
+            "param": 45.0,
+            "illusory_rate": 0.24877512844747743
+          },
+          {
+            "param": 53.0,
+            "illusory_rate": 0.1740250821398775
+          },
+          {
+            "param": 61.0,
+            "illusory_rate": 0.31637861355912883
+          },
+          {
+            "param": 69.0,
+            "illusory_rate": 0.2641004383224788
+          },
+          {
+            "param": 77.0,
+            "illusory_rate": 0.37050781237319386
+          },
+          {
+            "param": 85.0,
+            "illusory_rate": 0.24650206513531592
+          },
+          {
+            "param": 93.0,
+            "illusory_rate": 0.32053191878334
+          },
+          {
+            "param": 101.0,
+            "illusory_rate": 0.20086603087267965
+          },
+          {
+            "param": 109.0,
+            "illusory_rate": 0.3913631467543183
+          },
+          {
+            "param": 117.0,
+            "illusory_rate": 0.3337470795340369
+          },
+          {
+            "param": 125.0,
+            "illusory_rate": 0.36813343644101965
+          },
+          {
+            "param": 133.0,
+            "illusory_rate": 0.28233780381363244
+          },
+          {
+            "param": 141.0,
+            "illusory_rate": 0.3800496871613263
+          },
+          {
+            "param": 149.0,
+            "illusory_rate": 0.2769622472904748
+          },
+          {
+            "param": 157.0,
+            "illusory_rate": 0.22410812130704846
+          },
+          {
+            "param": 165.0,
+            "illusory_rate": 0.16686438206069204
+          }
+        ],
+        "vit_b_16": [
+          {
+            "param": 45.0,
+            "illusory_rate": 0.02847494185455293
+          },
+          {
+            "param": 53.0,
+            "illusory_rate": 0.14258177069331526
+          },
+          {
+            "param": 61.0,
+            "illusory_rate": 0.015269535300375454
+          },
+          {
+            "param": 69.0,
+            "illusory_rate": 0.9256315132352356
+          },
+          {
+            "param": 77.0,
+            "illusory_rate": 0.002388078208353214
+          },
+          {
+            "param": 85.0,
+            "illusory_rate": 0.009723079402029563
+          },
+          {
+            "param": 93.0,
+            "illusory_rate": 0.011051985663504278
+          },
+          {
+            "param": 101.0,
+            "illusory_rate": 0.6154974012078799
+          },
+          {
+            "param": 109.0,
+            "illusory_rate": 0.004795785515393524
+          },
+          {
+            "param": 117.0,
+            "illusory_rate": 0.02560787077863351
+          },
+          {
+            "param": 125.0,
+            "illusory_rate": 0.013129298991225703
+          },
+          {
+            "param": 133.0,
+            "illusory_rate": 0.6286372793586169
+          },
+          {
+            "param": 141.0,
+            "illusory_rate": 0.021905168245593777
+          },
+          {
+            "param": 149.0,
+            "illusory_rate": 0.014325207963239432
+          },
+          {
+            "param": 157.0,
+            "illusory_rate": 0.009560879156297804
+          },
+          {
+            "param": 165.0,
+            "illusory_rate": 0.15432945311723634
+          }
+        ],
+        "vit_l_16": [
+          {
+            "param": 45.0,
+            "illusory_rate": 0.668876626906097
+          },
+          {
+            "param": 53.0,
+            "illusory_rate": 0.6374532145943864
+          },
+          {
+            "param": 61.0,
+            "illusory_rate": 0.43784012240969794
+          },
+          {
+            "param": 69.0,
+            "illusory_rate": 0.4882812189390593
+          },
+          {
+            "param": 77.0,
+            "illusory_rate": 0.298765342698159
+          },
+          {
+            "param": 85.0,
+            "illusory_rate": 0.0738128808913408
+          },
+          {
+            "param": 93.0,
+            "illusory_rate": 0.09311102908185077
+          },
+          {
+            "param": 101.0,
+            "illusory_rate": 0.27166218390595864
+          },
+          {
+            "param": 109.0,
+            "illusory_rate": 0.049483742514214495
+          },
+          {
+            "param": 117.0,
+            "illusory_rate": 0.2528708679422736
+          },
+          {
+            "param": 125.0,
+            "illusory_rate": 0.07283188341787539
+          },
+          {
+            "param": 133.0,
+            "illusory_rate": 0.08495102350134769
+          },
+          {
+            "param": 141.0,
+            "illusory_rate": 0.07206712805084088
+          },
+          {
+            "param": 149.0,
+            "illusory_rate": 0.1460884468633694
+          },
+          {
+            "param": 157.0,
+            "illusory_rate": 0.08529459693813397
+          },
+          {
+            "param": 165.0,
+            "illusory_rate": 0.1488515889001693
+          }
+        ]
+      }
+    },
+    "ponzo": {
+      "category": "geometric",
+      "sweep_param": "convergence_deg",
+      "human_rate": 0.88,
+      "param_values": [
+        15.0,
+        18.0,
+        21.0,
+        24.0,
+        27.0,
+        30.0,
+        33.0,
+        36.0,
+        39.0,
+        42.0,
+        45.0,
+        48.0,
+        51.0,
+        54.0,
+        57.0,
+        60.0
+      ],
+      "models": {
+        "clip_vit_b32": [
+          {
+            "param": 15.0,
+            "illusory_rate": 0.3257315057277515
+          },
+          {
+            "param": 18.0,
+            "illusory_rate": 0.284099372106029
+          },
+          {
+            "param": 21.0,
+            "illusory_rate": 0.2768547545832682
+          },
+          {
+            "param": 24.0,
+            "illusory_rate": 0.27134365449364406
+          },
+          {
+            "param": 27.0,
+            "illusory_rate": 0.25587351836864136
+          },
+          {
+            "param": 30.0,
+            "illusory_rate": 0.18400238959957751
+          },
+          {
+            "param": 33.0,
+            "illusory_rate": 0.15932683903227113
+          },
+          {
+            "param": 36.0,
+            "illusory_rate": 0.11210382465749494
+          },
+          {
+            "param": 39.0,
+            "illusory_rate": 0.07241790207320628
+          },
+          {
+            "param": 42.0,
+            "illusory_rate": 0.05795667869403558
+          },
+          {
+            "param": 45.0,
+            "illusory_rate": 0.05604762619358479
+          },
+          {
+            "param": 48.0,
+            "illusory_rate": 0.06112558107225783
+          },
+          {
+            "param": 51.0,
+            "illusory_rate": 0.07734424658381742
+          },
+          {
+            "param": 54.0,
+            "illusory_rate": 0.06797093779050849
+          },
+          {
+            "param": 57.0,
+            "illusory_rate": 0.07434463623174029
+          },
+          {
+            "param": 60.0,
+            "illusory_rate": 0.08585247756817244
+          }
+        ],
+        "convnext_base": [
+          {
+            "param": 15.0,
+            "illusory_rate": 0.9806108700403621
+          },
+          {
+            "param": 18.0,
+            "illusory_rate": 0.9731490101755814
+          },
+          {
+            "param": 21.0,
+            "illusory_rate": 0.9763918099719547
+          },
+          {
+            "param": 24.0,
+            "illusory_rate": 0.9871945120691359
+          },
+          {
+            "param": 27.0,
+            "illusory_rate": 0.9949809828492786
+          },
+          {
+            "param": 30.0,
+            "illusory_rate": 0.9967923879349792
+          },
+          {
+            "param": 33.0,
+            "illusory_rate": 0.9977528631390413
+          },
+          {
+            "param": 36.0,
+            "illusory_rate": 0.9987843342014296
+          },
+          {
+            "param": 39.0,
+            "illusory_rate": 0.9986274994550118
+          },
+          {
+            "param": 42.0,
+            "illusory_rate": 0.9986949552680825
+          },
+          {
+            "param": 45.0,
+            "illusory_rate": 0.9993398878916674
+          },
+          {
+            "param": 48.0,
+            "illusory_rate": 0.9994869259157732
+          },
+          {
+            "param": 51.0,
+            "illusory_rate": 0.9997280874466912
+          },
+          {
+            "param": 54.0,
+            "illusory_rate": 0.9995490023796906
+          },
+          {
+            "param": 57.0,
+            "illusory_rate": 0.9701692798896931
+          },
+          {
+            "param": 60.0,
+            "illusory_rate": 0.9152889797407168
+          }
+        ],
+        "dinov2_vit_b14": [
+          {
+            "param": 15.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 18.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 21.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 24.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 27.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 30.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 33.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 36.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 39.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 42.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 45.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 48.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 51.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 54.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 57.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 60.0,
+            "illusory_rate": 0.3333333333333334
+          }
+        ],
+        "llava_1.5": [
+          {
+            "param": 15.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 18.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 21.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 24.0,
+            "illusory_rate": 0.9666666666666667
+          },
+          {
+            "param": 27.0,
+            "illusory_rate": 0.9666666666666667
+          },
+          {
+            "param": 30.0,
+            "illusory_rate": 0.9666666666666667
+          },
+          {
+            "param": 33.0,
+            "illusory_rate": 0.9
+          },
+          {
+            "param": 36.0,
+            "illusory_rate": 0.9666666666666667
+          },
+          {
+            "param": 39.0,
+            "illusory_rate": 0.9333333333333333
+          },
+          {
+            "param": 42.0,
+            "illusory_rate": 0.9333333333333333
+          },
+          {
+            "param": 45.0,
+            "illusory_rate": 0.8666666666666667
+          },
+          {
+            "param": 48.0,
+            "illusory_rate": 0.9333333333333333
+          },
+          {
+            "param": 51.0,
+            "illusory_rate": 0.9666666666666667
+          },
+          {
+            "param": 54.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 57.0,
+            "illusory_rate": 0.9333333333333333
+          },
+          {
+            "param": 60.0,
+            "illusory_rate": 1.0
+          }
+        ],
+        "llava_1.5_dpo": [
+          {
+            "param": 15.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 18.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 21.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 24.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 27.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 30.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 33.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 36.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 39.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 42.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 45.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 48.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 51.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 54.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 57.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 60.0,
+            "illusory_rate": 1.0
+          }
+        ],
+        "resnet50": [
+          {
+            "param": 15.0,
+            "illusory_rate": 0.9194024287090264
+          },
+          {
+            "param": 18.0,
+            "illusory_rate": 0.9090619573343787
+          },
+          {
+            "param": 21.0,
+            "illusory_rate": 0.9243828694439015
+          },
+          {
+            "param": 24.0,
+            "illusory_rate": 0.9492847393949401
+          },
+          {
+            "param": 27.0,
+            "illusory_rate": 0.9735164863161021
+          },
+          {
+            "param": 30.0,
+            "illusory_rate": 0.9811187982273671
+          },
+          {
+            "param": 33.0,
+            "illusory_rate": 0.9869690720924535
+          },
+          {
+            "param": 36.0,
+            "illusory_rate": 0.98892955371374
+          },
+          {
+            "param": 39.0,
+            "illusory_rate": 0.9870725498456683
+          },
+          {
+            "param": 42.0,
+            "illusory_rate": 0.9884236601229685
+          },
+          {
+            "param": 45.0,
+            "illusory_rate": 0.9905173215477387
+          },
+          {
+            "param": 48.0,
+            "illusory_rate": 0.9930136116821818
+          },
+          {
+            "param": 51.0,
+            "illusory_rate": 0.9947155935900874
+          },
+          {
+            "param": 54.0,
+            "illusory_rate": 0.9947830102649643
+          },
+          {
+            "param": 57.0,
+            "illusory_rate": 0.9947987130369549
+          },
+          {
+            "param": 60.0,
+            "illusory_rate": 0.9945396556142134
+          }
+        ],
+        "vit_b_16": [
+          {
+            "param": 15.0,
+            "illusory_rate": 0.36336765539110305
+          },
+          {
+            "param": 18.0,
+            "illusory_rate": 0.4482477953274122
+          },
+          {
+            "param": 21.0,
+            "illusory_rate": 0.3778866802711466
+          },
+          {
+            "param": 24.0,
+            "illusory_rate": 0.3490407749068545
+          },
+          {
+            "param": 27.0,
+            "illusory_rate": 0.30300504252752464
+          },
+          {
+            "param": 30.0,
+            "illusory_rate": 0.3087909979649964
+          },
+          {
+            "param": 33.0,
+            "illusory_rate": 0.40504473787762924
+          },
+          {
+            "param": 36.0,
+            "illusory_rate": 0.4320494076874664
+          },
+          {
+            "param": 39.0,
+            "illusory_rate": 0.5748546238617546
+          },
+          {
+            "param": 42.0,
+            "illusory_rate": 0.8246770306385154
+          },
+          {
+            "param": 45.0,
+            "illusory_rate": 0.8168315140595398
+          },
+          {
+            "param": 48.0,
+            "illusory_rate": 0.8321071947930997
+          },
+          {
+            "param": 51.0,
+            "illusory_rate": 0.7905416862533148
+          },
+          {
+            "param": 54.0,
+            "illusory_rate": 0.751464605231149
+          },
+          {
+            "param": 57.0,
+            "illusory_rate": 0.6331599097004375
+          },
+          {
+            "param": 60.0,
+            "illusory_rate": 0.9172483929640566
+          }
+        ],
+        "vit_l_16": [
+          {
+            "param": 15.0,
+            "illusory_rate": 0.15306759609915999
+          },
+          {
+            "param": 18.0,
+            "illusory_rate": 0.3375327701237171
+          },
+          {
+            "param": 21.0,
+            "illusory_rate": 0.39196286879875525
+          },
+          {
+            "param": 24.0,
+            "illusory_rate": 0.4630820745028955
+          },
+          {
+            "param": 27.0,
+            "illusory_rate": 0.5547431544776664
+          },
+          {
+            "param": 30.0,
+            "illusory_rate": 0.5448635661954023
+          },
+          {
+            "param": 33.0,
+            "illusory_rate": 0.6678434250041007
+          },
+          {
+            "param": 36.0,
+            "illusory_rate": 0.7990457399973185
+          },
+          {
+            "param": 39.0,
+            "illusory_rate": 0.8404985596307363
+          },
+          {
+            "param": 42.0,
+            "illusory_rate": 0.8858638869638634
+          },
+          {
+            "param": 45.0,
+            "illusory_rate": 0.8774496496944634
+          },
+          {
+            "param": 48.0,
+            "illusory_rate": 0.8541725256896522
+          },
+          {
+            "param": 51.0,
+            "illusory_rate": 0.8933781727296206
+          },
+          {
+            "param": 54.0,
+            "illusory_rate": 0.8860619968558158
+          },
+          {
+            "param": 57.0,
+            "illusory_rate": 0.9028434819036946
+          },
+          {
+            "param": 60.0,
+            "illusory_rate": 0.9610680806909119
+          }
+        ]
+      }
+    },
+    "rotating_snakes": {
+      "category": "motion",
+      "sweep_param": "wheel_radius",
+      "human_rate": 0.7,
+      "param_values": [
+        46.0,
+        47.0,
+        48.0,
+        49.0,
+        50.0,
+        51.0,
+        52.0,
+        53.0,
+        54.0,
+        55.0,
+        56.0,
+        57.0,
+        58.0,
+        59.0,
+        60.0,
+        62.0
+      ],
+      "models": {
+        "clip_vit_b32": [
+          {
+            "param": 46.0,
+            "illusory_rate": 0.6114236549088413
+          },
+          {
+            "param": 47.0,
+            "illusory_rate": 0.6259900878630144
+          },
+          {
+            "param": 48.0,
+            "illusory_rate": 0.6399236174689077
+          },
+          {
+            "param": 49.0,
+            "illusory_rate": 0.6423277950810414
+          },
+          {
+            "param": 50.0,
+            "illusory_rate": 0.6504780999008528
+          },
+          {
+            "param": 51.0,
+            "illusory_rate": 0.6816839696764401
+          },
+          {
+            "param": 52.0,
+            "illusory_rate": 0.6909566453384008
+          },
+          {
+            "param": 53.0,
+            "illusory_rate": 0.7165218659257061
+          },
+          {
+            "param": 54.0,
+            "illusory_rate": 0.7232176017286036
+          },
+          {
+            "param": 55.0,
+            "illusory_rate": 0.732571404600955
+          },
+          {
+            "param": 56.0,
+            "illusory_rate": 0.7406977412450474
+          },
+          {
+            "param": 57.0,
+            "illusory_rate": 0.7451992192489229
+          },
+          {
+            "param": 58.0,
+            "illusory_rate": 0.758077143427406
+          },
+          {
+            "param": 59.0,
+            "illusory_rate": 0.7647191412398268
+          },
+          {
+            "param": 60.0,
+            "illusory_rate": 0.7768086482405696
+          },
+          {
+            "param": 62.0,
+            "illusory_rate": 0.7854118527971942
+          }
+        ],
+        "convnext_base": [
+          {
+            "param": 46.0,
+            "illusory_rate": 0.19096173426473456
+          },
+          {
+            "param": 47.0,
+            "illusory_rate": 0.20013597348445242
+          },
+          {
+            "param": 48.0,
+            "illusory_rate": 0.2013269510790051
+          },
+          {
+            "param": 49.0,
+            "illusory_rate": 0.18808033188097198
+          },
+          {
+            "param": 50.0,
+            "illusory_rate": 0.19193498185393146
+          },
+          {
+            "param": 51.0,
+            "illusory_rate": 0.20649966244678303
+          },
+          {
+            "param": 52.0,
+            "illusory_rate": 0.20844626005269404
+          },
+          {
+            "param": 53.0,
+            "illusory_rate": 0.20722884910330786
+          },
+          {
+            "param": 54.0,
+            "illusory_rate": 0.20182670382842446
+          },
+          {
+            "param": 55.0,
+            "illusory_rate": 0.22319964140656487
+          },
+          {
+            "param": 56.0,
+            "illusory_rate": 0.2268709430746667
+          },
+          {
+            "param": 57.0,
+            "illusory_rate": 0.24159206497862362
+          },
+          {
+            "param": 58.0,
+            "illusory_rate": 0.2592124310599618
+          },
+          {
+            "param": 59.0,
+            "illusory_rate": 0.25717076877831047
+          },
+          {
+            "param": 60.0,
+            "illusory_rate": 0.2630247544426963
+          },
+          {
+            "param": 62.0,
+            "illusory_rate": 0.2757638139606933
+          }
+        ],
+        "dinov2_vit_b14": [
+          {
+            "param": 46.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 47.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 48.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 49.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 50.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 51.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 52.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 53.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 54.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 55.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 56.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 57.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 58.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 59.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 60.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 62.0,
+            "illusory_rate": 0.3333333333333334
+          }
+        ],
+        "llava_1.5": [
+          {
+            "param": 46.0,
+            "illusory_rate": 0.0
+          },
+          {
+            "param": 47.0,
+            "illusory_rate": 0.0
+          },
+          {
+            "param": 48.0,
+            "illusory_rate": 0.0
+          },
+          {
+            "param": 49.0,
+            "illusory_rate": 0.0
+          },
+          {
+            "param": 50.0,
+            "illusory_rate": 0.0
+          },
+          {
+            "param": 51.0,
+            "illusory_rate": 0.0
+          },
+          {
+            "param": 52.0,
+            "illusory_rate": 0.0
+          },
+          {
+            "param": 53.0,
+            "illusory_rate": 0.0
+          },
+          {
+            "param": 54.0,
+            "illusory_rate": 0.0
+          },
+          {
+            "param": 55.0,
+            "illusory_rate": 0.0
+          },
+          {
+            "param": 56.0,
+            "illusory_rate": 0.0
+          },
+          {
+            "param": 57.0,
+            "illusory_rate": 0.0
+          },
+          {
+            "param": 58.0,
+            "illusory_rate": 0.0
+          },
+          {
+            "param": 59.0,
+            "illusory_rate": 0.0
+          },
+          {
+            "param": 60.0,
+            "illusory_rate": 0.0
+          },
+          {
+            "param": 62.0,
+            "illusory_rate": 0.0
+          }
+        ],
+        "llava_1.5_dpo": [
+          {
+            "param": 46.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 47.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 48.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 49.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 50.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 51.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 52.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 53.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 54.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 55.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 56.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 57.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 58.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 59.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 60.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 62.0,
+            "illusory_rate": 1.0
+          }
+        ],
+        "resnet50": [
+          {
+            "param": 46.0,
+            "illusory_rate": 1.918590027806642e-05
+          },
+          {
+            "param": 47.0,
+            "illusory_rate": 2.2271051520476972e-05
+          },
+          {
+            "param": 48.0,
+            "illusory_rate": 2.536450796270054e-05
+          },
+          {
+            "param": 49.0,
+            "illusory_rate": 3.828073308400512e-05
+          },
+          {
+            "param": 50.0,
+            "illusory_rate": 5.193108016946095e-05
+          },
+          {
+            "param": 51.0,
+            "illusory_rate": 0.00010524181251280494
+          },
+          {
+            "param": 52.0,
+            "illusory_rate": 0.0001238668249385462
+          },
+          {
+            "param": 53.0,
+            "illusory_rate": 0.000200453454374738
+          },
+          {
+            "param": 54.0,
+            "illusory_rate": 0.00032330177479718546
+          },
+          {
+            "param": 55.0,
+            "illusory_rate": 0.0005513702972884262
+          },
+          {
+            "param": 56.0,
+            "illusory_rate": 0.0005837652076735564
+          },
+          {
+            "param": 57.0,
+            "illusory_rate": 0.0005468924797613826
+          },
+          {
+            "param": 58.0,
+            "illusory_rate": 0.0009115608586168723
+          },
+          {
+            "param": 59.0,
+            "illusory_rate": 0.0011105962541430835
+          },
+          {
+            "param": 60.0,
+            "illusory_rate": 0.0010574061148960765
+          },
+          {
+            "param": 62.0,
+            "illusory_rate": 0.0013271454399160973
+          }
+        ],
+        "vit_b_16": [
+          {
+            "param": 46.0,
+            "illusory_rate": 0.10814158708545737
+          },
+          {
+            "param": 47.0,
+            "illusory_rate": 0.08698605711877519
+          },
+          {
+            "param": 48.0,
+            "illusory_rate": 0.09678325914112847
+          },
+          {
+            "param": 49.0,
+            "illusory_rate": 0.09627245060658975
+          },
+          {
+            "param": 50.0,
+            "illusory_rate": 0.04870135197774392
+          },
+          {
+            "param": 51.0,
+            "illusory_rate": 0.048623427881974275
+          },
+          {
+            "param": 52.0,
+            "illusory_rate": 0.04060377514050268
+          },
+          {
+            "param": 53.0,
+            "illusory_rate": 0.05949443868396046
+          },
+          {
+            "param": 54.0,
+            "illusory_rate": 0.06996725181866803
+          },
+          {
+            "param": 55.0,
+            "illusory_rate": 0.06638322349213535
+          },
+          {
+            "param": 56.0,
+            "illusory_rate": 0.06572674485453098
+          },
+          {
+            "param": 57.0,
+            "illusory_rate": 0.06529607405901276
+          },
+          {
+            "param": 58.0,
+            "illusory_rate": 0.06824717354100816
+          },
+          {
+            "param": 59.0,
+            "illusory_rate": 0.06261689122992302
+          },
+          {
+            "param": 60.0,
+            "illusory_rate": 0.06034652501618798
+          },
+          {
+            "param": 62.0,
+            "illusory_rate": 0.06052843208623049
+          }
+        ],
+        "vit_l_16": [
+          {
+            "param": 46.0,
+            "illusory_rate": 1.7284940978880433e-05
+          },
+          {
+            "param": 47.0,
+            "illusory_rate": 1.1129415827336812e-05
+          },
+          {
+            "param": 48.0,
+            "illusory_rate": 4.041032235321727e-06
+          },
+          {
+            "param": 49.0,
+            "illusory_rate": 4.467751100701096e-06
+          },
+          {
+            "param": 50.0,
+            "illusory_rate": 3.884335056501644e-06
+          },
+          {
+            "param": 51.0,
+            "illusory_rate": 4.560469860536012e-06
+          },
+          {
+            "param": 52.0,
+            "illusory_rate": 7.729008610503822e-06
+          },
+          {
+            "param": 53.0,
+            "illusory_rate": 4.546763706239665e-06
+          },
+          {
+            "param": 54.0,
+            "illusory_rate": 2.8905170582398233e-06
+          },
+          {
+            "param": 55.0,
+            "illusory_rate": 2.476402210351243e-06
+          },
+          {
+            "param": 56.0,
+            "illusory_rate": 1.2525542639471515e-06
+          },
+          {
+            "param": 57.0,
+            "illusory_rate": 3.868991379469461e-06
+          },
+          {
+            "param": 58.0,
+            "illusory_rate": 7.583208172529806e-06
+          },
+          {
+            "param": 59.0,
+            "illusory_rate": 6.369484002464198e-06
+          },
+          {
+            "param": 60.0,
+            "illusory_rate": 1.1007649785829354e-05
+          },
+          {
+            "param": 62.0,
+            "illusory_rate": 5.425883558947621e-05
+          }
+        ]
+      }
+    },
+    "scintillating_grid": {
+      "category": "motion",
+      "sweep_param": "disc_radius",
+      "human_rate": 0.7,
+      "param_values": [
+        6.0,
+        7.0,
+        8.0,
+        9.0,
+        10.0,
+        11.0,
+        12.0,
+        13.0
+      ],
+      "models": {
+        "clip_vit_b32": [
+          {
+            "param": 6.0,
+            "illusory_rate": 0.44312513018534955
+          },
+          {
+            "param": 7.0,
+            "illusory_rate": 0.4041175638687578
+          },
+          {
+            "param": 8.0,
+            "illusory_rate": 0.3848838498905659
+          },
+          {
+            "param": 9.0,
+            "illusory_rate": 0.38445660408254195
+          },
+          {
+            "param": 10.0,
+            "illusory_rate": 0.37750131602164017
+          },
+          {
+            "param": 11.0,
+            "illusory_rate": 0.38695444280017094
+          },
+          {
+            "param": 12.0,
+            "illusory_rate": 0.3976002333326892
+          },
+          {
+            "param": 13.0,
+            "illusory_rate": 0.4230181435169579
+          }
+        ],
+        "convnext_base": [
+          {
+            "param": 6.0,
+            "illusory_rate": 0.00255097206004606
+          },
+          {
+            "param": 7.0,
+            "illusory_rate": 0.0076864778906592535
+          },
+          {
+            "param": 8.0,
+            "illusory_rate": 0.03422672127382062
+          },
+          {
+            "param": 9.0,
+            "illusory_rate": 0.072352637094576
+          },
+          {
+            "param": 10.0,
+            "illusory_rate": 0.15868464288600495
+          },
+          {
+            "param": 11.0,
+            "illusory_rate": 0.19137974610595554
+          },
+          {
+            "param": 12.0,
+            "illusory_rate": 0.16071953691564247
+          },
+          {
+            "param": 13.0,
+            "illusory_rate": 0.26959620460462913
+          }
+        ],
+        "dinov2_vit_b14": [
+          {
+            "param": 6.0,
+            "illusory_rate": 0.3333333333333333
+          },
+          {
+            "param": 7.0,
+            "illusory_rate": 0.3333333333333332
+          },
+          {
+            "param": 8.0,
+            "illusory_rate": 0.3333333333333332
+          },
+          {
+            "param": 9.0,
+            "illusory_rate": 0.3333333333333332
+          },
+          {
+            "param": 10.0,
+            "illusory_rate": 0.3333333333333332
+          },
+          {
+            "param": 11.0,
+            "illusory_rate": 0.3333333333333332
+          },
+          {
+            "param": 12.0,
+            "illusory_rate": 0.3333333333333332
+          },
+          {
+            "param": 13.0,
+            "illusory_rate": 0.3333333333333334
+          }
+        ],
+        "llava_1.5": [
+          {
+            "param": 6.0,
+            "illusory_rate": 0.0
+          },
+          {
+            "param": 7.0,
+            "illusory_rate": 0.0
+          },
+          {
+            "param": 8.0,
+            "illusory_rate": 0.0
+          },
+          {
+            "param": 9.0,
+            "illusory_rate": 0.0
+          },
+          {
+            "param": 10.0,
+            "illusory_rate": 0.0
+          },
+          {
+            "param": 11.0,
+            "illusory_rate": 0.0
+          },
+          {
+            "param": 12.0,
+            "illusory_rate": 0.0
+          },
+          {
+            "param": 13.0,
+            "illusory_rate": 0.0
+          }
+        ],
+        "llava_1.5_dpo": [
+          {
+            "param": 6.0,
+            "illusory_rate": 0.32222222222222224
+          },
+          {
+            "param": 7.0,
+            "illusory_rate": 0.6666666666666666
+          },
+          {
+            "param": 8.0,
+            "illusory_rate": 0.6166666666666667
+          },
+          {
+            "param": 9.0,
+            "illusory_rate": 0.7833333333333333
+          },
+          {
+            "param": 10.0,
+            "illusory_rate": 0.7166666666666667
+          },
+          {
+            "param": 11.0,
+            "illusory_rate": 0.5833333333333334
+          },
+          {
+            "param": 12.0,
+            "illusory_rate": 0.7833333333333333
+          },
+          {
+            "param": 13.0,
+            "illusory_rate": 0.7
+          }
+        ],
+        "resnet50": [
+          {
+            "param": 6.0,
+            "illusory_rate": 0.0006236831530099891
+          },
+          {
+            "param": 7.0,
+            "illusory_rate": 0.029111032765711715
+          },
+          {
+            "param": 8.0,
+            "illusory_rate": 0.07752391682480123
+          },
+          {
+            "param": 9.0,
+            "illusory_rate": 0.05422975493381206
+          },
+          {
+            "param": 10.0,
+            "illusory_rate": 0.09729359565294969
+          },
+          {
+            "param": 11.0,
+            "illusory_rate": 0.19890888810362928
+          },
+          {
+            "param": 12.0,
+            "illusory_rate": 0.09585241233955942
+          },
+          {
+            "param": 13.0,
+            "illusory_rate": 0.13702173664241377
+          }
+        ],
+        "vit_b_16": [
+          {
+            "param": 6.0,
+            "illusory_rate": 0.015493900367044603
+          },
+          {
+            "param": 7.0,
+            "illusory_rate": 0.01354634655123907
+          },
+          {
+            "param": 8.0,
+            "illusory_rate": 0.018301835761757528
+          },
+          {
+            "param": 9.0,
+            "illusory_rate": 0.013422458830322297
+          },
+          {
+            "param": 10.0,
+            "illusory_rate": 0.013483360296429072
+          },
+          {
+            "param": 11.0,
+            "illusory_rate": 0.008907486434487372
+          },
+          {
+            "param": 12.0,
+            "illusory_rate": 0.0070471713721118835
+          },
+          {
+            "param": 13.0,
+            "illusory_rate": 0.002023940784604551
+          }
+        ],
+        "vit_l_16": [
+          {
+            "param": 6.0,
+            "illusory_rate": 4.399586013127987e-08
+          },
+          {
+            "param": 7.0,
+            "illusory_rate": 2.760262366718798e-07
+          },
+          {
+            "param": 8.0,
+            "illusory_rate": 5.157266803923963e-07
+          },
+          {
+            "param": 9.0,
+            "illusory_rate": 5.650396014743674e-07
+          },
+          {
+            "param": 10.0,
+            "illusory_rate": 2.133211616418414e-06
+          },
+          {
+            "param": 11.0,
+            "illusory_rate": 3.442111161064518e-05
+          },
+          {
+            "param": 12.0,
+            "illusory_rate": 4.928290378656427e-06
+          },
+          {
+            "param": 13.0,
+            "illusory_rate": 3.392336719110569e-05
+          }
+        ]
+      }
+    },
+    "simultaneous_contrast": {
+      "category": "color",
+      "sweep_param": "contrast_delta",
+      "human_rate": 0.92,
+      "param_values": [
+        50.0,
+        54.0,
+        58.0,
+        63.0,
+        67.0,
+        71.0,
+        76.0,
+        80.0,
+        84.0,
+        89.0,
+        93.0,
+        97.0,
+        102.0,
+        106.0,
+        110.0,
+        115.0
+      ],
+      "models": {
+        "clip_vit_b32": [
+          {
+            "param": 50.0,
+            "illusory_rate": 0.11785405740151683
+          },
+          {
+            "param": 54.0,
+            "illusory_rate": 0.1258894052522115
+          },
+          {
+            "param": 58.0,
+            "illusory_rate": 0.12303535022759868
+          },
+          {
+            "param": 63.0,
+            "illusory_rate": 0.12856546503670618
+          },
+          {
+            "param": 67.0,
+            "illusory_rate": 0.1255379566440106
+          },
+          {
+            "param": 71.0,
+            "illusory_rate": 0.1310840004595597
+          },
+          {
+            "param": 76.0,
+            "illusory_rate": 0.12982852965833608
+          },
+          {
+            "param": 80.0,
+            "illusory_rate": 0.13493880970854288
+          },
+          {
+            "param": 84.0,
+            "illusory_rate": 0.13587625466209724
+          },
+          {
+            "param": 89.0,
+            "illusory_rate": 0.13800270760980285
+          },
+          {
+            "param": 93.0,
+            "illusory_rate": 0.13735384267751882
+          },
+          {
+            "param": 97.0,
+            "illusory_rate": 0.1362154751982996
+          },
+          {
+            "param": 102.0,
+            "illusory_rate": 0.1323208761218731
+          },
+          {
+            "param": 106.0,
+            "illusory_rate": 0.1339020306339351
+          },
+          {
+            "param": 110.0,
+            "illusory_rate": 0.13573559268409394
+          },
+          {
+            "param": 115.0,
+            "illusory_rate": 0.12998897279259944
+          }
+        ],
+        "convnext_base": [
+          {
+            "param": 50.0,
+            "illusory_rate": 0.03916703741727872
+          },
+          {
+            "param": 54.0,
+            "illusory_rate": 0.0412927033275333
+          },
+          {
+            "param": 58.0,
+            "illusory_rate": 0.03361468791468506
+          },
+          {
+            "param": 63.0,
+            "illusory_rate": 0.033737891466097424
+          },
+          {
+            "param": 67.0,
+            "illusory_rate": 0.03376759645264785
+          },
+          {
+            "param": 71.0,
+            "illusory_rate": 0.03997498437666189
+          },
+          {
+            "param": 76.0,
+            "illusory_rate": 0.039469365368502325
+          },
+          {
+            "param": 80.0,
+            "illusory_rate": 0.04485185652931535
+          },
+          {
+            "param": 84.0,
+            "illusory_rate": 0.04596505223034922
+          },
+          {
+            "param": 89.0,
+            "illusory_rate": 0.04333579386739097
+          },
+          {
+            "param": 93.0,
+            "illusory_rate": 0.04094963878245623
+          },
+          {
+            "param": 97.0,
+            "illusory_rate": 0.04028888688504982
+          },
+          {
+            "param": 102.0,
+            "illusory_rate": 0.03573585114778515
+          },
+          {
+            "param": 106.0,
+            "illusory_rate": 0.03344730766775132
+          },
+          {
+            "param": 110.0,
+            "illusory_rate": 0.02974982035724263
+          },
+          {
+            "param": 115.0,
+            "illusory_rate": 0.025662314740078428
+          }
+        ],
+        "dinov2_vit_b14": [
+          {
+            "param": 50.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 54.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 58.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 63.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 67.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 71.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 76.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 80.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 84.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 89.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 93.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 97.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 102.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 106.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 110.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 115.0,
+            "illusory_rate": 0.3333333333333334
+          }
+        ],
+        "llava_1.5": [
+          {
+            "param": 50.0,
+            "illusory_rate": 0.6
+          },
+          {
+            "param": 54.0,
+            "illusory_rate": 0.5333333333333333
+          },
+          {
+            "param": 58.0,
+            "illusory_rate": 0.5333333333333333
+          },
+          {
+            "param": 63.0,
+            "illusory_rate": 0.5666666666666667
+          },
+          {
+            "param": 67.0,
+            "illusory_rate": 0.5333333333333333
+          },
+          {
+            "param": 71.0,
+            "illusory_rate": 0.6333333333333333
+          },
+          {
+            "param": 76.0,
+            "illusory_rate": 0.6666666666666666
+          },
+          {
+            "param": 80.0,
+            "illusory_rate": 0.5666666666666667
+          },
+          {
+            "param": 84.0,
+            "illusory_rate": 0.5333333333333333
+          },
+          {
+            "param": 89.0,
+            "illusory_rate": 0.5666666666666667
+          },
+          {
+            "param": 93.0,
+            "illusory_rate": 0.7333333333333333
+          },
+          {
+            "param": 97.0,
+            "illusory_rate": 0.5666666666666667
+          },
+          {
+            "param": 102.0,
+            "illusory_rate": 0.5666666666666667
+          },
+          {
+            "param": 106.0,
+            "illusory_rate": 0.5333333333333333
+          },
+          {
+            "param": 110.0,
+            "illusory_rate": 0.6
+          },
+          {
+            "param": 115.0,
+            "illusory_rate": 0.4
+          }
+        ],
+        "llava_1.5_dpo": [
+          {
+            "param": 50.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 54.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 58.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 63.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 67.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 71.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 76.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 80.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 84.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 89.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 93.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 97.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 102.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 106.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 110.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 115.0,
+            "illusory_rate": 1.0
+          }
+        ],
+        "resnet50": [
+          {
+            "param": 50.0,
+            "illusory_rate": 0.12665479106099733
+          },
+          {
+            "param": 54.0,
+            "illusory_rate": 0.09374910999426558
+          },
+          {
+            "param": 58.0,
+            "illusory_rate": 0.0684632774287159
+          },
+          {
+            "param": 63.0,
+            "illusory_rate": 0.05303361966520128
+          },
+          {
+            "param": 67.0,
+            "illusory_rate": 0.04456500728894979
+          },
+          {
+            "param": 71.0,
+            "illusory_rate": 0.03193650285333784
+          },
+          {
+            "param": 76.0,
+            "illusory_rate": 0.025400553642176162
+          },
+          {
+            "param": 80.0,
+            "illusory_rate": 0.019492780978948732
+          },
+          {
+            "param": 84.0,
+            "illusory_rate": 0.017339550383993662
+          },
+          {
+            "param": 89.0,
+            "illusory_rate": 0.013575091094338002
+          },
+          {
+            "param": 93.0,
+            "illusory_rate": 0.010789349443185717
+          },
+          {
+            "param": 97.0,
+            "illusory_rate": 0.00987300959468885
+          },
+          {
+            "param": 102.0,
+            "illusory_rate": 0.006403551442057571
+          },
+          {
+            "param": 106.0,
+            "illusory_rate": 0.005133676332239188
+          },
+          {
+            "param": 110.0,
+            "illusory_rate": 0.004060676839316201
+          },
+          {
+            "param": 115.0,
+            "illusory_rate": 0.004416881275382904
+          }
+        ],
+        "vit_b_16": [
+          {
+            "param": 50.0,
+            "illusory_rate": 0.010965870171367735
+          },
+          {
+            "param": 54.0,
+            "illusory_rate": 0.023372376153063434
+          },
+          {
+            "param": 58.0,
+            "illusory_rate": 0.03313294793787755
+          },
+          {
+            "param": 63.0,
+            "illusory_rate": 0.015929919290879987
+          },
+          {
+            "param": 67.0,
+            "illusory_rate": 0.011265194870883899
+          },
+          {
+            "param": 71.0,
+            "illusory_rate": 0.012847002649461172
+          },
+          {
+            "param": 76.0,
+            "illusory_rate": 0.012069416348023226
+          },
+          {
+            "param": 80.0,
+            "illusory_rate": 0.0028328179907245927
+          },
+          {
+            "param": 84.0,
+            "illusory_rate": 0.0011214646729319608
+          },
+          {
+            "param": 89.0,
+            "illusory_rate": 0.00015909656286209998
+          },
+          {
+            "param": 93.0,
+            "illusory_rate": 2.437825154586767e-05
+          },
+          {
+            "param": 97.0,
+            "illusory_rate": 5.497972068859174e-06
+          },
+          {
+            "param": 102.0,
+            "illusory_rate": 5.604460635783839e-06
+          },
+          {
+            "param": 106.0,
+            "illusory_rate": 4.407813048284241e-06
+          },
+          {
+            "param": 110.0,
+            "illusory_rate": 7.5291259764030494e-06
+          },
+          {
+            "param": 115.0,
+            "illusory_rate": 5.741424191546749e-06
+          }
+        ],
+        "vit_l_16": [
+          {
+            "param": 50.0,
+            "illusory_rate": 0.44795938039527733
+          },
+          {
+            "param": 54.0,
+            "illusory_rate": 0.4106081583907214
+          },
+          {
+            "param": 58.0,
+            "illusory_rate": 0.48629572839706386
+          },
+          {
+            "param": 63.0,
+            "illusory_rate": 0.4762639062868367
+          },
+          {
+            "param": 67.0,
+            "illusory_rate": 0.5785096281000002
+          },
+          {
+            "param": 71.0,
+            "illusory_rate": 0.31392798579273434
+          },
+          {
+            "param": 76.0,
+            "illusory_rate": 0.28944102874448774
+          },
+          {
+            "param": 80.0,
+            "illusory_rate": 0.25248065847758966
+          },
+          {
+            "param": 84.0,
+            "illusory_rate": 0.2274121109928075
+          },
+          {
+            "param": 89.0,
+            "illusory_rate": 0.14361728503077695
+          },
+          {
+            "param": 93.0,
+            "illusory_rate": 0.09776214064160599
+          },
+          {
+            "param": 97.0,
+            "illusory_rate": 0.05051307467790929
+          },
+          {
+            "param": 102.0,
+            "illusory_rate": 0.031231661570835307
+          },
+          {
+            "param": 106.0,
+            "illusory_rate": 0.011644867134352678
+          },
+          {
+            "param": 110.0,
+            "illusory_rate": 0.008865031638131323
+          },
+          {
+            "param": 115.0,
+            "illusory_rate": 0.0037471767110665807
+          }
+        ]
+      }
+    },
+    "whites_illusion": {
+      "category": "color",
+      "sweep_param": "stripe_height",
+      "human_rate": 0.92,
+      "param_values": [
+        20.0,
+        23.0,
+        27.0,
+        31.0,
+        34.0,
+        38.0,
+        42.0,
+        46.0,
+        49.0,
+        53.0,
+        57.0,
+        61.0,
+        64.0,
+        68.0,
+        72.0,
+        76.0
+      ],
+      "models": {
+        "clip_vit_b32": [
+          {
+            "param": 20.0,
+            "illusory_rate": 0.928119697407063
+          },
+          {
+            "param": 23.0,
+            "illusory_rate": 0.9197127232642098
+          },
+          {
+            "param": 27.0,
+            "illusory_rate": 0.9319004483814458
+          },
+          {
+            "param": 31.0,
+            "illusory_rate": 0.9460824794476672
+          },
+          {
+            "param": 34.0,
+            "illusory_rate": 0.9066415429387035
+          },
+          {
+            "param": 38.0,
+            "illusory_rate": 0.8351550141201716
+          },
+          {
+            "param": 42.0,
+            "illusory_rate": 0.8250010118697683
+          },
+          {
+            "param": 46.0,
+            "illusory_rate": 0.7574280169708345
+          },
+          {
+            "param": 49.0,
+            "illusory_rate": 0.8203148569498434
+          },
+          {
+            "param": 53.0,
+            "illusory_rate": 0.7073108574615056
+          },
+          {
+            "param": 57.0,
+            "illusory_rate": 0.5988894850493998
+          },
+          {
+            "param": 61.0,
+            "illusory_rate": 0.5719691473481118
+          },
+          {
+            "param": 64.0,
+            "illusory_rate": 0.6556258196704875
+          },
+          {
+            "param": 68.0,
+            "illusory_rate": 0.547473611358959
+          },
+          {
+            "param": 72.0,
+            "illusory_rate": 0.5563156666008567
+          },
+          {
+            "param": 76.0,
+            "illusory_rate": 0.5527310080850248
+          }
+        ],
+        "convnext_base": [
+          {
+            "param": 20.0,
+            "illusory_rate": 2.0133916203009993e-06
+          },
+          {
+            "param": 23.0,
+            "illusory_rate": 1.8417123642162071e-06
+          },
+          {
+            "param": 27.0,
+            "illusory_rate": 1.9432315847165434e-06
+          },
+          {
+            "param": 31.0,
+            "illusory_rate": 3.1000604841536704e-06
+          },
+          {
+            "param": 34.0,
+            "illusory_rate": 4.4434765098055e-06
+          },
+          {
+            "param": 38.0,
+            "illusory_rate": 5.18652804400539e-06
+          },
+          {
+            "param": 42.0,
+            "illusory_rate": 8.152721491361536e-06
+          },
+          {
+            "param": 46.0,
+            "illusory_rate": 1.3021316352030747e-05
+          },
+          {
+            "param": 49.0,
+            "illusory_rate": 2.294570547908426e-05
+          },
+          {
+            "param": 53.0,
+            "illusory_rate": 3.262017933000041e-05
+          },
+          {
+            "param": 57.0,
+            "illusory_rate": 3.843151032050947e-05
+          },
+          {
+            "param": 61.0,
+            "illusory_rate": 8.607404450025188e-05
+          },
+          {
+            "param": 64.0,
+            "illusory_rate": 6.976593105257433e-05
+          },
+          {
+            "param": 68.0,
+            "illusory_rate": 8.612153593183718e-05
+          },
+          {
+            "param": 72.0,
+            "illusory_rate": 0.00012408916707448497
+          },
+          {
+            "param": 76.0,
+            "illusory_rate": 0.00019957159870109587
+          }
+        ],
+        "dinov2_vit_b14": [
+          {
+            "param": 20.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 23.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 27.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 31.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 34.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 38.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 42.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 46.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 49.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 53.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 57.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 61.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 64.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 68.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 72.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 76.0,
+            "illusory_rate": 0.3333333333333334
+          }
+        ],
+        "llava_1.5": [
+          {
+            "param": 20.0,
+            "illusory_rate": 0.5333333333333333
+          },
+          {
+            "param": 23.0,
+            "illusory_rate": 0.16666666666666666
+          },
+          {
+            "param": 27.0,
+            "illusory_rate": 0.2
+          },
+          {
+            "param": 31.0,
+            "illusory_rate": 0.3333333333333333
+          },
+          {
+            "param": 34.0,
+            "illusory_rate": 0.3
+          },
+          {
+            "param": 38.0,
+            "illusory_rate": 0.3333333333333333
+          },
+          {
+            "param": 42.0,
+            "illusory_rate": 0.4
+          },
+          {
+            "param": 46.0,
+            "illusory_rate": 0.3
+          },
+          {
+            "param": 49.0,
+            "illusory_rate": 0.26666666666666666
+          },
+          {
+            "param": 53.0,
+            "illusory_rate": 0.3
+          },
+          {
+            "param": 57.0,
+            "illusory_rate": 0.3333333333333333
+          },
+          {
+            "param": 61.0,
+            "illusory_rate": 0.3333333333333333
+          },
+          {
+            "param": 64.0,
+            "illusory_rate": 0.26666666666666666
+          },
+          {
+            "param": 68.0,
+            "illusory_rate": 0.4
+          },
+          {
+            "param": 72.0,
+            "illusory_rate": 0.36666666666666664
+          },
+          {
+            "param": 76.0,
+            "illusory_rate": 0.43333333333333335
+          }
+        ],
+        "llava_1.5_dpo": [
+          {
+            "param": 20.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 23.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 27.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 31.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 34.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 38.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 42.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 46.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 49.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 53.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 57.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 61.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 64.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 68.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 72.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 76.0,
+            "illusory_rate": 1.0
+          }
+        ],
+        "resnet50": [
+          {
+            "param": 20.0,
+            "illusory_rate": 0.002057205938790476
+          },
+          {
+            "param": 23.0,
+            "illusory_rate": 0.0017462460148644525
+          },
+          {
+            "param": 27.0,
+            "illusory_rate": 0.002627989743508217
+          },
+          {
+            "param": 31.0,
+            "illusory_rate": 0.0028352483028202427
+          },
+          {
+            "param": 34.0,
+            "illusory_rate": 0.004067207845284177
+          },
+          {
+            "param": 38.0,
+            "illusory_rate": 0.005156555103037071
+          },
+          {
+            "param": 42.0,
+            "illusory_rate": 0.004724723459847392
+          },
+          {
+            "param": 46.0,
+            "illusory_rate": 0.00500701618598151
+          },
+          {
+            "param": 49.0,
+            "illusory_rate": 0.006416311520600066
+          },
+          {
+            "param": 53.0,
+            "illusory_rate": 0.006792635440117118
+          },
+          {
+            "param": 57.0,
+            "illusory_rate": 0.00652448813287107
+          },
+          {
+            "param": 61.0,
+            "illusory_rate": 0.007749320565990704
+          },
+          {
+            "param": 64.0,
+            "illusory_rate": 0.007677066922611966
+          },
+          {
+            "param": 68.0,
+            "illusory_rate": 0.006931183406417847
+          },
+          {
+            "param": 72.0,
+            "illusory_rate": 0.005325322537101887
+          },
+          {
+            "param": 76.0,
+            "illusory_rate": 0.004407474614830351
+          }
+        ],
+        "vit_b_16": [
+          {
+            "param": 20.0,
+            "illusory_rate": 0.17043246698963677
+          },
+          {
+            "param": 23.0,
+            "illusory_rate": 0.6634133546702193
+          },
+          {
+            "param": 27.0,
+            "illusory_rate": 0.8356153603872387
+          },
+          {
+            "param": 31.0,
+            "illusory_rate": 0.8807751447188468
+          },
+          {
+            "param": 34.0,
+            "illusory_rate": 0.743172895370345
+          },
+          {
+            "param": 38.0,
+            "illusory_rate": 0.16999234756749546
+          },
+          {
+            "param": 42.0,
+            "illusory_rate": 0.32009462758339235
+          },
+          {
+            "param": 46.0,
+            "illusory_rate": 0.17226380953126308
+          },
+          {
+            "param": 49.0,
+            "illusory_rate": 0.04782815608035928
+          },
+          {
+            "param": 53.0,
+            "illusory_rate": 0.0281093991349468
+          },
+          {
+            "param": 57.0,
+            "illusory_rate": 0.0178113251775987
+          },
+          {
+            "param": 61.0,
+            "illusory_rate": 0.0011470932494858218
+          },
+          {
+            "param": 64.0,
+            "illusory_rate": 0.0027665477556675622
+          },
+          {
+            "param": 68.0,
+            "illusory_rate": 0.0021141246887843904
+          },
+          {
+            "param": 72.0,
+            "illusory_rate": 0.0006783923660481657
+          },
+          {
+            "param": 76.0,
+            "illusory_rate": 0.002108452363577593
+          }
+        ],
+        "vit_l_16": [
+          {
+            "param": 20.0,
+            "illusory_rate": 0.0015781190975465184
+          },
+          {
+            "param": 23.0,
+            "illusory_rate": 9.989183823980954e-05
+          },
+          {
+            "param": 27.0,
+            "illusory_rate": 3.477368971688606e-05
+          },
+          {
+            "param": 31.0,
+            "illusory_rate": 7.49262731793817e-05
+          },
+          {
+            "param": 34.0,
+            "illusory_rate": 4.701721059068547e-05
+          },
+          {
+            "param": 38.0,
+            "illusory_rate": 2.6590128159138616e-06
+          },
+          {
+            "param": 42.0,
+            "illusory_rate": 2.936255717739596e-06
+          },
+          {
+            "param": 46.0,
+            "illusory_rate": 1.9178535922019425e-06
+          },
+          {
+            "param": 49.0,
+            "illusory_rate": 3.7011049898446564e-06
+          },
+          {
+            "param": 53.0,
+            "illusory_rate": 7.88671901377289e-06
+          },
+          {
+            "param": 57.0,
+            "illusory_rate": 3.444971970145947e-06
+          },
+          {
+            "param": 61.0,
+            "illusory_rate": 3.90534757688764e-06
+          },
+          {
+            "param": 64.0,
+            "illusory_rate": 3.5927245423137467e-06
+          },
+          {
+            "param": 68.0,
+            "illusory_rate": 7.944414524641743e-06
+          },
+          {
+            "param": 72.0,
+            "illusory_rate": 4.6090909130135305e-06
+          },
+          {
+            "param": 76.0,
+            "illusory_rate": 7.13107505749103e-06
+          }
+        ]
+      }
+    },
+    "zollner": {
+      "category": "angle",
+      "sweep_param": "hatch_angle_deg",
+      "human_rate": 0.86,
+      "param_values": [
+        20.0,
+        23.67,
+        27.33,
+        31.0,
+        34.67,
+        38.33,
+        42.0,
+        45.67,
+        49.33,
+        53.0,
+        56.67,
+        60.33,
+        64.0,
+        67.67,
+        71.33,
+        75.0
+      ],
+      "models": {
+        "clip_vit_b32": [
+          {
+            "param": 20.0,
+            "illusory_rate": 0.10760610503225101
+          },
+          {
+            "param": 23.67,
+            "illusory_rate": 0.10476694684797291
+          },
+          {
+            "param": 27.33,
+            "illusory_rate": 0.10393991517521518
+          },
+          {
+            "param": 31.0,
+            "illusory_rate": 0.10498552018242147
+          },
+          {
+            "param": 34.67,
+            "illusory_rate": 0.11813553565255627
+          },
+          {
+            "param": 38.33,
+            "illusory_rate": 0.13592108935885758
+          },
+          {
+            "param": 42.0,
+            "illusory_rate": 0.13060857219951488
+          },
+          {
+            "param": 45.67,
+            "illusory_rate": 0.1322267970063699
+          },
+          {
+            "param": 49.33,
+            "illusory_rate": 0.12911056420332206
+          },
+          {
+            "param": 53.0,
+            "illusory_rate": 0.16993560426786125
+          },
+          {
+            "param": 56.67,
+            "illusory_rate": 0.14748924484726844
+          },
+          {
+            "param": 60.33,
+            "illusory_rate": 0.1704203403063165
+          },
+          {
+            "param": 64.0,
+            "illusory_rate": 0.16498680314583059
+          },
+          {
+            "param": 67.67,
+            "illusory_rate": 0.17976535326131343
+          },
+          {
+            "param": 71.33,
+            "illusory_rate": 0.1664955601913569
+          },
+          {
+            "param": 75.0,
+            "illusory_rate": 0.1447061519341565
+          }
+        ],
+        "convnext_base": [
+          {
+            "param": 20.0,
+            "illusory_rate": 0.020129810042203752
+          },
+          {
+            "param": 23.67,
+            "illusory_rate": 0.03777329282433727
+          },
+          {
+            "param": 27.33,
+            "illusory_rate": 0.029827427816903434
+          },
+          {
+            "param": 31.0,
+            "illusory_rate": 0.012447418238536031
+          },
+          {
+            "param": 34.67,
+            "illusory_rate": 0.01409895138053666
+          },
+          {
+            "param": 38.33,
+            "illusory_rate": 0.023501891167787177
+          },
+          {
+            "param": 42.0,
+            "illusory_rate": 0.021088421589019475
+          },
+          {
+            "param": 45.67,
+            "illusory_rate": 0.032908418259321885
+          },
+          {
+            "param": 49.33,
+            "illusory_rate": 0.028453648962671215
+          },
+          {
+            "param": 53.0,
+            "illusory_rate": 0.021214524896911183
+          },
+          {
+            "param": 56.67,
+            "illusory_rate": 0.011708035832714483
+          },
+          {
+            "param": 60.33,
+            "illusory_rate": 0.011815894457857546
+          },
+          {
+            "param": 64.0,
+            "illusory_rate": 0.0074191839136876795
+          },
+          {
+            "param": 67.67,
+            "illusory_rate": 0.006836808813806263
+          },
+          {
+            "param": 71.33,
+            "illusory_rate": 0.0055360775391884
+          },
+          {
+            "param": 75.0,
+            "illusory_rate": 0.0034666869907125242
+          }
+        ],
+        "dinov2_vit_b14": [
+          {
+            "param": 20.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 23.67,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 27.33,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 31.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 34.67,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 38.33,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 42.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 45.67,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 49.33,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 53.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 56.67,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 60.33,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 64.0,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 67.67,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 71.33,
+            "illusory_rate": 0.3333333333333334
+          },
+          {
+            "param": 75.0,
+            "illusory_rate": 0.3333333333333334
+          }
+        ],
+        "llava_1.5": [
+          {
+            "param": 20.0,
+            "illusory_rate": 0.9333333333333333
+          },
+          {
+            "param": 23.67,
+            "illusory_rate": 0.9666666666666667
+          },
+          {
+            "param": 27.33,
+            "illusory_rate": 0.9666666666666667
+          },
+          {
+            "param": 31.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 34.67,
+            "illusory_rate": 0.9666666666666667
+          },
+          {
+            "param": 38.33,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 42.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 45.67,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 49.33,
+            "illusory_rate": 0.9666666666666667
+          },
+          {
+            "param": 53.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 56.67,
+            "illusory_rate": 0.9666666666666667
+          },
+          {
+            "param": 60.33,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 64.0,
+            "illusory_rate": 0.8333333333333334
+          },
+          {
+            "param": 67.67,
+            "illusory_rate": 0.9666666666666667
+          },
+          {
+            "param": 71.33,
+            "illusory_rate": 0.9666666666666667
+          },
+          {
+            "param": 75.0,
+            "illusory_rate": 1.0
+          }
+        ],
+        "llava_1.5_dpo": [
+          {
+            "param": 20.0,
+            "illusory_rate": 0.9666666666666667
+          },
+          {
+            "param": 23.67,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 27.33,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 31.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 34.67,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 38.33,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 42.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 45.67,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 49.33,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 53.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 56.67,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 60.33,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 64.0,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 67.67,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 71.33,
+            "illusory_rate": 1.0
+          },
+          {
+            "param": 75.0,
+            "illusory_rate": 1.0
+          }
+        ],
+        "resnet50": [
+          {
+            "param": 20.0,
+            "illusory_rate": 0.01672411409941343
+          },
+          {
+            "param": 23.67,
+            "illusory_rate": 0.019533733693170848
+          },
+          {
+            "param": 27.33,
+            "illusory_rate": 0.019294313301796505
+          },
+          {
+            "param": 31.0,
+            "illusory_rate": 0.014382784339069882
+          },
+          {
+            "param": 34.67,
+            "illusory_rate": 0.011926095565540393
+          },
+          {
+            "param": 38.33,
+            "illusory_rate": 0.006501037230448582
+          },
+          {
+            "param": 42.0,
+            "illusory_rate": 0.006340505374559266
+          },
+          {
+            "param": 45.67,
+            "illusory_rate": 0.006205475545249735
+          },
+          {
+            "param": 49.33,
+            "illusory_rate": 0.0049576034097942165
+          },
+          {
+            "param": 53.0,
+            "illusory_rate": 0.008363698930172105
+          },
+          {
+            "param": 56.67,
+            "illusory_rate": 0.01130904344446077
+          },
+          {
+            "param": 60.33,
+            "illusory_rate": 0.0239057298570189
+          },
+          {
+            "param": 64.0,
+            "illusory_rate": 0.021436316674622268
+          },
+          {
+            "param": 67.67,
+            "illusory_rate": 0.01957075289839873
+          },
+          {
+            "param": 71.33,
+            "illusory_rate": 0.025984750647732712
+          },
+          {
+            "param": 75.0,
+            "illusory_rate": 0.030297518049447626
+          }
+        ],
+        "vit_b_16": [
+          {
+            "param": 20.0,
+            "illusory_rate": 0.0002531878909714161
+          },
+          {
+            "param": 23.67,
+            "illusory_rate": 0.00037002074920427255
+          },
+          {
+            "param": 27.33,
+            "illusory_rate": 0.0009148482310719565
+          },
+          {
+            "param": 31.0,
+            "illusory_rate": 0.0009787199434066307
+          },
+          {
+            "param": 34.67,
+            "illusory_rate": 0.0027521306977560203
+          },
+          {
+            "param": 38.33,
+            "illusory_rate": 0.005172605333895585
+          },
+          {
+            "param": 42.0,
+            "illusory_rate": 0.0077154398773447465
+          },
+          {
+            "param": 45.67,
+            "illusory_rate": 0.010220892836324635
+          },
+          {
+            "param": 49.33,
+            "illusory_rate": 0.010844865552665589
+          },
+          {
+            "param": 53.0,
+            "illusory_rate": 0.02329512059748771
+          },
+          {
+            "param": 56.67,
+            "illusory_rate": 0.010080277351648981
+          },
+          {
+            "param": 60.33,
+            "illusory_rate": 0.07667971776320257
+          },
+          {
+            "param": 64.0,
+            "illusory_rate": 0.11129325825375941
+          },
+          {
+            "param": 67.67,
+            "illusory_rate": 0.10277125114551042
+          },
+          {
+            "param": 71.33,
+            "illusory_rate": 0.13884095121941095
+          },
+          {
+            "param": 75.0,
+            "illusory_rate": 0.1498459372817764
+          }
+        ],
+        "vit_l_16": [
+          {
+            "param": 20.0,
+            "illusory_rate": 0.0002790178416988722
+          },
+          {
+            "param": 23.67,
+            "illusory_rate": 0.00030926671280389527
+          },
+          {
+            "param": 27.33,
+            "illusory_rate": 0.00042183546638096034
+          },
+          {
+            "param": 31.0,
+            "illusory_rate": 0.00033756191606822546
+          },
+          {
+            "param": 34.67,
+            "illusory_rate": 0.0003767288786919748
+          },
+          {
+            "param": 38.33,
+            "illusory_rate": 0.00029439517684827217
+          },
+          {
+            "param": 42.0,
+            "illusory_rate": 0.00023502697241736245
+          },
+          {
+            "param": 45.67,
+            "illusory_rate": 0.000247655206405388
+          },
+          {
+            "param": 49.33,
+            "illusory_rate": 0.0003153970161859401
+          },
+          {
+            "param": 53.0,
+            "illusory_rate": 0.00030374989688819763
+          },
+          {
+            "param": 56.67,
+            "illusory_rate": 0.00043241032515083534
+          },
+          {
+            "param": 60.33,
+            "illusory_rate": 0.0005315777952559659
+          },
+          {
+            "param": 64.0,
+            "illusory_rate": 0.0006897421064391273
+          },
+          {
+            "param": 67.67,
+            "illusory_rate": 0.0007007143852389796
+          },
+          {
+            "param": 71.33,
+            "illusory_rate": 0.0014501537314033559
+          },
+          {
+            "param": 75.0,
+            "illusory_rate": 0.001014741071225443
+          }
+        ]
+      }
+    }
+  },
+  "spearman": [
+    {
+      "illusion_type": "ebbinghaus",
+      "category": "geometric",
+      "model": "clip_vit_b32",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "ebbinghaus",
+      "category": "geometric",
+      "model": "convnext_base",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "ebbinghaus",
+      "category": "geometric",
+      "model": "dinov2_vit_b14",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "ebbinghaus",
+      "category": "geometric",
+      "model": "llava_1.5",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "ebbinghaus",
+      "category": "geometric",
+      "model": "llava_1.5_dpo",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "ebbinghaus",
+      "category": "geometric",
+      "model": "resnet50",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "ebbinghaus",
+      "category": "geometric",
+      "model": "vit_b_16",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "ebbinghaus",
+      "category": "geometric",
+      "model": "vit_l_16",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "muller_lyer",
+      "category": "geometric",
+      "model": "clip_vit_b32",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "muller_lyer",
+      "category": "geometric",
+      "model": "convnext_base",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "muller_lyer",
+      "category": "geometric",
+      "model": "dinov2_vit_b14",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "muller_lyer",
+      "category": "geometric",
+      "model": "llava_1.5",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "muller_lyer",
+      "category": "geometric",
+      "model": "llava_1.5_dpo",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "muller_lyer",
+      "category": "geometric",
+      "model": "resnet50",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "muller_lyer",
+      "category": "geometric",
+      "model": "vit_b_16",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "muller_lyer",
+      "category": "geometric",
+      "model": "vit_l_16",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "poggendorff",
+      "category": "angle",
+      "model": "clip_vit_b32",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "poggendorff",
+      "category": "angle",
+      "model": "convnext_base",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "poggendorff",
+      "category": "angle",
+      "model": "dinov2_vit_b14",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "poggendorff",
+      "category": "angle",
+      "model": "llava_1.5",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "poggendorff",
+      "category": "angle",
+      "model": "llava_1.5_dpo",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "poggendorff",
+      "category": "angle",
+      "model": "resnet50",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "poggendorff",
+      "category": "angle",
+      "model": "vit_b_16",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "poggendorff",
+      "category": "angle",
+      "model": "vit_l_16",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "ponzo",
+      "category": "geometric",
+      "model": "clip_vit_b32",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "ponzo",
+      "category": "geometric",
+      "model": "convnext_base",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "ponzo",
+      "category": "geometric",
+      "model": "dinov2_vit_b14",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "ponzo",
+      "category": "geometric",
+      "model": "llava_1.5",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "ponzo",
+      "category": "geometric",
+      "model": "llava_1.5_dpo",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "ponzo",
+      "category": "geometric",
+      "model": "resnet50",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "ponzo",
+      "category": "geometric",
+      "model": "vit_b_16",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "ponzo",
+      "category": "geometric",
+      "model": "vit_l_16",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "rotating_snakes",
+      "category": "motion",
+      "model": "clip_vit_b32",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "rotating_snakes",
+      "category": "motion",
+      "model": "convnext_base",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "rotating_snakes",
+      "category": "motion",
+      "model": "dinov2_vit_b14",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "rotating_snakes",
+      "category": "motion",
+      "model": "llava_1.5",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "rotating_snakes",
+      "category": "motion",
+      "model": "llava_1.5_dpo",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "rotating_snakes",
+      "category": "motion",
+      "model": "resnet50",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "rotating_snakes",
+      "category": "motion",
+      "model": "vit_b_16",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "rotating_snakes",
+      "category": "motion",
+      "model": "vit_l_16",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "scintillating_grid",
+      "category": "motion",
+      "model": "clip_vit_b32",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "scintillating_grid",
+      "category": "motion",
+      "model": "convnext_base",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "scintillating_grid",
+      "category": "motion",
+      "model": "dinov2_vit_b14",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "scintillating_grid",
+      "category": "motion",
+      "model": "llava_1.5",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "scintillating_grid",
+      "category": "motion",
+      "model": "llava_1.5_dpo",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "scintillating_grid",
+      "category": "motion",
+      "model": "resnet50",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "scintillating_grid",
+      "category": "motion",
+      "model": "vit_b_16",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "scintillating_grid",
+      "category": "motion",
+      "model": "vit_l_16",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "simultaneous_contrast",
+      "category": "color",
+      "model": "clip_vit_b32",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "simultaneous_contrast",
+      "category": "color",
+      "model": "convnext_base",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "simultaneous_contrast",
+      "category": "color",
+      "model": "dinov2_vit_b14",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "simultaneous_contrast",
+      "category": "color",
+      "model": "llava_1.5",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "simultaneous_contrast",
+      "category": "color",
+      "model": "llava_1.5_dpo",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "simultaneous_contrast",
+      "category": "color",
+      "model": "resnet50",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "simultaneous_contrast",
+      "category": "color",
+      "model": "vit_b_16",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "simultaneous_contrast",
+      "category": "color",
+      "model": "vit_l_16",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "whites_illusion",
+      "category": "color",
+      "model": "clip_vit_b32",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "whites_illusion",
+      "category": "color",
+      "model": "convnext_base",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "whites_illusion",
+      "category": "color",
+      "model": "dinov2_vit_b14",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "whites_illusion",
+      "category": "color",
+      "model": "llava_1.5",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "whites_illusion",
+      "category": "color",
+      "model": "llava_1.5_dpo",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "whites_illusion",
+      "category": "color",
+      "model": "resnet50",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "whites_illusion",
+      "category": "color",
+      "model": "vit_b_16",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "whites_illusion",
+      "category": "color",
+      "model": "vit_l_16",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "zollner",
+      "category": "angle",
+      "model": "clip_vit_b32",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "zollner",
+      "category": "angle",
+      "model": "convnext_base",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "zollner",
+      "category": "angle",
+      "model": "dinov2_vit_b14",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "zollner",
+      "category": "angle",
+      "model": "llava_1.5",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "zollner",
+      "category": "angle",
+      "model": "llava_1.5_dpo",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "zollner",
+      "category": "angle",
+      "model": "resnet50",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "zollner",
+      "category": "angle",
+      "model": "vit_b_16",
+      "spearman_rho": null,
+      "spearman_pval": null
+    },
+    {
+      "illusion_type": "zollner",
+      "category": "angle",
+      "model": "vit_l_16",
+      "spearman_rho": null,
+      "spearman_pval": null
+    }
+  ]
+}
