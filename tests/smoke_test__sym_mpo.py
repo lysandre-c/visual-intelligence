@@ -42,7 +42,7 @@ from transformers import (
     LlavaForConditionalGeneration,
 )
 
-from src.rl.dpo_train import compute_sequence_logps, PolarityDPODataset
+from src.rl.sym_mpo_train import compute_sequence_logps, PolarityDPODataset
 from src.rl.collator import SymmetricPolarityCollator
 from src.rl.loss import SymmetricPolarityPreferenceLoss
 
@@ -99,7 +99,7 @@ def _freeze_and_lora(
     model: LlavaForConditionalGeneration,
     lora_config: LoraConfig,
 ) -> nn.Module:
-    """Replicate the exact freeze/unfreeze/LoRA logic from dpo_train.py.
+    """Replicate the exact freeze/unfreeze/LoRA logic from sym_mpo_train.py.
 
     Order matters:
     1. Apply LoRA first (adds adapters to ALL matching modules incl. CLIP)
@@ -132,7 +132,7 @@ def main() -> None:
     param_mb = sum(p.numel() * p.element_size() for p in model.parameters()) / 1e6
     print(f"✓ Tiny LLaVA built  ({param_mb:.1f} MB)")
 
-    # ── 2. Apply LoRA + freeze/unfreeze (same logic as dpo_train.py) ────
+    # ── 2. Apply LoRA + freeze/unfreeze (same logic as sym_mpo_train.py) ────
     _sep("Step 2: LoRA → freeze vision tower → unfreeze projector")
     lora_config = LoraConfig(
         r=8,
@@ -331,7 +331,7 @@ def main() -> None:
     import shlex
     import argparse
     from transformers import HfArgumentParser
-    from src.rl.dpo_train import ScriptArguments
+    from src.rl.sym_mpo_train import ScriptArguments
     from transformers import TrainingArguments
 
     sbatch_args_str = """
@@ -379,7 +379,7 @@ def main() -> None:
     assert training_args.gradient_checkpointing is True
     assert training_args.bf16 is True
     assert "tensorboard" in training_args.report_to
-    print("✓ dpo_train.py arguments parsed successfully")
+    print("✓ sym_mpo_train.py arguments parsed successfully")
 
     dataset_parser = argparse.ArgumentParser()
     dataset_parser.add_argument("--output-dir", type=Path, default=None)
@@ -392,7 +392,7 @@ def main() -> None:
     assert ds_args.max_per_illusion == 60
     assert ds_args.control_ratio == 0.2
     assert ds_args.seed == 42
-    print("✓ dataset.py CLI arguments parsed successfully")
+    print("✓ polarity_dataset.py CLI arguments parsed successfully")
 
     # ── 13. Gradient Checkpointing Compatibility ────────────────────────
     _sep("Step 13: Gradient Checkpointing check")

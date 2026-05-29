@@ -220,7 +220,7 @@ class LLaVAProber(VLMProber):
             }
         ]
         formatted = self.processor.apply_chat_template(conversation, add_generation_prompt=True)
-        outputs = self._pipe(image, prompt=formatted, generate_kwargs={"max_new_tokens": 150})
+        outputs = self._pipe(image, text=formatted, generate_kwargs={"max_new_tokens": 150})
         generated = outputs[0]["generated_text"]
         # image-text-to-text returns a list of message dicts; extract the
         # assistant reply.  Fall back to treating it as a plain string.

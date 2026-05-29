@@ -13,7 +13,7 @@ This script:
 
 Usage
 -----
-    python src/rl/dpo_train.py \\
+    python src/rl/sym_mpo_train.py \\
         --output_dir results/rl_alignment \\
         --dataset_path data/rl/dataset.jsonl \\
         --max_steps 1000 --save_steps 100
@@ -653,7 +653,7 @@ def train(
         logger.info("Pushing final weights to Hugging Face Hub: %s", script_args.push_to_hub_repo)
         try:
             # The PEFT model's push_to_hub uploads the LoRA adapter (adapter_model.safetensors)
-            policy_model.push_to_hub(script_args.push_to_hub_repo, safe_serialization=True)
+            policy_model.push_to_hub(script_args.push_to_hub_repo)
             
             # Use HfApi to upload the custom multi_modal_projector.pt file alongside it
             from huggingface_hub import HfApi
