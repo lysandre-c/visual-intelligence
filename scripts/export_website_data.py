@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Export aggregated JSON for the project website (small files for the browser).
 
-Reads fig/all_results.json, fig/heas_table.csv, fig/diagnostics_table.csv
+Reads website/source/all_results.json, heas_table.csv, diagnostics_table.csv
 and writes website/data/*.json.
 
 Usage:
@@ -26,7 +26,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.metrics.psychometric import psychometric_from_results, spearman_alignment
 
-FIG_DIR = PROJECT_ROOT / "fig"
+SOURCE_DIR = PROJECT_ROOT / "website" / "source"
 OUT_DIR = PROJECT_ROOT / "website" / "data"
 
 SWEEP_PARAM: dict[str, str] = {
@@ -306,7 +306,7 @@ def _load_human_baselines() -> dict[str, float]:
 
 
 def export_heas_table() -> dict:
-    csv_path = FIG_DIR / "heas_table.csv"
+    csv_path = SOURCE_DIR / "heas_table.csv"
     df = pd.read_csv(csv_path)
     records = df.to_dict(orient="records")
     models = [c for c in df.columns if c != "category"]
@@ -383,7 +383,7 @@ def export_psychometric_curves(all_results: list[dict]) -> dict:
 
 
 def export_diagnostics_summary() -> list[dict]:
-    csv_path = FIG_DIR / "diagnostics_table.csv"
+    csv_path = SOURCE_DIR / "diagnostics_table.csv"
     df = pd.read_csv(csv_path)
     cols = [
         "category", "illusion_type", "model", "n", "accuracy",
@@ -776,7 +776,7 @@ def export_stimulus_gallery() -> dict:
 def main() -> None:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    all_results_path = FIG_DIR / "all_results.json"
+    all_results_path = SOURCE_DIR / "all_results.json"
     print(f"Loading {all_results_path} ...")
     with open(all_results_path) as fh:
         all_results = json.load(fh)

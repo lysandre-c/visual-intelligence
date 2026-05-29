@@ -96,9 +96,12 @@ python experiments/full_eval.py --device cuda --models llava_1.5 llava_1.5_dpo
 
 ### 5. Website data export
 
+After a full eval, refresh the tracked export inputs (or edit `website/source/` directly):
+
 ```bash
+cp results/full/heas_table.csv results/full/diagnostics_table.csv results/full/all_results.json website/source/
 python scripts/export_website_data.py
-# Writes website/data/*.json from fig/ or results/full/ CSVs
+# Writes website/data/*.json; figures and saliency PNGs live under website/assets/
 ```
 
 ### 6. Saliency / DPO visualizations
@@ -134,7 +137,9 @@ visual-intelligence/
 ├── scripts/
 │   └── export_website_data.py
 ├── website/                # Project webpage (GitHub Pages)
-├── fig/                    # Published figures + tables for the site
+│   ├── source/             # HEAS tables + all_results.json for export script
+│   ├── data/               # JSON consumed by the page
+│   └── assets/             # Figures, saliency overlays, stimulus thumbnails
 ├── data/                   # Generated stimuli and external datasets (not in git)
 └── results/                # Experiment outputs (not in git)
 ```
