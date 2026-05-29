@@ -52,7 +52,7 @@ from src.analysis.plots import plot_heas_table, plot_psychometric_curves, save_f
 logging.basicConfig(level=logging.INFO, format="%(levelname)s  %(message)s")
 logger = logging.getLogger(__name__)
 
-PROJECT_ROOT = Path("/home/herrsche/visual-intelligence/")
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 # ──────────────────────────────────────────────────────────────────────────────
 # Registry
@@ -95,9 +95,8 @@ def _build_model(model_name: str, device: str | None, out_dir: Path) -> object:
         "vit_l_16": lambda: ViTLProber(device=device),
         "clip_vit_b32": lambda: CLIPProber(device=device),
         "dinov2_vit_b14": lambda: DINOv2Prober(device=device),
-        "llava_1.5": lambda: LLaVAProber(device=device, load_in_4bit=True),
-        "llava_1.5_dpo": lambda: LLaVAProber(device=device, load_in_4bit=True, adapter_path="results/rl_alignment"),
-        "llava_symDPO": lambda: LLaVAProber(device=device, adapter_path="results/rl_alignment/final"),
+        "llava_1.5": lambda: LLaVAProber(device=device),
+        "llava_symDPO": lambda: LLaVAProber(device=device, adapter_path="results/rl_alignment/checkpoint-900"),
         "qwen_vl": lambda: QwenVLProber(device=device),
     }
     if model_name not in registry:
@@ -110,7 +109,7 @@ def _needs_linear_probe(model_name: str) -> bool:
 
 
 def _is_vlm(model_name: str) -> bool:
-    return model_name in {"llava_1.5", "llava_1.5_dpo", "llava_symDPO", "qwen_vl"}
+    return model_name in {"llava_1.5", "llava_symDPO", "qwen_vl"}
 
 
 def _make_probe_train_data(category: str, n_per_class: int = 400) -> tuple[list, list[int]]:
@@ -199,8 +198,7 @@ def run_full_eval(args: argparse.Namespace) -> None:
     eval_cfg = cfg["full_eval"]
     human_baselines: dict[str, float] = cfg["human_baselines"]
     ctrl_threshold: float = cfg["control_ceiling_threshold"]
-    out_dir_path = args.output_dir if args.output_dir else eval_cfg["output_dir"]
-    out_dir = PROJECT_ROOT / out_dir_path
+    out_dir = PROJECT_ROOT / eval_cfg["output_dir"]
     out_dir.mkdir(parents=True, exist_ok=True)
 
     stimuli_dir = PROJECT_ROOT / cfg["paths"]["stimuli_dir"]
@@ -288,9 +286,6 @@ def run_full_eval(args: argparse.Namespace) -> None:
             else:
                 zs = ZeroShotProtocol(prober)
                 results = zs.probe_dataset(pairs, verbose=args.verbose)
-
-            for r in results:
-                r["model"] = model_name
 
             with open(results_path, "w") as fh:
                 json.dump(results, fh, indent=2, default=str)
@@ -427,7 +422,6 @@ if __name__ == "__main__":
     parser.add_argument("--skip-generate", action="store_true")
     parser.add_argument("--models", nargs="+", default=None, help="Subset of model names to run.")
     parser.add_argument("--categories", nargs="+", default=None, help="Subset of categories to evaluate.")
-    parser.add_argument("--output-dir", type=str, default=None, help="Override the default output directory from yaml.")
     parser.add_argument("--verbose", action="store_true", default=True)
     args = parser.parse_args()
     run_full_eval(args)

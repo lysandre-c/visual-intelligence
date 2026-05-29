@@ -18,6 +18,8 @@ set -e
 # Activate virtual environment
 source .venv/bin/activate
 
+export HF_HOME="$PWD/results/hf_cache"
+
 # Create output directories
 mkdir -p results/full
 mkdir -p logs
@@ -28,7 +30,7 @@ mkdir -p logs
 # 2. Run all models on all illusions
 # 3. Compute HEAS metrics
 # 4. Generate the HEAS table heatmap
-python experiments/full_eval.py --device cuda --verbose --skip-generate
+python experiments/full_eval.py --device cuda --verbose --skip-generate --output-dir results/full_final
 
 # Generate saliency heatmaps for presentation
 # echo "Generating saliency visualizations..."

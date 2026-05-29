@@ -14,6 +14,11 @@ from typing import Any
 
 from PIL import Image
 
+import transformers.integrations.bitsandbytes
+def skip_check(*args, **kwargs):
+    return True
+transformers.integrations.bitsandbytes.validate_bnb_backend_availability = skip_check
+
 from .base import ModelProber, ResponseDistribution
 
 
@@ -133,20 +138,47 @@ class VLMProber(ModelProber):
         letters = ["A", "B", "C"]
         label_order = ["correct", "illusory", "other"]
 
-        responses: list[tuple[str, dict[str, str]]] = []
+        # Randomly sample 1 ordering per image to average out bias over the dataset
+        self._rng.shuffle(label_order)
+        shuffled = list(zip(letters, label_order))
+        options = [(l, descriptions[lbl]) for l, lbl in shuffled]
+        letter_to_label = {l: lbl for l, lbl in shuffled}
 
-        for _ in range(self.n_orderings):
-            shuffled = list(zip(letters, label_order))
-            self._rng.shuffle(shuffled)
-            options = [(l, descriptions[lbl]) for l, lbl in shuffled]
-            letter_to_label = {l: lbl for l, lbl in shuffled}
+        # Randomly sample 1 framing per image
+        framing = self._rng.choice(["neutral", "name_blind"])
+        
+        prompt = self._build_prompt(question, options, framing)
+        
+        # Query illusion image
+        raw_out = self._query(illusion, prompt)
+        
+        # Query control image (only if not impossible category)
+        ctrl_probs = None
+        ctrl_argmax_correct = False
+        if category != "impossible":
+            raw_out_ctrl = self._query(control, prompt)
+            ctrl_chosen = raw_out_ctrl.strip().upper()[:1]
+            ctrl_label = letter_to_label.get(ctrl_chosen, "other")
+            
+            ctrl_probs = [0.0, 0.0, 0.0]
+            if ctrl_label == "correct":
+                ctrl_probs[0] = 1.0
+            elif ctrl_label == "illusory":
+                ctrl_probs[1] = 1.0
+            else:
+                ctrl_probs[2] = 1.0
+            ctrl_argmax_correct = (ctrl_label == "correct")
 
-            for framing in ["neutral", "name_blind"][: self.n_framings]:
-                prompt = self._build_prompt(question, options, framing)
-                raw_out = self._query(illusion, prompt)
-                responses.append((raw_out, letter_to_label))
-
-        return self._aggregate_responses(responses)
+        responses = [(raw_out, letter_to_label)]
+        dist = self._aggregate_responses(responses)
+        
+        if dist.raw is None:
+            dist.raw = {}
+        if ctrl_probs is not None:
+            dist.raw["probs_control"] = ctrl_probs
+            dist.raw["ctrl_argmax_correct"] = ctrl_argmax_correct
+            
+        return dist
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -166,15 +198,18 @@ class LLaVAProber(VLMProber):
         seed: int = 42,
         device: str | None = None,
         load_in_4bit: bool = False,
+        adapter_path: str | None = None,
     ) -> None:
         super().__init__(n_orderings, n_framings, seed, device)
         self.hf_model_id = hf_model_id
         self._pipe = None  # Lazy loading
         self._load_in_4bit = load_in_4bit
+        self.adapter_path = adapter_path
 
     def _load_model(self) -> None:
-        from transformers import pipeline, BitsAndBytesConfig  # type: ignore
+        from transformers import pipeline, BitsAndBytesConfig, AutoProcessor  # type: ignore
         import torch
+        self.processor = AutoProcessor.from_pretrained(self.hf_model_id)
 
         # BitsAndBytes quantisation requires CUDA; skip on MPS/CPU.
         if self._load_in_4bit and torch.cuda.is_available():
@@ -195,6 +230,10 @@ class LLaVAProber(VLMProber):
             kwargs = {"device_map": "auto"}
         self._pipe = pipeline("image-text-to-text", model=self.hf_model_id, **kwargs)
 
+        if self.adapter_path is not None:
+            from peft import PeftModel
+            self._pipe.model = PeftModel.from_pretrained(self._pipe.model, self.adapter_path)
+
     def _query(self, image: Image.Image, prompt: str) -> str:
         if self._pipe is None:
             self._load_model()
@@ -207,13 +246,25 @@ class LLaVAProber(VLMProber):
                 ],
             }
         ]
-        from transformers import AutoProcessor  # type: ignore
+        formatted = self.processor.apply_chat_template(conversation, add_generation_prompt=True)
+        
+        task = getattr(self._pipe, "task", "image-to-text")
+        if task == "image-text-to-text":
+            outputs = self._pipe(image, text=formatted, generate_kwargs={"max_new_tokens": 150})
+        else:
+            outputs = self._pipe(image, prompt=formatted, generate_kwargs={"max_new_tokens": 16})
+            
+        generated = outputs[0]["generated_text"]
+        
+        if isinstance(generated, list):
+            generated = generated[-1].get("content", "")
+        else:
+            if "ASSISTANT:" in generated:
+                generated = generated.split("ASSISTANT:")[-1]
+                
+        return generated.strip()
 
-        processor = AutoProcessor.from_pretrained(self.hf_model_id)
-        formatted = processor.apply_chat_template(conversation, add_generation_prompt=True)
-        outputs = self._pipe(image, text=formatted, generate_kwargs={"max_new_tokens": 10})
-        return outputs[0]["generated_text"].strip()
-
+            
 
 # ──────────────────────────────────────────────────────────────────────────────
 # Qwen-VL
