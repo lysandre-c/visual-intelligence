@@ -83,13 +83,9 @@ def compute_heas(
             included.append(r)
             continue
 
-        # raw = r.get("raw") or {} 
-        # ctrl_probs = raw.get("probs_control") or None
-
         raw = r.get("raw")
         if not isinstance(raw, dict):
             raw = {}
-            
         ctrl_probs = raw.get("probs_control") or None
 
         if control_ceiling_threshold < 0:
