@@ -172,12 +172,14 @@ class LLaVAProber(VLMProber):
         device: str | None = None,
         load_in_4bit: bool = False,
         adapter_path: str | None = None,
+        model_name: str = "llava_1.5",
     ) -> None:
         super().__init__(n_orderings, n_framings, seed, device)
         self.hf_model_id = hf_model_id
         self._pipe = None  # Lazy loading
         self._load_in_4bit = load_in_4bit
         self.adapter_path = adapter_path
+        self.model_name = model_name
 
     def _load_model(self) -> None:
         from transformers import pipeline, BitsAndBytesConfig, AutoProcessor  # type: ignore
@@ -204,8 +206,18 @@ class LLaVAProber(VLMProber):
         self._pipe = pipeline("image-text-to-text", model=self.hf_model_id, **kwargs)
 
         if self.adapter_path is not None:
+            import os
+            from pathlib import Path
+            projector_path = Path(self.adapter_path) / "multi_modal_projector.pt"
+            if projector_path.exists():
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.info("Loading trained projector weights from %s", projector_path)
+                projector_state = torch.load(str(projector_path), map_location="cpu", weights_only=True)
+                self._pipe.model.model.multi_modal_projector.load_state_dict(projector_state)
+
             from peft import PeftModel
-            self._pipe.model = PeftModel.from_pretrained(self._pipe.model, self.adapter_path)
+            self._pipe.model = PeftModel.from_pretrained(self._pipe.model, self.adapter_path).merge_and_unload()
 
     def _query(self, image: Image.Image, prompt: str) -> str:
         if self._pipe is None:

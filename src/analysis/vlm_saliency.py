@@ -95,7 +95,11 @@ def compute_vlm_gradcam(
 
     # Locate the vision tower through any wrapper layers
     vision_tower = _resolve_vision_tower(model)
-    target_layer = vision_tower.vision_model.encoder.layers[-2]
+    if hasattr(vision_tower, "vision_model"):
+        vision_model = vision_tower.vision_model
+    else:
+        vision_model = vision_tower
+    target_layer = vision_model.encoder.layers[-2]
 
     activations = []
     gradients = []
