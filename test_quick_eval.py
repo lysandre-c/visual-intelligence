@@ -62,12 +62,8 @@ def test():
         predicted = dist.to_label()
         baseline_record = baselines.get(sid)
         baseline_pred = baseline_record["predicted_label"] if baseline_record else "UNKNOWN"
-        baseline_probs = baseline_record["probabilities"] if baseline_record else {}
-        dpo_probs = dist.normalise().as_dict()["probabilities"]
         
-        print(f"[{sid}] Base: {baseline_pred:10s} (probs: {baseline_probs})")
-        print(f"[{sid}] symDPO: {predicted:10s} (probs: {dpo_probs})")
-        print(f"[{sid}] Match: {'SAME' if predicted == baseline_pred else 'DIFF'}\n")
+        print(f"[{sid}] Base: {baseline_pred:10s} | symDPO: {predicted:10s} | {'SAME' if predicted == baseline_pred else 'DIFF'}")
         if predicted != baseline_pred:
             differences += 1
             

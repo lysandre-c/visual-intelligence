@@ -359,8 +359,8 @@ _QUESTIONS: dict[str, str] = {
 _ANSWER_DESCRIPTIONS: dict[str, dict[str, str]] = {
     "geometric": {
         "correct": "They are equal in length.",
-        "illusory": "The top line looks longer.",
-        "other": "The bottom line looks longer.",
+       "illusory": "The bottom line looks longer.",
+        "other": "The top line looks longer.",
     },
     "color": {
         "correct": "They are the same brightness.",
