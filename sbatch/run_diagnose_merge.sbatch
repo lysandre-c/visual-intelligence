@@ -36,6 +36,6 @@ export HF_DATASETS_CACHE="$PWD/results/hf_cache"
 export TMPDIR="$PWD/results/tmp"
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 
-echo "=== Running merge diagnostic (matches real eval: gpu:2, device_map=auto) ==="
-python experiments/diagnose_eval_merge.py
+echo "=== Running REAL-path diagnostic (actual LLaVAProber class, gpu:2) ==="
+python experiments/diagnose_eval_real.py
 echo "=== Diagnostic complete ==="
