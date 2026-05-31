@@ -31,9 +31,18 @@ comparison must account for this:
    symDPO is single-trial hard {0,1}. `mean_prob_illusory` is then not directly
    comparable — trust `predicted_label`-based metrics.
 
-`experiments/compare_sym_mpo.py` handles all four: restricts to shared
-`stimulus_id`s, corrects the muller swap (`_normalize_base`), auto-detects
-soft/hard (`_is_soft`), and uses ungated HEAS. See [[symmpo-eval-no-load-bug]].
+**THE FIX (cheap): re-EVAL base, don't accept the broken cache.** At the
+measured 0.77 s/it the full 4440-stimulus base scan is ~1h on 1 GPU
+(`sbatch/rerun_base_eval.sbatch`, backs up old base then re-runs full_eval
+--models llava_1.5). A fresh base gains control logs + single-trial + corrected
+muller, fixing all 4 confounds and enabling a proper control-GATED before/after
+plus control-fail before-vs-after.
+
+`experiments/compare_sym_mpo.py` is ADAPTIVE: restricts to shared `stimulus_id`s;
+if base has control logs it GATES both models identically (valid before/after),
+else falls back to ungated + muller swap (`_normalize_base`, skipped for fresh
+base) + soft/hard warning (`_is_soft`). Ungated HEAS is a TRAP (rewards
+indiscriminate illusory). See [[symmpo-eval-no-load-bug]].
 
 Run config: 7B fp16 → use `gpu:1` (single-stream faster than 2-GPU split).
 `vlm.py` `_query` uses `max_new_tokens=8` (only first char parsed; greedy →

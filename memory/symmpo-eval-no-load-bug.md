@@ -31,6 +31,20 @@ no longer exists. Most likely a stale/old results file — unconfirmed, do not a
    share `original_prompt`. Violates DPO's identical-prompt requirement (`loss.py` docstring
    assumes constant conditioning) → corrupted preference gradient.
 
+**Full before/after run (2026-05-31, validated fast pipeline, 4440 stimuli):**
+Original "identical outputs" was NOT reproduced — flip rate 79% (upper bound:
+base is soft/multi-trial, symDPO hard/1-shot, so estimator differences inflate
+it). symDPO shifted hard toward "illusory" (base p_illusory 0.135 → symDPO 0.498).
+KEY: symDPO answers non-veridically on **76% of its OWN control images** (angle
+100%) → its illusory answers are NOT stimulus-contingent (sourced from symDPO
+alone; there is NO base control baseline, so do NOT claim "degraded vs base").
+The only computable before/after HEAS is UNGATED (0.29→0.65) and is a TRAP — it
+rewards indiscriminate "always illusory" (angle ungated 0.88 ≈ human 0.86 is the
+signature, not alignment). The valid control-gated HEAS is NaN(angle,0 survive)/
+0.32/0.38/0.43 on a tiny minority. Honest conclusion: no valid HEAS gain; apparent
+gain is an artifact exposed by control-fail. Consistent with the collator/symbol
+training bugs above. `base_p_correct=0` is partly a soft-vs-hard artifact.
+
 Diagnostic scripts left in repo: `experiments/diagnose_adapter.py`,
 `diagnose_eval_merge.py`, `diagnose_eval_real.py`, `diagnose_heas_chain.py`;
 `sbatch/run_diagnose_merge.sbatch`. User fixed a Müller-Lyer illusory/other label swap

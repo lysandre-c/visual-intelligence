@@ -1,74 +1,96 @@
-import torch
+"""Validate compute_vlm_gradcam on BOTH the base and the PEFT/DPO model.
+
+Reproduces the production call exactly (real Müller-Lyer stimulus, the neutral
+A/B/C prompt, target_token="A") so a green run here means the post_dpo_eval
+GradCAM step will work. Prints the CAM shape per model, or the precise failure.
+"""
+
 import json
-import numpy as np
+import sys
+from pathlib import Path
+
+import torch
+import yaml
 from PIL import Image
 from transformers import AutoProcessor, LlavaForConditionalGeneration
 from peft import PeftModel
-from src.analysis.vlm_saliency import _resolve_vision_tower, _resolve_device
 
-def test():
-    hf_model_id = "llava-hf/llava-1.5-7b-hf"
-    adapter_path = "results/rl_alignment/checkpoint-900"
-    
-    print("Loading processor...")
-    processor = AutoProcessor.from_pretrained(hf_model_id)
-    
-    print("Loading base model...")
-    base_model = LlavaForConditionalGeneration.from_pretrained(
-        hf_model_id,
-        torch_dtype=torch.float16,
-        device_map="auto"
+ROOT = Path(__file__).resolve().parent
+sys.path.insert(0, str(ROOT))
+
+from src.analysis.vlm_saliency import compute_vlm_gradcam
+from src.models.vlm import VLMProber
+
+HF_MODEL_ID = "llava-hf/llava-1.5-7b-hf"
+ADAPTER_PATH = "results/rl_alignment/final"  # production adapter
+
+
+def _pick_stimulus():
+    with open(ROOT / "configs" / "experiments.yaml") as fh:
+        cfg = yaml.safe_load(fh)
+    stimuli_dir = ROOT / cfg["paths"]["stimuli_dir"]
+    manifest_path = stimuli_dir / "geometric" / "muller_lyer" / "manifest.json"
+    with open(manifest_path) as fh:
+        manifest = json.load(fh)
+    entry = manifest[0]
+    return entry["stimulus_id"], Image.open(entry["illusion_path"]).convert("RGB")
+
+
+def _build_prompt(processor):
+    prompt = VLMProber._build_prompt(
+        question="Which of the two horizontal lines looks longer?",
+        options=[
+            ("A", "They are equal in length."),
+            ("B", "The top line looks longer."),
+            ("C", "The bottom line looks longer."),
+        ],
+        framing="neutral",
     )
-    
-    print("Loading PEFT model...")
-    dpo_model = PeftModel.from_pretrained(base_model, adapter_path)
-    dpo_model.eval()
-    
-    # Create fake image and prompt
-    image = Image.new('RGB', (336, 336), color='white')
-    prompt = "USER: <image>\nWhich line is longer?\nOptions:\nA) Top\nB) Bottom\nASSISTANT:"
-    
-    inputs = processor(text=prompt, images=image, return_tensors="pt").to(dpo_model.device)
-    if "pixel_values" in inputs:
-        inputs["pixel_values"].requires_grad_(True)
-        print("Set pixel_values.requires_grad = True")
-        
-    vision_tower = _resolve_vision_tower(dpo_model)
-    if hasattr(vision_tower, "vision_model"):
-        vision_model = vision_tower.vision_model
-    else:
-        vision_model = vision_tower
-    target_layer = vision_model.encoder.layers[-2]
-    
-    activations = []
-    gradients = []
-    
-    def forward_hook(module, input, output):
-        print(f"Forward hook called! Output shape: {output[0].shape}")
-        activations.append(output[0])
-        
-    def backward_hook(module, grad_input, grad_output):
-        print(f"Backward hook called! Grad output shape: {grad_output[0].shape}")
-        gradients.append(grad_output[0])
-        
-    h1 = target_layer.register_forward_hook(forward_hook)
-    h2 = target_layer.register_full_backward_hook(backward_hook)
-    
-    print("Running forward...")
-    outputs = dpo_model(**inputs, output_hidden_states=True)
-    logits = outputs.logits
-    next_token_logits = logits[0, -1, :]
-    target_token_id = processor.tokenizer.encode(" A", add_special_tokens=False)[-1]
-    score = next_token_logits[target_token_id]
-    
-    print("Running backward...")
-    dpo_model.zero_grad()
-    score.backward(retain_graph=True)
-    
-    h1.remove()
-    h2.remove()
-    
-    print(f"Activations captured: {len(activations)}")
-    print(f"Gradients captured: {len(gradients)}")
+    conversation = [
+        {"role": "user", "content": [{"type": "image"}, {"type": "text", "text": prompt}]}
+    ]
+    return processor.apply_chat_template(conversation, add_generation_prompt=True)
 
-test()
+
+def _try(name, model, processor, image, formatted_prompt):
+    print(f"\n=== {name} ===", flush=True)
+    try:
+        cam = compute_vlm_gradcam(model, processor, image, formatted_prompt, target_token="A")
+        print(f"  OK  {name}: cam shape={cam.shape}, min={cam.min():.3f}, max={cam.max():.3f}", flush=True)
+        return True
+    except Exception as e:
+        print(f"  FAIL {name}: {type(e).__name__}: {e}", flush=True)
+        return False
+
+
+def main():
+    processor = AutoProcessor.from_pretrained(HF_MODEL_ID)
+    sid, image = _pick_stimulus()
+    formatted_prompt = _build_prompt(processor)
+    print(f"Stimulus: {sid}  image size={image.size}")
+
+    print("Loading base model ...", flush=True)
+    base = LlavaForConditionalGeneration.from_pretrained(
+        HF_MODEL_ID, torch_dtype=torch.float16, device_map="auto"
+    ).eval()
+    ok_base = _try("base", base, processor, image, formatted_prompt)
+    del base
+    torch.cuda.empty_cache()
+
+    print("\nLoading DPO/PEFT model ...", flush=True)
+    dpo_base = LlavaForConditionalGeneration.from_pretrained(
+        HF_MODEL_ID, torch_dtype=torch.float16, device_map="auto"
+    )
+    proj = Path(ADAPTER_PATH) / "multi_modal_projector.pt"
+    if proj.exists():
+        state = torch.load(str(proj), map_location="cpu", weights_only=True)
+        dpo_base.model.multi_modal_projector.load_state_dict(state)
+    dpo = PeftModel.from_pretrained(dpo_base, ADAPTER_PATH).eval()
+    ok_dpo = _try("dpo", dpo, processor, image, formatted_prompt)
+
+    print(f"\nRESULT  base={'OK' if ok_base else 'FAIL'}  dpo={'OK' if ok_dpo else 'FAIL'}")
+    sys.exit(0 if (ok_base and ok_dpo) else 1)
+
+
+if __name__ == "__main__":
+    main()

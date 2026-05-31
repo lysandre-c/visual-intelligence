@@ -57,15 +57,21 @@ def _load(results_dir: Path, model: str) -> list[dict]:
     return out
 
 
-def _normalize_base(r: dict) -> dict:
-    """Align a cached base record to the CURRENT label convention.
+def _has_control(r: dict) -> bool:
+    raw = r.get("raw") or {}
+    return ("ctrl_argmax_correct" in raw) or (raw.get("probs_control") is not None)
 
-    The Müller-Lyer illusory/other tagging was fixed AFTER the base run, so base
-    ``muller_lyer`` records have ``illusory`` and ``other`` swapped relative to
-    freshly-run symDPO. Swap them back (correct is unchanged) so the before/after
-    compares like-for-like. Only muller_lyer is affected.
+
+def _normalize_base(r: dict) -> dict:
+    """Align an OLD cached base record to the CURRENT label convention.
+
+    The Müller-Lyer illusory/other tagging was fixed AFTER the original base run,
+    so OLD base ``muller_lyer`` records have ``illusory``/``other`` swapped vs
+    freshly-run symDPO. Swap them back (correct unchanged). A FRESH base re-run
+    (which carries control logs) already uses the corrected mapping, so it is
+    left untouched.
     """
-    if r.get("illusion_type") != "muller_lyer":
+    if r.get("illusion_type") != "muller_lyer" or _has_control(r):
         return r
     r = dict(r)
     r["illusory"], r["other"] = float(r.get("other", 0.0)), float(r.get("illusory", 0.0))
@@ -109,22 +115,36 @@ def _ctrl_correct(r: dict) -> bool | None:
     return int(cp.index(max(cp))) == 0
 
 
-def _slice_metrics(results: list[dict], human_rate: float) -> dict:
-    """Ungated metrics that are comparable across base and symDPO.
+def _ctrl_label(r: dict) -> str | None:
+    """The model's argmax answer on the CONTROL image (correct/illusory/other),
+    or None if no control was logged. probs_control is one-hot [c, i, o]."""
+    raw = r.get("raw") or {}
+    cp = raw.get("probs_control")
+    if cp is None:
+        return None
+    return LABELS[int(cp.index(max(cp)))]
 
-    HEAS here is UNGATED (1 - |p_illusory - human|) so base and symDPO are
-    treated identically; base cannot be control-gated. control_FAIL is NaN
-    whenever control was not logged (always, for base)."""
-    diag = output_diagnostics(results)
+
+def _slice_metrics(results: list[dict], human_rate: float, gate: bool) -> dict:
+    """Per-slice metrics for one model.
+
+    control_FAIL is over the full slice. When ``gate`` is True, the illusion
+    answer metrics (p_*, heas, mean_prob) are computed ONLY on stimuli the model
+    answered correctly on their control image — the proper HEAS methodology
+    applied identically to both models. ``gate`` must be False if either model
+    lacks control logs (e.g. the old cached base), in which case metrics are
+    ungated for both so the comparison stays fair."""
     ctrl_vals = [c for c in (_ctrl_correct(r) for r in results) if c is not None]
     ctrl_succ = (sum(ctrl_vals) / len(ctrl_vals)) if ctrl_vals else float("nan")
+    eval_set = [r for r in results if _ctrl_correct(r) is True] if (gate and ctrl_vals) else results
+    diag = output_diagnostics(eval_set)
     p_ill = diag["p_pred_illusory"]
-    heas_ungated = (1.0 - abs(p_ill - human_rate)) if diag["n"] else float("nan")
+    heas = (1.0 - abs(p_ill - human_rate)) if diag["n"] else float("nan")
     return {
-        "n": diag["n"],
-        "n_ctrl_logged": len(ctrl_vals),
+        "n_total": len(results),
+        "n_eval": diag["n"],
         "control_FAIL": round(1 - ctrl_succ, 4) if ctrl_succ == ctrl_succ else float("nan"),
-        "heas_ungated": round(heas_ungated, 4) if heas_ungated == heas_ungated else float("nan"),
+        "heas": round(heas, 4) if heas == heas else float("nan"),
         "p_correct": round(diag["p_pred_correct"], 4),
         "p_illusory": round(p_ill, 4),
         "p_other": round(diag["p_pred_other"], 4),
@@ -150,10 +170,15 @@ def _plot_comparison(side: pd.DataFrame, out_path: Path) -> None:
     ax1.set_xticks(x); ax1.set_xticklabels(cats, rotation=45, ha="right")
     ax1.legend()
 
-    # Control-FAIL — symDPO only (base never logged control).
-    ax2.bar(x, side["dpo_control_FAIL"], w * 1.3, color="#C44E52", label="symDPO")
+    # Control-FAIL — both models if base has control logs, else symDPO only.
+    if side["base_control_FAIL"].notna().any():
+        ax2.bar(x - w / 2, side["base_control_FAIL"], w, label="base", color="#4C72B0")
+        ax2.bar(x + w / 2, side["dpo_control_FAIL"], w, label="symDPO", color="#C44E52")
+        ax2.set_title("Control-FAIL rate (base vs symDPO)\nlower = still does the task")
+    else:
+        ax2.bar(x, side["dpo_control_FAIL"], w * 1.3, color="#C44E52", label="symDPO")
+        ax2.set_title("Control-FAIL rate (symDPO only)\nbase control not logged in cache")
     ax2.set_ylim(0, 1)
-    ax2.set_title("Control-FAIL rate (symDPO only)\nbase control not logged in cache")
     ax2.set_ylabel("fraction")
     ax2.set_xticks(x); ax2.set_xticklabels(cats, rotation=45, ha="right")
     ax2.legend()
@@ -178,11 +203,17 @@ def main() -> None:
         print("ERROR: missing cached results for one of the models.")
         sys.exit(1)
 
-    # Correct the post-base Müller-Lyer illusory/other label swap on base records.
-    n_muller = sum(1 for r in base_all if r.get("illusion_type") == "muller_lyer")
+    # Gate both models identically ONLY if base also has control logs. symDPO
+    # always does; the OLD cached base does not, so it forces ungated mode.
+    base_has_control = any(_has_control(r) for r in base_all)
+    gate = base_has_control
+    n_swapped = sum(1 for r in base_all
+                    if r.get("illusion_type") == "muller_lyer" and not _has_control(r))
     base_all = [_normalize_base(r) for r in base_all]
-    if n_muller:
-        print(f"Applied muller_lyer illusory<->other correction to {n_muller} base records.")
+    print(f"base has control logs: {base_has_control}  ->  "
+          f"{'GATED (control-pass only)' if gate else 'UNGATED'} before/after metrics.")
+    if n_swapped:
+        print(f"Applied muller_lyer illusory<->other correction to {n_swapped} OLD base records.")
 
     # Detect the soft (multi-trial) vs hard (single-trial) estimator mismatch.
     base_soft, dpo_soft = _is_soft(base_all), _is_soft(dpo_all)
@@ -218,8 +249,8 @@ def main() -> None:
             b = [r for r in base_all if r["category"] == cat]
             d = [r for r in dpo_all if r["category"] == cat]
             hr = human.get(cat, 0.5)
-        mb = _slice_metrics(b, hr)
-        md = _slice_metrics(d, hr)
+        mb = _slice_metrics(b, hr, gate)
+        md = _slice_metrics(d, hr, gate)
         row = {"category": cat, "human_illusory": round(hr, 3)}
         for k in mb:
             row[f"base_{k}"] = mb[k]
@@ -241,7 +272,37 @@ def main() -> None:
             "n_excluded_ctrl_fail": res["n_excluded"],
         })
     gated_df = pd.DataFrame(gated_rows)
+    # Overall = stimulus-weighted mean of the valid per-category gated HEAS.
+    valid = gated_df.dropna(subset=["symDPO_heas_gated"])
+    if not valid.empty and valid["n_included"].sum() > 0:
+        overall = float((valid["symDPO_heas_gated"] * valid["n_included"]).sum()
+                        / valid["n_included"].sum())
+        gated_df = pd.concat([gated_df, pd.DataFrame([{
+            "category": "ALL(weighted)",
+            "symDPO_heas_gated": round(overall, 4),
+            "n_included": int(valid["n_included"].sum()),
+            "n_excluded_ctrl_fail": int(gated_df["n_excluded_ctrl_fail"].sum()),
+        }])], ignore_index=True)
     gated_df.to_csv(out_dir / "symDPO_gated_heas.csv", index=False)
+
+    # ── 1c. symDPO CONTROL-image answer breakdown (mechanism of control-fail) ─
+    # On a control image the only veridical answer is "correct"; what symDPO
+    # picks instead reveals whether failures are an indiscriminate illusory bias.
+    ctrl_rows = []
+    for cat in categories + ["ALL"]:
+        d = dpo_all if cat == "ALL" else [r for r in dpo_all if r["category"] == cat]
+        labs = [l for l in (_ctrl_label(r) for r in d) if l is not None]
+        n = len(labs) or 1
+        c = Counter(labs)
+        ctrl_rows.append({
+            "category": cat,
+            "n_ctrl": len(labs),
+            "ctrl_correct": round(c["correct"] / n, 4),
+            "ctrl_illusory": round(c["illusory"] / n, 4),
+            "ctrl_other": round(c["other"] / n, 4),
+        })
+    ctrl_df = pd.DataFrame(ctrl_rows)
+    ctrl_df.to_csv(out_dir / "symDPO_control_breakdown.csv", index=False)
 
     # ── 2. Paired analysis (matched stimulus_id) ────────────────────────
     confusion = defaultdict(int)
@@ -267,19 +328,30 @@ def main() -> None:
     pd.set_option("display.width", 200)
     pd.set_option("display.max_columns", 50)
     print("\n" + "=" * 72)
-    print("NOTE: base (before) has no control logs and no raw text in cache.")
-    print("  - control_FAIL: symDPO only; base shows NaN (not recorded).")
-    print("  - HEAS in the side-by-side is UNGATED for both (only fair option).")
-    print("  - symDPO's control-gated HEAS is in symDPO_gated_heas.csv.")
-    print("  - base muller_lyer illusory<->other corrected (swap fixed post-base).")
-    print(f"  - base multi-trial(soft)={base_soft}, symDPO soft={dpo_soft} "
-          "(if differing, trust predicted_label metrics over mean_prob_illusory).")
+    if gate:
+        print("NOTE: base has control logs -> before/after is properly CONTROL-GATED.")
+        print("  - p_*/heas computed only on each model's control-PASS stimuli (n_eval).")
+        print("  - control_FAIL reported for both; this is the valid before/after.")
+    else:
+        print("NOTE: base (before) has NO control logs in cache (old leaner schema).")
+        print("  - control_FAIL: symDPO only; base shows NaN (not recorded).")
+        print("  - HEAS/p_* are UNGATED for both (only fair option without base control).")
+        print("    The ungated HEAS is a TRAP: it rewards answering illusory regardless")
+        print("    of stimulus. Re-run the base eval to enable a valid gated comparison.")
+        print("  - base muller_lyer illusory<->other corrected (swap fixed post-base).")
+        print(f"  - base multi-trial(soft)={base_soft}, symDPO soft={dpo_soft} "
+              "(if differing, trust predicted_label metrics over mean_prob_illusory).")
+    print("  - symDPO's standalone gated HEAS: symDPO_gated_heas.csv; control answer")
+    print("    breakdown: symDPO_control_breakdown.csv.")
     print("=" * 72)
-    print("\nSIDE-BY-SIDE METRICS (matched stimuli, ungated):")
+    print(f"\nSIDE-BY-SIDE METRICS (matched stimuli, {'GATED' if gate else 'ungated'}):")
     print(side.to_string(index=False))
 
     print("\nsymDPO control-gated HEAS (after-only diagnostic):")
     print(gated_df.to_string(index=False))
+
+    print("\nsymDPO CONTROL-image answers (only 'correct' is veridical here):")
+    print(ctrl_df.to_string(index=False))
 
     print("\n" + "=" * 72)
     print(f"PAIRED ANALYSIS over {len(shared)} matched stimuli")
