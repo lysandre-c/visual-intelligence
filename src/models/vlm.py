@@ -262,7 +262,11 @@ class LLaVAProber(VLMProber):
         
         task = getattr(self._pipe, "task", "image-to-text")
         if task == "image-text-to-text":
-            outputs = self._pipe(image, text=formatted, generate_kwargs={"max_new_tokens": 150})
+            # Only the first character of the reply is ever parsed (see
+            # _aggregate_responses), so a tiny cap is enough. Under greedy
+            # decoding the first token is invariant to this cap, so cached
+            # base results (generated at 150) stay comparable.
+            outputs = self._pipe(image, text=formatted, generate_kwargs={"max_new_tokens": 8})
         else:
             outputs = self._pipe(image, prompt=formatted, generate_kwargs={"max_new_tokens": 16})
             
