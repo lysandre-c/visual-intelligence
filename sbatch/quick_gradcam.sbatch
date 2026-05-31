@@ -32,6 +32,6 @@ export HF_DATASETS_CACHE="$PWD/results/hf_cache"
 export TMPDIR="$PWD/results/tmp"
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 
-echo "Generating GradCAM images (base vs symDPO) ..."
-python experiments/quick_gradcam.py --n 2
+echo "Generating GradCAM images (symDPO; weak / regular / strong fin) ..."
+python experiments/quick_gradcam.py --n 3
 echo "Exit code: $?"
