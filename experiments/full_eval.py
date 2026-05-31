@@ -52,7 +52,9 @@ from src.analysis.plots import plot_heas_table, plot_psychometric_curves, save_f
 logging.basicConfig(level=logging.INFO, format="%(levelname)s  %(message)s")
 logger = logging.getLogger(__name__)
 
-PROJECT_ROOT = Path("/home/herrsche/visual-intelligence/")
+# Resolve repo root from this file's location so the script is portable across
+# machines / user accounts (was previously hardcoded to one user's home dir).
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 # ──────────────────────────────────────────────────────────────────────────────
 # Registry
