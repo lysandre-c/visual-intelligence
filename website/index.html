@@ -785,6 +785,11 @@
         </p>
 
         <h4>Visualizations</h4>
+        <p>
+          These visualizations help clarify the gap between standard preference tuning and true visual alignment. 
+          While the baseline DPO approach drastically inflated HEAS by exploiting language shortcuts, the bar chart shows how SymMPO's symmetric objective suppresses that superficial overfitting. 
+          The Müller-Lyer samples further illustrate that when language loopholes are closed, the model does not automatically gain human-like structural processing—instead, it defaults to physically veridical measurements (or fails the controls entirely) as illusion strength varies.
+        </p>
         <div class="symmpo-figure-grid">
           <figure class="symmpo-slot">
             <img src="./assets/visualizations/symmpo/heas_comparison_bar.png" alt="HEAS comparison bar chart">
@@ -997,6 +1002,6 @@
   <script src="./js/psychometric-explorer.js"></script>
   <script src="./js/illusion-lab.js"></script>
   <script src="./js/dpo-delta.js"></script>
-  <script src="./js/symmpo-results.js"></script>
+
 </body>
 </html>
