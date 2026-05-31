@@ -72,28 +72,49 @@ def main() -> None:
         adapter_path=args.adapter_path,
         model_name="llava_symDPO",
     )
+    raw_samples: list[str] = []
+
+    def _probe(p):
+        d = prober.probe_pair(
+            illusion=p.illusion, control=p.control,
+            correct_answer=p.correct_answer, illusory_answer=p.illusory_answer,
+            category=p.category, illusion_type=p.illusion_type,
+        )
+        rr = (d.raw or {}).get("raw_responses") or []
+        if rr:
+            raw_samples.append(rr[0])
+        return d
+
     # Force model load + first generation (warm-up, excluded from timing).
-    p0 = pairs[0]
-    prober.probe_pair(
-        illusion=p0.illusion, control=p0.control,
-        correct_answer=p0.correct_answer, illusory_answer=p0.illusory_answer,
-        category=p0.category, illusion_type=p0.illusion_type,
-    )
+    _probe(pairs[0])
     print(f"Model loaded + warm-up in {time.time() - t0:.1f}s")
 
     # Timed loop over the remaining pairs.
     timed = pairs[1:]
     t1 = time.time()
     for p in timed:
-        prober.probe_pair(
-            illusion=p.illusion, control=p.control,
-            correct_answer=p.correct_answer, illusory_answer=p.illusory_answer,
-            category=p.category, illusion_type=p.illusion_type,
-        )
+        _probe(p)
     elapsed = time.time() - t1
     per_it = elapsed / max(1, len(timed))
     print("\n" + "=" * 60)
     print(f"Timed {len(timed)} stimuli in {elapsed:.1f}s  ->  {per_it:.2f} s/it")
+    print("=" * 60)
+
+    # ── Sanity: does truncating to 8 tokens still yield a parseable letter? ──
+    # The eval parses raw.strip().upper()[:1]; verify that is a real option.
+    valid = sum(1 for s in raw_samples if s.strip()[:1].upper() in {"A", "B", "C"})
+    print("\n" + "=" * 60)
+    print("OUTPUT SANITY CHECK (max_new_tokens=8 — exactly what eval parses):")
+    print(f"  {valid}/{len(raw_samples)} replies start with a valid letter A/B/C")
+    for s in raw_samples[:8]:
+        letter = s.strip()[:1].upper()
+        flag = "ok" if letter in {"A", "B", "C"} else "!! NOT A/B/C"
+        print(f"    parsed={letter!r:5} <- {s[:70]!r}   {flag}")
+    if valid < len(raw_samples):
+        print("  WARNING: some replies do NOT begin with A/B/C — first-char parse "
+              "marks those 'other'. Raise max_new_tokens in vlm.py if so.")
+    else:
+        print("  All replies begin with a valid letter — 8-token truncation is safe.")
     print("=" * 60)
 
     sizes = _manifest_sizes()
