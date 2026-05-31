@@ -314,8 +314,8 @@
         on Hugging Face. SymMPO keeps the same illusory-alignment goal but adds
         polarity-inverted prompts on the <em>same</em> image, margin consistency between those prompts, anchored preference
         regularisation, factual control VQA to limit catastrophic forgetting, and a trainable multimodal projector so visual
-        features can be remapped into text space. Full loss and data details follow; HEAS re-evaluation is reported when the
-        SymMPO checkpoint is available (<a href="#symmpo-results">results</a>).
+        features can be remapped into text space. Full loss and data details follow; HEAS re-evaluation is reported in the
+        <a href="#symmpo-results">SymMPO benchmark results</a>.
       </p>
 
       <h4>SymMPO dataset (polarity-paired preferences)</h4>
@@ -396,8 +396,8 @@
         Each model answers the same three-way probe on the programmatic pairs above plus external impossible-scene items where
         applicable. Primary metric:
         <strong>HEAS</strong> per (model, category). Below we report HEAS tables and an interactive heatmap, psychometric curves,
-        saliency maps, and DPO alignment results; SymMPO is described in Method with benchmark numbers
-        <a href="#symmpo-results">pending</a>.
+        saliency maps, and DPO alignment results; SymMPO is described in Method with benchmark numbers in the
+        <a href="#symmpo-results">SymMPO results section</a>.
       </p>
 
       <h3>Quantitative evaluation</h3>
@@ -428,7 +428,7 @@
             <tr><td>Impossible</td><td>LLaVA+DPO</td><td>0.97</td><td>CLIP (0.48)</td><td>VLMs only evaluated</td></tr>
           </tbody>
         </table>
-        <p class="table-note">“Best model” rows use the DPO checkpoint where noted; SymMPO results are <a href="#symmpo-results">pending</a>.</p>
+        <p class="table-note">“Best model” rows use the DPO checkpoint where noted; SymMPO results are discussed <a href="#symmpo-results">below</a>.</p>
         <p>
           Geometric alignment does not transfer: the same ResNet that reaches HEAS 0.87 on length scores 0.08 on color, while humans
           still report strong simultaneous-contrast illusions. Thus “fails like humans” must be stated per category, not
@@ -454,7 +454,7 @@
             <tr><td>LLaVA + DPO</td><td>0.91</td><td>0.88</td><td>0.92</td><td>0.86</td><td>0.91</td><td>0.97</td></tr>
           </tbody>
         </table>
-        <p class="table-note">Family means are averages over all evaluated category–model cells in that family. Overview tables reflect the archived <strong>DPO</strong> checkpoint; SymMPO evaluation is <a href="#symmpo-results">pending</a>.</p>
+        <p class="table-note">Family means are averages over all evaluated category–model cells in that family. Overview tables reflect the archived <strong>DPO</strong> checkpoint; SymMPO evaluation is discussed <a href="#symmpo-results">below</a>.</p>
         <p>
           DPO (archive) shifts HEAS most where base LLaVA under-shoots: <strong>color +0.52</strong>, <strong>motion +0.61</strong>,
           <strong>geometric +0.29</strong>. Angle and impossible were already high pre-DPO; gains are smaller but control
@@ -738,34 +738,51 @@
       </p>
 
       <h4 id="symmpo-results">SymMPO: benchmark results</h4>
-      <div id="symmpo-results-panel" class="results-pending interactive-panel">
-        <p class="results-pending-msg">
-          The SymMPO checkpoint is on Hugging Face; full HEAS re-evaluation and comparison charts (base vs. DPO vs. SymMPO) will be
-          added here when the benchmark run is merged into this site.
+      <div id="symmpo-results-panel" class="interactive-panel">
+        <p>
+          <strong>SymMPO</strong> substantially changed the model's outputs (~79% of answers switched vs. base, moving away from "other" toward "correct" and "illusory"). 
+          However, when measured properly — <strong>HEAS over control-passed answers only</strong> — alignment is low (~0.40 overall; undefined for angle, where every control failed). 
+          On stimuli it understood, SymMPO gives the illusory answer far less often than humans, so it did not acquire human-like illusion susceptibility.
         </p>
-        <div class="symmpo-figure-grid">
-          <figure class="symmpo-slot" data-slot="symmpo-heas-heatmap">
-            <img src="./assets/visualizations/symmpo/heas_heatmap.png" alt="" hidden>
-            <figcaption>HEAS heatmap (base / DPO / SymMPO)</figcaption>
-          </figure>
-          <figure class="symmpo-slot" data-slot="symmpo-psychometric">
-            <img src="./assets/visualizations/symmpo/psychometric_curve.png" alt="" hidden>
-            <figcaption>Psychometric curve (SymMPO vs. base)</figcaption>
-          </figure>
-        </div>
-        <div class="chart-container symmpo-chart-wrap" style="height:280px" hidden>
-          <canvas id="symmpo-delta-chart"></canvas>
-        </div>
-        <div class="symmpo-figure-grid">
-          <figure class="symmpo-slot" data-slot="symmpo-gradcam">
-            <img src="./assets/visualizations/symmpo/muller_lyer_gradcam.png" alt="" hidden>
-            <figcaption>Grad-CAM (SymMPO)</figcaption>
-          </figure>
-          <figure class="symmpo-slot" data-slot="symmpo-occlusion">
-            <img src="./assets/visualizations/symmpo/muller_lyer_occlusion.png" alt="" hidden>
-            <figcaption>Occlusion sensitivity (SymMPO)</figcaption>
-          </figure>
-        </div>
+
+        <h4>HEAS — control-gated (only answers where the control passed)</h4>
+        <table class="data-table findings-table">
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Gated HEAS</th>
+              <th>n (passed control)</th>
+              <th>SymMPO illusory rate</th>
+              <th>Human</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Angle</td><td>undefined</td><td>0 / 960</td><td>—</td><td>0.86</td></tr>
+            <tr><td>Color</td><td>0.32</td><td>170</td><td>~0.24</td><td>0.92</td></tr>
+            <tr><td>Geometric</td><td>0.38</td><td>245</td><td>~0.26</td><td>0.88</td></tr>
+            <tr><td>Motion</td><td>0.43</td><td>629</td><td>~0.13</td><td>0.70</td></tr>
+            <tr><td><strong>Overall (weighted)</strong></td><td><strong>0.40</strong></td><td><strong>1044</strong></td><td><strong>—</strong></td><td><strong>—</strong></td></tr>
+          </tbody>
+        </table>
+        
+        <p>
+          Once you keep only the answers where SymMPO got the control right, its illusory rate (~13–26%) sits well below the human rate (70–92%), so HEAS is low (~0.40). i.e. on the stimuli it actually understood, SymMPO is largely veridical, not human-illusion-aligned. Angle is undefined — SymMPO failed every angle control, so nothing survives the gate.
+        </p>
+
+        <h4>Output change (all stimuli — behavioral, not gated)</h4>
+        <ul>
+          <li>~79% of answers switched vs base.</li>
+          <li>"correct": 0% → 30% (base never picked "they're equal"; SymMPO does ~30% of the time)</li>
+          <li>"illusory": 13.5% → 50%</li>
+          <li>"other": 86.5% → 20%</li>
+        </ul>
+
+        <p>
+          SymMPO moved strongly away from "other" toward "correct" and "illusory."
+        </p>
+        <p class="table-note">
+          Caveat: the 79% switch and the "0% → 30% correct" are upper bounds — base was scored multi-trial (8 draws, argmax) and SymMPO single-trial (1 draw), so some apparent change is an estimator difference, not behavior. (And geometric uses the assumed Müller-Lyer illusory/other correction.)
+        </p>
       </div>
     </section>
 
@@ -781,7 +798,7 @@
         length (best cells ≈ 0.92) yet often sit near the floor on color and angle (≈ 0.08–0.14), where humans remain strongly
         illusory. Vision–language models are uneven out of the box; DPO <a href="#ref-16" class="cite">[16]</a> pushes mean HEAS on evaluated VLM cells to ≈ 0.91,
         especially on color and motion, but control checks and saliency suggest part of that lift may reflect language shortcuts
-        as much as visual grounding. SymMPO <a href="#symmpo-results">still awaits full HEAS evaluation</a>.
+        as much as visual grounding. SymMPO <a href="#symmpo-results">has a low HEAS when controlling for passed answers</a>.
       </p>
       <p>
         These differences line up less with parameter count than with <strong>how representations were learned</strong>. Supervised
@@ -807,7 +824,7 @@
       </p>
       <p>
         The fair claim is cautious: under explicit directional metrics, some models align with human error patterns on some
-        illusion types, and many do not. Filling the sparse grid, finishing SymMPO benchmarking, and adding rank-based psychometric
+        illusion types, and many do not. Filling the sparse grid, and adding rank-based psychometric
         statistics would sharpen that picture further.
       </p>
     </section>
