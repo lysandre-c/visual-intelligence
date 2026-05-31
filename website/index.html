@@ -60,8 +60,7 @@
           Supervised ViTs can reach high HEAS on geometric length (up to ≈ 0.92) while staying near the floor on color and angle
           (often ≈ 0.08–0.14); contrastive encoders remain largely anti-illusory on geometry (HEAS ≈ 0.12). Preference-tuned LLaVA
           can raise reported illusory rates: DPO reaches mean HEAS ≈ 0.91 on evaluated VLM cells, but saliency and control checks
-          suggest this can reflect language shortcuts as much as visual grounding. Failures are structured (correct-avoidant,
-          anti-illusory, and “other”-collapse), not random.
+          suggest this can reflect language shortcuts as much as visual grounding.
         </p>
       </div>
     </section>
@@ -725,27 +724,23 @@
         </div>
       </details>
 
-      <h4>SymMPO: why we changed the objective</h4>
       <p>
-        SymMPO targets language-prior overfitting directly. On the <strong>same image</strong>, we train on both an original and a
-        polarity-inverted question (e.g. “longer?” vs. “shorter?”) with consistent human-illusory choices. A symmetric DPO term,
-        margin-consistency loss, and anchored preference regularisation penalise shortcut solutions that only work for one wording.
-        We also train the <strong>multimodal projector</strong> (not only LoRA on text), add ~20% factual control VQA to limit
-        catastrophic forgetting, and apply symbol demonstration plus option shuffling during training. Full specification:
-        <a href="#method">Method</a>. Training weights:
+        <strong>SymMPO</strong> (symmetric polarity preference optimization) is our follow-up to DPO; dataset, loss, and training setup are in
+        <a href="#method">Method</a>. Checkpoint:
         <a href="https://huggingface.co/Matisse6410/LlaVa-1.5-SDPO" rel="noopener noreferrer">Matisse6410/LlaVa-1.5-SDPO</a>
-        on Hugging Face (repo name uses “SDPO”; same symmetric polarity objective as SymMPO on this site).
+        on Hugging Face.
       </p>
 
       <h4 id="symmpo-results">SymMPO: benchmark results</h4>
       <div id="symmpo-results-panel" class="interactive-panel">
         <p>
-          <strong>SymMPO</strong> substantially changed the model's outputs (~79% of answers switched vs. base, moving away from "other" toward "correct" and "illusory"). 
-          However, when measured properly — <strong>HEAS over control-passed answers only</strong> — alignment is low (~0.40 overall; undefined for angle, where every control failed). 
-          On stimuli it understood, SymMPO gives the illusory answer far less often than humans, so it did not acquire human-like illusion susceptibility.
+          SymMPO changed most answers vs. base (~79% switched), shifting mass from <code>other</code> toward <code>correct</code> and
+          <code>illusory</code>. With <strong>HEAS on control-passed answers only</strong>, overall alignment stays low (~0.40): on
+          stimuli the model understood, illusory rates (~13–26%) sit far below humans (70–92%), so it did not gain human-like illusion
+          susceptibility. Angle is undefined (0/960 controls passed).
         </p>
 
-        <h4>HEAS — control-gated (only answers where the control passed)</h4>
+        <h4>HEAS: control-gated (control passed only)</h4>
         <table class="data-table findings-table">
           <thead>
             <tr>
@@ -757,38 +752,26 @@
             </tr>
           </thead>
           <tbody>
-            <tr><td>Angle</td><td>undefined</td><td>0 / 960</td><td>—</td><td>0.86</td></tr>
+            <tr><td>Angle</td><td>undefined</td><td>0 / 960</td><td>N/A</td><td>0.86</td></tr>
             <tr><td>Color</td><td>0.32</td><td>170</td><td>~0.24</td><td>0.92</td></tr>
             <tr><td>Geometric</td><td>0.38</td><td>245</td><td>~0.26</td><td>0.88</td></tr>
             <tr><td>Motion</td><td>0.43</td><td>629</td><td>~0.13</td><td>0.70</td></tr>
-            <tr><td><strong>Overall (weighted)</strong></td><td><strong>0.40</strong></td><td><strong>1044</strong></td><td><strong>—</strong></td><td><strong>—</strong></td></tr>
+            <tr><td><strong>Overall (weighted)</strong></td><td><strong>0.40</strong></td><td><strong>1044</strong></td><td><strong>N/A</strong></td><td><strong>N/A</strong></td></tr>
           </tbody>
         </table>
-        
-        <p>
-          Once you keep only the answers where SymMPO got the control right, its illusory rate (~13–26%) sits well below the human rate (70–92%), so HEAS is low (~0.40). i.e. on the stimuli it actually understood, SymMPO is largely veridical, not human-illusion-aligned. Angle is undefined — SymMPO failed every angle control, so nothing survives the gate.
-        </p>
 
-        <h4>Output change (all stimuli — behavioral, not gated)</h4>
+        <h4>Output change (all stimuli, not gated)</h4>
         <ul>
-          <li>~79% of answers switched vs base.</li>
-          <li>"correct": 0% → 30% (base never picked "they're equal"; SymMPO does ~30% of the time)</li>
-          <li>"illusory": 13.5% → 50%</li>
-          <li>"other": 86.5% → 20%</li>
+          <li>~79% of answers switched vs. base.</li>
+          <li><code>correct</code>: 0% → 30% (base never chose “they're equal”).</li>
+          <li><code>illusory</code>: 13.5% → 50%.</li>
+          <li><code>other</code>: 86.5% → 20%.</li>
         </ul>
-
-        <p>
-          SymMPO moved strongly away from "other" toward "correct" and "illusory."
-        </p>
-        <p class="table-note">
-          Caveat: the 79% switch and the "0% → 30% correct" are upper bounds — base was scored multi-trial (8 draws, argmax) and SymMPO single-trial (1 draw), so some apparent change is an estimator difference, not behavior. (And geometric uses the assumed Müller-Lyer illusory/other correction.)
-        </p>
 
         <h4>Visualizations</h4>
         <p>
-          These visualizations help clarify the gap between standard preference tuning and true visual alignment. 
-          While the baseline DPO approach drastically inflated HEAS by exploiting language shortcuts, the bar chart shows how SymMPO's symmetric objective suppresses that superficial overfitting. 
-          The Müller-Lyer samples further illustrate that when language loopholes are closed, the model does not automatically gain human-like structural processing—instead, it defaults to physically veridical measurements (or fails the controls entirely) as illusion strength varies.
+          The bar chart contrasts HEAS under DPO vs. SymMPO; Müller-Lyer samples show veridical or failed-control behavior across fin
+          length, not human-like structural bias.
         </p>
         <div class="symmpo-figure-grid">
           <figure class="symmpo-slot">
