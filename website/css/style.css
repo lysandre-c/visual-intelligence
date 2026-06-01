@@ -420,6 +420,23 @@ figcaption {
   margin: 0 0 0.75rem;
 }
 
+.heas-symmpo-footnote {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 0.5rem 0 0;
+}
+
+.heas-header.symmpo-col,
+.heas-cell.symmpo-col {
+  outline: 1px dashed rgba(49, 130, 206, 0.45);
+  outline-offset: -1px;
+}
+
+.heas-gated-note {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+}
+
 .heas-mode-tabs {
   margin-bottom: 1rem;
 }
@@ -773,6 +790,28 @@ details.collapsible-block {
 .results-pending .symmpo-chart-wrap,
 .results-pending .symmpo-slot img {
   display: none !important;
+}
+
+.symmpo-heas-bar-figure {
+  margin: 1rem 0 1.5rem;
+}
+
+.symmpo-heas-bar-figure img {
+  width: 100%;
+  max-width: 720px;
+  display: block;
+  margin: 0 auto;
+}
+
+.symmpo-heas-bar-figure figcaption {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-top: 0.5rem;
+}
+
+.symmpo-gradcam-grid {
+  margin: 0.75rem 0 0;
 }
 
 .symmpo-figure-grid {

@@ -1,23 +1,23 @@
 [
   {
     "category": "geometric",
-    "llava_base": 0.5936842105263158,
+    "llava_base": 0.12,
     "llava_dpo": 0.88,
-    "delta": 0.2863157894736842,
+    "delta": 0.76,
     "human_baseline": 0.88
   },
   {
     "category": "color",
-    "llava_base": 0.3992771084337349,
+    "llava_base": 0.0799999999999999,
     "llava_dpo": 0.92,
-    "delta": 0.5207228915662652,
+    "delta": 0.8400000000000001,
     "human_baseline": 0.92
   },
   {
     "category": "angle",
-    "llava_base": 0.8654901960784314,
+    "llava_base": 0.14,
     "llava_dpo": 0.8622675736961452,
-    "delta": -0.003222622382286211,
+    "delta": 0.7222675736961451,
     "human_baseline": 0.86
   },
   {
@@ -29,9 +29,9 @@
   },
   {
     "category": "impossible",
-    "llava_base": 0.937574712643678,
+    "llava_base": 0.94,
     "llava_dpo": 0.96516091954023,
-    "delta": 0.027586206896552,
+    "delta": 0.02516091954023003,
     "human_baseline": 0.913
   }
 ]

@@ -78,26 +78,26 @@
     "illusions": [
       {
         "illusion_type": "poggendorff",
-        "p_illusory": 1.0,
+        "p_illusory": 0.0,
         "p_correct": 0.0,
-        "p_other": 0.0,
-        "control_pass_rate": 0.0
+        "p_other": 1.0,
+        "control_pass_rate": null
       },
       {
         "illusion_type": "zollner",
-        "p_illusory": 0.9708333333333332,
-        "p_correct": 0.0291666666666666,
-        "p_other": 0.0,
-        "control_pass_rate": 0.10625
+        "p_illusory": 0.0,
+        "p_correct": 0.0,
+        "p_other": 1.0,
+        "control_pass_rate": null
       }
     ],
     "category": "angle",
     "model": "llava_1.5",
-    "heas": 0.8654901960784314,
+    "heas": 0.14,
     "p_human": 0.86,
-    "p_model": 0.9854166666666666,
-    "alignment_gap": 0.12541666666666662,
-    "interpretation": "moderate_mismatch"
+    "p_model": 0.0,
+    "alignment_gap": 0.86,
+    "interpretation": "under_illusory"
   },
   "angle|llava_1.5_dpo": {
     "illusions": [
@@ -278,25 +278,25 @@
     "illusions": [
       {
         "illusion_type": "simultaneous_contrast",
-        "p_illusory": 0.5708333333333333,
-        "p_correct": 0.03125,
-        "p_other": 0.3979166666666666,
-        "control_pass_rate": 0.1333333333333333
+        "p_illusory": 0.0,
+        "p_correct": 0.0,
+        "p_other": 1.0,
+        "control_pass_rate": null
       },
       {
         "illusion_type": "whites_illusion",
-        "p_illusory": 0.3291666666666666,
-        "p_correct": 0.1645833333333333,
-        "p_other": 0.50625,
-        "control_pass_rate": 0.2125
+        "p_illusory": 0.0,
+        "p_correct": 0.0,
+        "p_other": 1.0,
+        "control_pass_rate": null
       }
     ],
     "category": "color",
     "model": "llava_1.5",
-    "heas": 0.3992771084337349,
+    "heas": 0.0799999999999999,
     "p_human": 0.92,
-    "p_model": 0.44999999999999996,
-    "alignment_gap": 0.4700000000000001,
+    "p_model": 0.0,
+    "alignment_gap": 0.92,
     "interpretation": "under_illusory"
   },
   "color|llava_1.5_dpo": {
@@ -499,33 +499,33 @@
     "illusions": [
       {
         "illusion_type": "ebbinghaus",
-        "p_illusory": 0.5666666666666667,
+        "p_illusory": 0.0,
         "p_correct": 0.0,
-        "p_other": 0.4333333333333333,
-        "control_pass_rate": 0.0
+        "p_other": 1.0,
+        "control_pass_rate": null
       },
       {
         "illusion_type": "muller_lyer",
-        "p_illusory": 0.8783333333333333,
-        "p_correct": 0.0216666666666666,
-        "p_other": 0.1,
-        "control_pass_rate": 0.0316666666666666
+        "p_illusory": 0.0,
+        "p_correct": 0.0,
+        "p_other": 1.0,
+        "control_pass_rate": null
       },
       {
         "illusion_type": "ponzo",
-        "p_illusory": 0.9583333333333334,
+        "p_illusory": 0.0,
         "p_correct": 0.0,
-        "p_other": 0.0416666666666666,
-        "control_pass_rate": 0.0
+        "p_other": 1.0,
+        "control_pass_rate": null
       }
     ],
     "category": "geometric",
     "model": "llava_1.5",
-    "heas": 0.5936842105263158,
+    "heas": 0.12,
     "p_human": 0.88,
-    "p_model": 0.8011111111111111,
-    "alignment_gap": 0.0788888888888889,
-    "interpretation": "moderate_mismatch"
+    "p_model": 0.0,
+    "alignment_gap": 0.88,
+    "interpretation": "under_illusory"
   },
   "geometric|llava_1.5_dpo": {
     "illusions": [
@@ -695,18 +695,18 @@
     "illusions": [
       {
         "illusion_type": "illusion_vqa",
-        "p_illusory": 0.8505747126436781,
-        "p_correct": 0.1471264367816092,
-        "p_other": 0.0022988505747126,
+        "p_illusory": 0.85,
+        "p_correct": 0.15,
+        "p_other": 0.0,
         "control_pass_rate": null
       }
     ],
     "category": "impossible",
     "model": "llava_1.5",
-    "heas": 0.937574712643678,
+    "heas": 0.94,
     "p_human": 0.913,
-    "p_model": 0.8505747126436781,
-    "alignment_gap": 0.06242528735632191,
+    "p_model": 0.85,
+    "alignment_gap": 0.06300000000000006,
     "interpretation": "moderate_mismatch"
   },
   "impossible|llava_1.5_dpo": {
@@ -807,16 +807,16 @@
       {
         "illusion_type": "rotating_snakes",
         "p_illusory": 0.0,
-        "p_correct": 1.0,
-        "p_other": 0.0,
-        "control_pass_rate": 0.9625
+        "p_correct": 0.0,
+        "p_other": 1.0,
+        "control_pass_rate": null
       },
       {
         "illusion_type": "scintillating_grid",
         "p_illusory": 0.0,
-        "p_correct": 1.0,
-        "p_other": 0.0,
-        "control_pass_rate": 1.0
+        "p_correct": 0.0,
+        "p_other": 1.0,
+        "control_pass_rate": null
       }
     ],
     "category": "motion",

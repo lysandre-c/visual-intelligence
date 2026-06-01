@@ -29,7 +29,7 @@
   <header class="hero">
     <h1>Do Vision Models Fail Like Humans?</h1>
     <p class="subtitle">A systematic study of directional perceptual error alignment across classical illusions and modern vision architectures</p>
-    <p class="authors">Jules Herrscher · Matisse Van Schalkwijk · Lysandre Costes · Imane Oujja</p>
+    <p class="authors">Jules Herrscher · Matisse van Schalkwijk · Lysandre Costes · Imane Oujja</p>
     <p class="affiliation">EPFL, CS-503 Visual Intelligence: Machines and Minds</p>
     <div class="hero-links">
       <a href="https://github.com/lysandre-c/visual-intelligence">Code</a>
@@ -417,14 +417,14 @@
         </p>
         <table class="data-table findings-table">
           <thead>
-            <tr><th>Category</th><th>Best model</th><th>HEAS</th><th>Best non-VLM</th><th>Pattern</th></tr>
+            <tr><th>Category</th><th>Best model</th><th>HEAS</th><th>SymMPO</th><th>Best non-VLM</th><th>Pattern</th></tr>
           </thead>
           <tbody>
-            <tr><td>Geometric</td><td>ViT-L/16</td><td>0.92</td><td>ViT-L/16 (0.92)</td><td>Supervised alignment</td></tr>
-            <tr><td>Color</td><td>LLaVA+DPO</td><td>0.92</td><td>ViT-L/16 (0.27)</td><td>CNNs anti-illusory (~0.08)</td></tr>
-            <tr><td>Angle</td><td>LLaVA base</td><td>0.87</td><td>CLIP (0.36)</td><td>VLMs high; CNNs ~0.14</td></tr>
-            <tr><td>Motion</td><td>LLaVA+DPO</td><td>0.91</td><td>CLIP (0.70)</td><td>CLIP strong on motion; DPO best</td></tr>
-            <tr><td>Impossible</td><td>LLaVA+DPO</td><td>0.97</td><td>CLIP (0.48)</td><td>VLMs only evaluated</td></tr>
+            <tr><td>Geometric</td><td>ViT-L/16</td><td>0.92</td><td>0.15</td><td>ViT-L/16 (0.92)</td><td>Supervised alignment</td></tr>
+            <tr><td>Color</td><td>LLaVA+DPO</td><td>0.92</td><td>0.32</td><td>ViT-L/16 (0.27)</td><td>CNNs anti-illusory (~0.08)</td></tr>
+            <tr><td>Angle</td><td>LLaVA + DPO</td><td>0.86</td><td>N/A</td><td>CLIP (0.36)</td><td>DPO rescues angle; base LLaVA other-collapse</td></tr>
+            <tr><td>Motion</td><td>LLaVA+DPO</td><td>0.91</td><td>0.43</td><td>CLIP (0.70)</td><td>CLIP strong on motion; DPO best</td></tr>
+            <tr><td>Impossible</td><td>LLaVA+DPO</td><td>0.97</td><td>N/A</td><td>CLIP (0.48)</td><td>VLMs only evaluated</td></tr>
           </tbody>
         </table>
         <p class="table-note">“Best model” rows use the DPO checkpoint where noted; SymMPO results are discussed <a href="#symmpo-results">below</a>.</p>
@@ -449,15 +449,17 @@
           <tbody>
             <tr><td>Supervised CNN/ViT</td><td>0.36</td><td>0.86</td><td>0.13</td><td>0.14</td><td>0.30</td><td>N/A</td></tr>
             <tr><td>Contrastive</td><td>0.25</td><td>0.12</td><td>0.08</td><td>0.25</td><td>0.50</td><td>0.28</td></tr>
-            <tr><td>LLaVA base</td><td>0.62</td><td>0.59</td><td>0.40</td><td>0.87</td><td>0.30</td><td>0.94</td></tr>
+            <tr><td>LLaVA base</td><td>0.32</td><td>0.12</td><td>0.08</td><td>0.14</td><td>0.30</td><td>0.94</td></tr>
             <tr><td>LLaVA + DPO</td><td>0.91</td><td>0.88</td><td>0.92</td><td>0.86</td><td>0.91</td><td>0.97</td></tr>
+            <tr><td>LLaVA + SymMPO (gated)</td><td>0.36</td><td>0.15</td><td>0.32</td><td>N/A</td><td>0.43</td><td>N/A</td></tr>
           </tbody>
         </table>
-        <p class="table-note">Family means are averages over all evaluated category–model cells in that family. Overview tables reflect the archived <strong>DPO</strong> checkpoint; SymMPO evaluation is discussed <a href="#symmpo-results">below</a>.</p>
+        <p class="table-note">Family means are averages over all evaluated category–model cells in that family.</p>
         <p>
-          DPO (archive) shifts HEAS most where base LLaVA under-shoots: <strong>color +0.52</strong>, <strong>motion +0.61</strong>,
-          <strong>geometric +0.29</strong>. Angle and impossible were already high pre-DPO; gains are smaller but control
-          reliability improves (see <a href="#interpretability">saliency</a> and <a href="#dpo" class="open-details-link">DPO supplementary figures</a>).
+          DPO (archive) shifts HEAS most where base LLaVA under-shoots: <strong>color +0.84</strong>, <strong>geometric +0.76</strong>,
+          <strong>angle +0.72</strong>, and <strong>motion +0.61</strong>. Base LLaVA mean HEAS ≈ 0.16 on programmatic cells;
+          control reliability and interpretable labels improve with DPO (see <a href="#interpretability">saliency</a> and
+          <a href="#dpo" class="open-details-link">DPO supplementary figures</a>).
         </p>
       </div>
 
@@ -487,9 +489,9 @@
               <td>P(other)≈0.87; non-human failure axis</td>
             </tr>
             <tr>
-              <td>Illusory without control</td>
+              <td>Other-collapse</td>
               <td>LLaVA base × Zöllner</td>
-              <td>P(illusory)≈0.97, control pass ≈11%</td>
+              <td>P(other)≈1.0; no usable illusion axis pre-DPO</td>
             </tr>
           </tbody>
         </table>
@@ -591,7 +593,8 @@
         Grad-CAM <a href="#ref-14" class="cite">[14]</a>, ViT attention rollout
         <a href="#ref-21" class="cite">[21]</a>, and LLaVA token-level maps offer <em>hypotheses</em> for why models misalign, not causal proof.
         DPO increases saliency on fins (Müller-Lyer) and contrast patches (simultaneous contrast), consistent
-        with higher illusory rates but not demonstrating human-identical processing.
+        with higher illusory rates but not demonstrating human-identical processing. SymMPO Grad-CAM is available
+        for Müller-Lyer in the gallery below and in <a href="#symmpo-results">SymMPO results</a> (fin-length sweep).
       </p>
 
       <div id="saliency-gallery" class="interactive-panel">
@@ -608,6 +611,7 @@
             <figure><img src="./assets/visualizations/muller_lyer_strong_vit_attention.png" alt="ViT attention"><figcaption>ViT attention</figcaption></figure>
             <figure><img src="./assets/visualizations/muller_lyer_strong_llava_base_gradcam.png" alt="LLaVA base"><figcaption>LLaVA base</figcaption></figure>
             <figure><img src="./assets/visualizations/muller_lyer_strong_llava_dpo_gradcam.png" alt="LLaVA DPO"><figcaption>LLaVA + DPO</figcaption></figure>
+            <figure><img src="./assets/visualizations/muller_lyer_strong_llava_symmpo_gradcam.png" alt="LLaVA SymMPO Grad-CAM"><figcaption>LLaVA + SymMPO</figcaption></figure>
           </div>
         </div>
         <div id="sal-sc" class="saliency-panel" hidden>
@@ -644,28 +648,28 @@
       <p>
         We fine-tuned LLaVA-1.5 with DPO on roughly 1,000 illusion/control preference pairs (illusory answers preferred on illusion
         images, reversed on controls; LoRA rank 16 on the language model; frozen CLIP encoder). Weights are public as
-        <a href="https://huggingface.co/Jukess/llava_illusions_dpo" rel="noopener noreferrer">Jukess/llava_illusions_dpo</a>
-        (<code>llava_1.5_dpo</code> in our benchmark).
+        <a href="https://huggingface.co/Jukess/llava_illusions_dpo" rel="noopener noreferrer">Jukess/llava_illusions_dpo</a>.
       </p>
       <p>
         <strong>What improved.</strong> DPO was our first evidence that a VLM <em>can</em> be steered toward human-like illusory rates.
-        Mean HEAS over evaluated VLM cells rose from <strong>0.62</strong> (base) to <strong>0.91</strong> (DPO). The largest jumps
-        were where base LLaVA under-reported illusion most: <strong>color +0.52</strong>, <strong>motion +0.61</strong>, and
-        <strong>geometric +0.29</strong>. Psychometric sweeps show the effect clearly on Müller-Lyer and simultaneous contrast: the
+        Mean HEAS over evaluated VLM cells rose from <strong>0.16</strong> (base) to <strong>0.91</strong> (DPO). The largest jumps
+        were where base LLaVA under-reported illusion most: <strong>color +0.84</strong>, <strong>geometric +0.76</strong>,
+        <strong>angle +0.72</strong>, and <strong>motion +0.61</strong>. Psychometric sweeps show the effect clearly on Müller-Lyer and simultaneous contrast: the
         model’s illusory-response curve moves upward when illusion strength increases, not only on a single prompt template.
       </p>
       <table class="data-table findings-table alignment-story-table">
         <thead>
-          <tr><th>Category</th><th>LLaVA base HEAS</th><th>LLaVA + DPO HEAS</th><th>Δ vs. base</th></tr>
+          <tr><th>Category</th><th>LLaVA base</th><th>LLaVA + DPO</th><th>SymMPO</th><th>Δ DPO vs. base</th></tr>
         </thead>
         <tbody>
-          <tr><td>Geometric</td><td>0.59</td><td>0.88</td><td>+0.29</td></tr>
-          <tr><td>Color</td><td>0.40</td><td>0.92</td><td>+0.52</td></tr>
-          <tr><td>Angle</td><td>0.87</td><td>0.86</td><td>≈0</td></tr>
-          <tr><td>Motion</td><td>0.30</td><td>0.91</td><td>+0.61</td></tr>
-          <tr><td>Impossible</td><td>0.94</td><td>0.97</td><td>+0.03</td></tr>
+          <tr><td>Geometric</td><td>0.12</td><td>0.88</td><td>0.15</td><td>+0.76</td></tr>
+          <tr><td>Color</td><td>0.08</td><td>0.92</td><td>0.32</td><td>+0.84</td></tr>
+          <tr><td>Angle</td><td>0.14</td><td>0.86</td><td>N/A</td><td>+0.72</td></tr>
+          <tr><td>Motion</td><td>0.30</td><td>0.91</td><td>0.43</td><td>+0.61</td></tr>
+          <tr><td>Impossible</td><td>0.94</td><td>0.97</td><td>N/A</td><td>+0.03</td></tr>
         </tbody>
       </table>
+      <p class="table-note">SymMPO column: control-gated HEAS (not in full-eval HEAS table). DPO/base: standard category HEAS.</p>
 
       <div class="interactive-panel">
         <div class="chart-container" style="height:280px">
@@ -734,10 +738,9 @@
       <h4 id="symmpo-results">SymMPO: benchmark results</h4>
       <div id="symmpo-results-panel" class="interactive-panel">
         <p>
-          SymMPO changed most answers vs. base (~79% switched), shifting mass from <code>other</code> toward <code>correct</code> and
-          <code>illusory</code>. With <strong>HEAS on control-passed answers only</strong>, overall alignment stays low (~0.40): on
-          stimuli the model understood, illusory rates (~13–26%) sit far below humans (70–92%), so it did not gain human-like illusion
-          susceptibility. Angle is undefined (0/960 controls passed).
+          On the same programmatic illusions as base LLaVA, SymMPO shifts many answers but does not move toward human-like bias when
+          controls are taken seriously. With <strong>HEAS on control-passed answers only</strong>, overall alignment stays low (~0.36):
+          on stimuli the model understood, illusory rates (~3–24%) sit far below humans (70–92%). Angle is undefined (0/960 controls passed).
         </p>
 
         <h4>HEAS: control-gated (control passed only)</h4>
@@ -753,42 +756,43 @@
           </thead>
           <tbody>
             <tr><td>Angle</td><td>undefined</td><td>0 / 960</td><td>N/A</td><td>0.86</td></tr>
-            <tr><td>Color</td><td>0.32</td><td>170</td><td>~0.24</td><td>0.92</td></tr>
-            <tr><td>Geometric</td><td>0.38</td><td>245</td><td>~0.26</td><td>0.88</td></tr>
-            <tr><td>Motion</td><td>0.43</td><td>629</td><td>~0.13</td><td>0.70</td></tr>
-            <tr><td><strong>Overall (weighted)</strong></td><td><strong>0.40</strong></td><td><strong>1044</strong></td><td><strong>N/A</strong></td><td><strong>N/A</strong></td></tr>
+            <tr><td>Color</td><td>0.32</td><td>170 / 960</td><td>~0.24</td><td>0.92</td></tr>
+            <tr><td>Geometric</td><td>0.15</td><td>188 / 1080</td><td>~0.03</td><td>0.88</td></tr>
+            <tr><td>Motion</td><td>0.43</td><td>629 / 960</td><td>~0.13</td><td>0.70</td></tr>
+            <tr><td><strong>Overall (weighted)</strong></td><td><strong>0.36</strong></td><td><strong>987</strong></td><td><strong>N/A</strong></td><td><strong>N/A</strong></td></tr>
           </tbody>
         </table>
 
-        <h4>Output change (all stimuli, not gated)</h4>
-        <ul>
-          <li>~79% of answers switched vs. base.</li>
-          <li><code>correct</code>: 0% → 30% (base never chose “they're equal”).</li>
-          <li><code>illusory</code>: 13.5% → 50%.</li>
-          <li><code>other</code>: 86.5% → 20%.</li>
-        </ul>
+        <div class="symmpo-chart-wrap chart-container" style="height:280px; margin-bottom:1rem">
+          <canvas id="symmpo-delta-chart"></canvas>
+        </div>
 
-        <h4>Visualizations</h4>
+        <p>SymMPO clearly changed the model: ~79% of answers differ from base LLaVA. On the raw outputs the model
+          appears more illusion-prone (illusory 13.5%→50%) and more decisive (correct 0%→30%, other 86.5%→20%), which at first looks like the intended alignment with human vision. However, this is an artifact: symDPO fails the control images
+         at a high rate (76% overall, and 100% for angle), meaning it produces these answers without correctly reading the
+         non-illusory images, so the illusory responses are not driven by the stimulus. Measured properly, HEAS computed
+          only on answers where the control passed alignment is in fact low (0.36 weighted across categories, and undefined
+         for angle, where every control failed), because on the stimuli it did read correctly symDPO chooses the illusory
+          answer far less often than humans (~13–26% vs 70–92%). In short, SymMPO substantially altered the model's behaviour but did not instil genuine human-like illusion susceptibility; the apparent gain disappears under the control gate.</p>
+
+        <h4>SymMPO Grad-CAM (Müller-Lyer)</h4>
         <p>
-          The bar chart contrasts HEAS under DPO vs. SymMPO; Müller-Lyer samples show veridical or failed-control behavior across fin
-          length, not human-like structural bias.
+          The <a href="#interpretability">saliency gallery</a> above compares base and DPO LLaVA on Müller-Lyer and simultaneous contrast.
+          Below we show SymMPO Grad-CAM on <strong>Müller-Lyer</strong> at three fin lengths; attention often spreads to background
+          patches rather than the fins, consistent with veridical or weakly illusory responding.
         </p>
-        <div class="symmpo-figure-grid">
-          <figure class="symmpo-slot">
-            <img src="./assets/visualizations/symmpo/heas_comparison_bar.png" alt="Bar chart comparing HEAS across LLaVA base, DPO, and SymMPO">
-            <figcaption>HEAS by alignment method (LLaVA-1.5 vs. DPO vs. SymMPO)</figcaption>
+        <div class="saliency-grid symmpo-gradcam-grid">
+          <figure>
+            <img src="./assets/visualizations/symmpo/muller_lyer_0010_dpo.png" alt="SymMPO Grad-CAM, Müller-Lyer fin length 6 px">
+            <figcaption>SymMPO Grad-CAM · fin length 6 px</figcaption>
           </figure>
-          <figure class="symmpo-slot">
-            <img src="./assets/visualizations/symmpo/muller_lyer_0010_dpo.png" alt="SymMPO output for Müller-Lyer illusion with 10px fin length">
-            <figcaption>SymMPO on Müller-Lyer (fin length 10px)</figcaption>
+          <figure>
+            <img src="./assets/visualizations/symmpo/muller_lyer_0280_dpo.png" alt="SymMPO Grad-CAM, Müller-Lyer fin length 28 px">
+            <figcaption>SymMPO Grad-CAM · fin length 28 px</figcaption>
           </figure>
-          <figure class="symmpo-slot">
-            <img src="./assets/visualizations/symmpo/muller_lyer_0280_dpo.png" alt="SymMPO output for Müller-Lyer illusion with 28px fin length">
-            <figcaption>SymMPO on Müller-Lyer (fin length 28px)</figcaption>
-          </figure>
-          <figure class="symmpo-slot">
-            <img src="./assets/visualizations/symmpo/muller_lyer_0580_dpo.png" alt="SymMPO output for Müller-Lyer illusion with 58px fin length">
-            <figcaption>SymMPO on Müller-Lyer (fin length 58px)</figcaption>
+          <figure>
+            <img src="./assets/visualizations/symmpo/muller_lyer_0580_dpo.png" alt="SymMPO Grad-CAM, Müller-Lyer fin length 58 px">
+            <figcaption>SymMPO Grad-CAM · fin length 58 px</figcaption>
           </figure>
         </div>
       </div>
@@ -797,43 +801,34 @@
     <section id="conclusion-and-limitations">
       <h2>Conclusion and Limitations</h2>
       <p>
-        Comparing <em>directional</em> illusory-response rates with HEAS, not raw accuracy, shows that modern vision models do not
-        “fail like humans” in one global sense. Alignment appears only in specific category×model cells; nowhere does a single
-        architecture track human bias across all five illusion families.
+        With HEAS we compare <em>directional</em> illusory bias to humans, not raw accuracy. No model tracks human error across all
+        five categories: alignment is local to category×architecture cells. Supervised CNNs/ViTs reach high HEAS on geometric length
+        (≈ 0.92) but stay near the floor on color and angle (≈ 0.08–0.14). Contrastive encoders pass controls yet stay anti-illusory
+        on geometry (≈ 0.12). Scene-level impossible items (IllusionVQA) are a partial exception for base LLaVA (HEAS ≈ 0.94 at
+        ~85% illusory) while programmatic illusions stay misaligned (family mean ≈ 0.32, ≈ 0.16 on the four parametric categories).
       </p>
       <p>
-        The clearest pattern is <strong>category specificity</strong>. Supervised CNNs and ViTs can reach high HEAS on geometric
-        length (best cells ≈ 0.92) yet often sit near the floor on color and angle (≈ 0.08–0.14), where humans remain strongly
-        illusory. Vision–language models are uneven out of the box; DPO <a href="#ref-16" class="cite">[16]</a> pushes mean HEAS on evaluated VLM cells to ≈ 0.91,
-        especially on color and motion, but control checks and saliency suggest part of that lift may reflect language shortcuts
-        as much as visual grounding. SymMPO <a href="#symmpo-results">has a low HEAS when controlling for passed answers</a>.
+        Training interface matters more than backbone scale within a family. DPO <a href="#ref-16" class="cite">[16]</a> on LLaVA-1.5
+        raises mean HEAS on evaluated VLM cells to ≈ 0.91, with the largest gains where base LLaVA under-reported illusion (color
+        +0.84, geometric +0.76, angle +0.72, motion +0.61) and restores interpretable labels after base <code>other</code>-collapse on
+        angle. Control checks and saliency nonetheless suggest part of the DPO lift may be language shortcuts, not fully grounded
+        vision. SymMPO <a href="#symmpo-results">changes ~79% of answers</a> and raw illusory rates look higher, but controls fail
+        often (≈76% overall; 100% on angle); <strong>control-gated HEAS stays ≈ 0.36</strong>, with illusory rates on passed stimuli
+        far below humans (~13–26% vs 70–92%). The apparent alignment without gating is therefore not evidence of human-like
+        susceptibility.
       </p>
       <p>
-        These differences line up less with parameter count than with <strong>how representations were learned</strong>. Supervised
-        models share a high-geometric / low-color fingerprint; contrastive encoders (CLIP, DINOv2) can pass controls yet stay
-        anti-illusory on geometry (~0.12). Preference tuning on LLaVA moves reported illusion rates more than swapping among
-        similar-scale supervised backbones, a reminder that the training interface matters as much as the backbone class.
+        When models miss humans they do so in repeatable ways: correct-avoidant color, anti-illusory geometry, and
+        <code>other</code>-collapse (ResNet on Poggendorff; base LLaVA on Zöllner). DPO largely fixes the VLM angle mode; SymMPO does
+        not. Psychometric curves and Grad-CAM <a href="#ref-14" class="cite">[14]</a> / occlusion maps <a href="#ref-15" class="cite">[15]</a> help read these patterns qualitatively,
+        not as proof of human-identical mechanisms.
       </p>
       <p>
-        Where models miss humans, the errors are <strong>structured, not random</strong>: correct-avoidant color responding,
-        anti-illusory geometry, <code>other</code>-collapse on difficult angle trials, and, before control filtering, illusory
-        saturation on some VLM items without reliable control competence. Psychometric curves and saliency maps help read these
-        modes qualitatively; they are not evidence of human-identical internal processing.
-      </p>
-      <p>
-        Several limits bound how far to generalize. HEAS uses one reference illusory rate per category, so a model can match the
-        score while diverging on curve shape or individual illusions; we judge psychometric shape by eye, not rank correlation.
-        The evaluation grid is sparse in places (e.g. no ResNet on motion; no CNN/ViT on impossible scenes), and empty heatmap cells
-        mean unevaluated, not zero alignment. Each model family is probed differently (linear probes, CLIP zero-shot, DINOv2
-        matching, debiased LLaVA MCQ per HallusionBench <a href="#ref-7" class="cite">[7]</a>), so low HEAS may partly reflect protocol mismatch.
-        Impossible-scene benchmarks <a href="#ref-6" class="cite">[6]</a>, <a href="#ref-7" class="cite">[7]</a> lack the tight illusion–control pairing of our programmatic
-        stimuli; alignment on LLaVA with DPO and SymMPO is a case study on one VLM <a href="#ref-17" class="cite">[17]</a>. Grad-CAM
-        <a href="#ref-14" class="cite">[14]</a> and occlusion maps <a href="#ref-15" class="cite">[15]</a> show where models look, not why they answer as they do.
-      </p>
-      <p>
-        The fair claim is cautious: under explicit directional metrics, some models align with human error patterns on some
-        illusion types, and many do not. Filling the sparse grid, and adding rank-based psychometric
-        statistics would sharpen that picture further.
+        <strong>Limitations.</strong> HEAS uses one reference rate per category; psychometric shape is judged from plots, not rank
+        correlation. The grid is sparse (e.g. no ResNet on motion; no CNN/ViT on impossible scenes), families use different probing
+        protocols, and impossible benchmarks <a href="#ref-6" class="cite">[6]</a> lack tight programmatic controls. VLM alignment results are a case study on
+        LLaVA-1.5 <a href="#ref-17" class="cite">[17]</a>. Under these constraints, the fair summary is cautious: some models align with human directional error on
+        some illusion types; many do not, and reported gains from preference tuning should be read together with control competence.
       </p>
     </section>
 
@@ -844,7 +839,7 @@
       </p>
       <ul>
         <li><strong>Jules Herrscher:</strong> Evaluation pipeline, DPO training and VLM runs, analysis.</li>
-        <li><strong>Matisse Van Schalkwijk:</strong>Evaluation pipeline, SymMPO training and VLM runs, analysis.</li>
+        <li><strong>Matisse van Schalkwijk:</strong>Evaluation pipeline, SymMPO training and VLM runs, analysis.</li>
         <li><strong>Lysandre Costes:</strong> Stimulus design and generation, models and vizualization implementation, website, analysis.</li>
         <li><strong>Imane Oujja:</strong> Literature review and related work.</li>
       </ul>
@@ -974,7 +969,7 @@
 
   <footer>
     <p>CS-503 Visual Intelligence · EPFL · 2025</p>
-    <p>Code and step-by-step reproduction instructions are in the project repository (linked above).</p>
+    <p>Evaluation materials and supplementary details are available in the project repository (linked above).</p>
   </footer>
 
   <script src="./js/utils.js"></script>
@@ -985,6 +980,7 @@
   <script src="./js/psychometric-explorer.js"></script>
   <script src="./js/illusion-lab.js"></script>
   <script src="./js/dpo-delta.js"></script>
+  <script src="./js/symmpo-results.js"></script>
 
 </body>
 </html>

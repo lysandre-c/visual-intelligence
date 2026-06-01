@@ -1,4 +1,6 @@
 (function () {
+  const SYMMP0_MODEL = "llava_1.5_symmpo";
+
   const MODEL_LABELS = {
     resnet50: "ResNet-50",
     convnext_base: "ConvNeXt-B",
@@ -8,6 +10,7 @@
     dinov2_vit_b14: "DINOv2",
     "llava_1.5": "LLaVA",
     "llava_1.5_dpo": "LLaVA+DPO",
+    [SYMMP0_MODEL]: "SymMPO†",
   };
 
   const CATEGORY_LABELS = {
@@ -42,8 +45,31 @@
 
   let heasData = null;
   let cellDetails = null;
+  let symmpoHeas = null;
   let selected = null;
   let compareChart = null;
+
+  function isSymmpoModel(model) {
+    return model === SYMMP0_MODEL;
+  }
+
+  function mergeSymmpoIntoHeas(heas, symmpo) {
+    if (!symmpo?.values) return heas;
+    const merged = {
+      ...heas,
+      models: [...heas.models, SYMMP0_MODEL],
+      values: Object.fromEntries(
+        heas.categories.map((cat) => [
+          cat,
+          {
+            ...heas.values[cat],
+            [SYMMP0_MODEL]: symmpo.values[cat] ?? null,
+          },
+        ])
+      ),
+    };
+    return merged;
+  }
 
   function heasColor(value) {
     if (value == null || Number.isNaN(value)) return "#e2e8f0";
@@ -67,9 +93,54 @@
     return v != null && !Number.isNaN(v) ? v.toFixed(digits) : "N/A";
   }
 
+  function renderSymmpoDetailPanel(cat) {
+    const panel = document.getElementById("heas-detail-panel");
+    if (!panel || !symmpoHeas) return;
+
+    const heas = symmpoHeas.values[cat];
+    const cell = symmpoHeas.cells?.[cat];
+    const pHuman = heasData?.human_baselines[cat];
+    const pModel = cell?.p_illusory;
+
+    if (heas == null && !cell) {
+      panel.innerHTML =
+        "<p class=\"heas-detail-empty\">SymMPO was not evaluated on this category.</p>";
+      return;
+    }
+
+    const pHumanPct = pHuman != null ? pHuman * 100 : 0;
+    const pModelPct = pModel != null ? pModel * 100 : 0;
+
+    panel.innerHTML = `
+      <h4>${MODEL_LABELS[SYMMP0_MODEL]} · ${CATEGORY_LABELS[cat] || cat}</h4>
+      <p class="heas-detail-interp heas-gated-note">${symmpoHeas.metric_note || ""}</p>
+      <div class="heas-rate-bars">
+        <div class="heas-rate-row">
+          <span class="heas-rate-label">Reference rate</span>
+          <div class="heas-rate-track"><div class="heas-rate-fill human" style="width:${pHumanPct}%"></div></div>
+          <span class="heas-rate-val">${fmt(pHuman)}</span>
+        </div>
+        <div class="heas-rate-row">
+          <span class="heas-rate-label">Model illusory (gated)</span>
+          <div class="heas-rate-track"><div class="heas-rate-fill model" style="width:${pModelPct}%"></div></div>
+          <span class="heas-rate-val">${fmt(pModel)}</span>
+        </div>
+      </div>
+      <p class="heas-detail-stats">
+        <strong>Gated HEAS:</strong> ${heas != null ? fmt(heas, 3) : "undefined"}
+        · <strong>Controls passed:</strong> ${cell ? `${cell.n_passed} / ${cell.n_total}` : "N/A"}
+      </p>
+    `;
+  }
+
   function renderDetailPanel(cat, model) {
     const panel = document.getElementById("heas-detail-panel");
     if (!panel) return;
+
+    if (isSymmpoModel(model)) {
+      renderSymmpoDetailPanel(cat);
+      return;
+    }
 
     const key = cellKey(cat, model);
     const detail = cellDetails?.[key];
@@ -152,6 +223,11 @@
     }
   }
 
+  function showSymmpoFootnote() {
+    const el = document.getElementById("heas-symmpo-footnote");
+    if (el && symmpoHeas) el.hidden = false;
+  }
+
   function renderHeatmap() {
     const root = document.getElementById("heas-heatmap");
     if (!root || !heasData) return;
@@ -166,8 +242,11 @@
 
     models.forEach((m) => {
       const h = document.createElement("div");
-      h.className = "heas-header";
+      h.className = "heas-header" + (isSymmpoModel(m) ? " symmpo-col" : "");
       h.textContent = MODEL_LABELS[m] || m;
+      if (isSymmpoModel(m)) {
+        h.title = "Control-gated HEAS (illusion answers where control passed)";
+      }
       root.appendChild(h);
     });
 
@@ -181,18 +260,16 @@
         const v = heasData.values[cat]?.[m];
         const cell = document.createElement("button");
         cell.type = "button";
-        cell.className = "heas-cell";
+        cell.className = "heas-cell" + (isSymmpoModel(m) ? " symmpo-col" : "");
         cell.style.background = heasColor(v);
         cell.style.color = textColor(v);
         cell.textContent = v != null ? v.toFixed(2) : "N/A";
         cell.disabled = v == null;
-        cell.title = "Click for breakdown";
+        cell.title = isSymmpoModel(m)
+          ? "Control-gated HEAS. Click for breakdown."
+          : "Click for breakdown";
 
-        if (
-          selected &&
-          selected.cat === cat &&
-          selected.model === m
-        ) {
+        if (selected && selected.cat === cat && selected.model === m) {
           cell.classList.add("selected");
         }
 
@@ -200,6 +277,8 @@
         root.appendChild(cell);
       });
     });
+
+    showSymmpoFootnote();
   }
 
   function renderCompareChart() {
@@ -253,8 +332,8 @@
       .join("");
     selA.innerHTML = opts;
     selB.innerHTML = opts;
-    selA.value = "resnet50";
-    selB.value = "llava_1.5_dpo";
+    selA.value = "llava_1.5";
+    selB.value = symmpoHeas ? SYMMP0_MODEL : "llava_1.5_dpo";
 
     const onChange = () => renderCompareChart();
     selA.addEventListener("change", onChange);
@@ -283,11 +362,13 @@
     if (!root) return;
 
     try {
-      const [heas, details] = await Promise.all([
+      const [heas, details, symmpo] = await Promise.all([
         SiteUtils.fetchJSON("./data/heas_table.json"),
         SiteUtils.fetchJSON("./data/heas_cell_details.json"),
+        SiteUtils.fetchJSON("./data/symmpo_heas.json").catch(() => null),
       ]);
-      heasData = heas;
+      symmpoHeas = symmpo;
+      heasData = mergeSymmpoIntoHeas(heas, symmpo);
       cellDetails = details;
     } catch (err) {
       SiteUtils.showError(root, `Could not load HEAS data. ${err.message}`);

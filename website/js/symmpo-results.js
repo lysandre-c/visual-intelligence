@@ -9,92 +9,79 @@
 
   let symmpoChart = null;
 
-  function setPending(panel, pendingMsg) {
-    if (pendingMsg) pendingMsg.hidden = false;
-    panel.classList.add("results-pending");
-    const chartWrap = panel.querySelector(".symmpo-chart-wrap");
-    if (chartWrap) chartWrap.hidden = true;
-    panel.querySelectorAll(".symmpo-slot img").forEach((img) => {
-      img.hidden = true;
-    });
-  }
+  function renderChart(chartWrap, canvas, data) {
+    const labels = data.rows.map((r) => CATEGORY_LABELS[r.category] || r.category);
+    const isGated = data.symmpo_metric === "control_gated";
 
-  function setReady(panel, pendingMsg, data) {
-    panel.classList.remove("results-pending");
-    if (pendingMsg) pendingMsg.hidden = true;
+    if (symmpoChart) symmpoChart.destroy();
 
-    const chartWrap = panel.querySelector(".symmpo-chart-wrap");
-    const canvas = document.getElementById("symmpo-delta-chart");
-    if (chartWrap && canvas && data.rows?.length && typeof Chart !== "undefined") {
-      chartWrap.hidden = false;
-      const labels = data.rows.map(
-        (r) => CATEGORY_LABELS[r.category] || r.category
-      );
-      if (symmpoChart) symmpoChart.destroy();
-      symmpoChart = new Chart(canvas, {
-        type: "bar",
-        data: {
-          labels,
-          datasets: [
-            {
-              label: "LLaVA-1.5",
-              data: data.rows.map((r) => r.llava_base),
-              backgroundColor: "rgba(128, 90, 213, 0.55)",
-            },
-            {
-              label: "LLaVA + DPO",
-              data: data.rows.map((r) => r.llava_dpo),
-              backgroundColor: "rgba(85, 60, 154, 0.75)",
-            },
-            {
-              label: "LLaVA + SymMPO",
-              data: data.rows.map((r) => r.llava_symmpo),
-              backgroundColor: "rgba(49, 130, 206, 0.85)",
-            },
-          ],
-        },
-        options: SiteUtils.chartOptions({
-          title: "HEAS by alignment method (higher = closer to category reference)",
-          scales: {
-            y: { min: 0, max: 1, title: { text: "HEAS" } },
+    symmpoChart = new Chart(canvas, {
+      type: "bar",
+      data: {
+        labels,
+        datasets: [
+          {
+            label: "LLaVA-1.5",
+            data: data.rows.map((r) => r.llava_base),
+            backgroundColor: "rgba(128, 90, 213, 0.55)",
           },
-        }),
-      });
-    }
-
-    panel.querySelectorAll(".symmpo-slot img").forEach((img) => {
-      img.hidden = false;
-      img.addEventListener(
-        "error",
-        () => {
-          img.hidden = true;
+          {
+            label: "LLaVA + DPO",
+            data: data.rows.map((r) => r.llava_dpo),
+            backgroundColor: "rgba(85, 60, 154, 0.75)",
+          },
+          {
+            label: isGated ? "LLaVA + SymMPO (gated)" : "LLaVA + SymMPO",
+            data: data.rows.map((r) => r.llava_symmpo),
+            backgroundColor: "rgba(49, 130, 206, 0.85)",
+          },
+        ],
+      },
+      options: SiteUtils.chartOptions({
+        title: isGated
+          ? "HEAS by alignment method (SymMPO: control-gated; base/DPO: standard)"
+          : "HEAS by alignment method (higher = closer to category reference)",
+        scales: {
+          y: { min: 0, max: 1, title: { text: "HEAS" } },
         },
-        { once: true }
-      );
+      }),
     });
   }
 
-  async function initSymmpoResults() {
+  async function initSymmpoChart() {
     const panel = document.getElementById("symmpo-results-panel");
-    if (!panel) return;
+    const chartWrap = panel?.querySelector(".symmpo-chart-wrap");
+    const canvas = document.getElementById("symmpo-delta-chart");
+    if (!panel || !chartWrap || !canvas) return;
 
-    const pendingMsg = panel.querySelector(".results-pending-msg");
+    if (typeof Chart === "undefined") {
+      SiteUtils.showError(chartWrap, "Chart.js failed to load.");
+      return;
+    }
 
     let data;
     try {
       data = await SiteUtils.fetchJSON("./data/symmpo_delta.json");
     } catch (err) {
-      setPending(panel, pendingMsg);
+      SiteUtils.showError(chartWrap, `Could not load SymMPO data. ${err.message}`);
       return;
     }
 
     if (data.status !== "ready" || !data.rows?.length) {
-      setPending(panel, pendingMsg);
+      SiteUtils.showError(
+        chartWrap,
+        "SymMPO comparison data is not available yet. Run export after adding results."
+      );
       return;
     }
 
-    setReady(panel, pendingMsg, data);
+    try {
+      renderChart(chartWrap, canvas, data);
+    } catch (err) {
+      console.error(err);
+      SiteUtils.showError(chartWrap, `Could not render SymMPO chart. ${err.message}`);
+    }
   }
 
-  SiteUtils.onReady(() => initSymmpoResults().catch(console.error));
+  SiteUtils.onReady(() => initSymmpoChart().catch(console.error));
 })();

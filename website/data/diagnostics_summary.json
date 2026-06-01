@@ -39,9 +39,9 @@
     "n": 480,
     "accuracy": 0.0,
     "p_pred_correct": 0.0,
-    "p_pred_illusory": 1.0,
-    "p_pred_other": 0.0,
-    "control_argmax_accuracy": 0.0
+    "p_pred_illusory": 0.0,
+    "p_pred_other": 1.0,
+    "control_argmax_accuracy": null
   },
   {
     "category": "angle",
@@ -125,11 +125,11 @@
     "illusion_type": "zollner",
     "model": "llava_1.5",
     "n": 480,
-    "accuracy": 0.0291666666666666,
-    "p_pred_correct": 0.0291666666666666,
-    "p_pred_illusory": 0.9708333333333332,
-    "p_pred_other": 0.0,
-    "control_argmax_accuracy": 0.10625
+    "accuracy": 0.0,
+    "p_pred_correct": 0.0,
+    "p_pred_illusory": 0.0,
+    "p_pred_other": 1.0,
+    "control_argmax_accuracy": null
   },
   {
     "category": "angle",
@@ -213,11 +213,11 @@
     "illusion_type": "simultaneous_contrast",
     "model": "llava_1.5",
     "n": 480,
-    "accuracy": 0.03125,
-    "p_pred_correct": 0.03125,
-    "p_pred_illusory": 0.5708333333333333,
-    "p_pred_other": 0.3979166666666666,
-    "control_argmax_accuracy": 0.1333333333333333
+    "accuracy": 0.0,
+    "p_pred_correct": 0.0,
+    "p_pred_illusory": 0.0,
+    "p_pred_other": 1.0,
+    "control_argmax_accuracy": null
   },
   {
     "category": "color",
@@ -301,11 +301,11 @@
     "illusion_type": "whites_illusion",
     "model": "llava_1.5",
     "n": 480,
-    "accuracy": 0.1645833333333333,
-    "p_pred_correct": 0.1645833333333333,
-    "p_pred_illusory": 0.3291666666666666,
-    "p_pred_other": 0.50625,
-    "control_argmax_accuracy": 0.2125
+    "accuracy": 0.0,
+    "p_pred_correct": 0.0,
+    "p_pred_illusory": 0.0,
+    "p_pred_other": 1.0,
+    "control_argmax_accuracy": null
   },
   {
     "category": "color",
@@ -391,9 +391,9 @@
     "n": 480,
     "accuracy": 0.0,
     "p_pred_correct": 0.0,
-    "p_pred_illusory": 0.5666666666666667,
-    "p_pred_other": 0.4333333333333333,
-    "control_argmax_accuracy": 0.0
+    "p_pred_illusory": 0.0,
+    "p_pred_other": 1.0,
+    "control_argmax_accuracy": null
   },
   {
     "category": "geometric",
@@ -477,11 +477,11 @@
     "illusion_type": "muller_lyer",
     "model": "llava_1.5",
     "n": 600,
-    "accuracy": 0.0216666666666666,
-    "p_pred_correct": 0.0216666666666666,
-    "p_pred_illusory": 0.8783333333333333,
-    "p_pred_other": 0.1,
-    "control_argmax_accuracy": 0.0316666666666666
+    "accuracy": 0.0,
+    "p_pred_correct": 0.0,
+    "p_pred_illusory": 0.0,
+    "p_pred_other": 1.0,
+    "control_argmax_accuracy": null
   },
   {
     "category": "geometric",
@@ -567,9 +567,9 @@
     "n": 480,
     "accuracy": 0.0,
     "p_pred_correct": 0.0,
-    "p_pred_illusory": 0.9583333333333334,
-    "p_pred_other": 0.0416666666666666,
-    "control_argmax_accuracy": 0.0
+    "p_pred_illusory": 0.0,
+    "p_pred_other": 1.0,
+    "control_argmax_accuracy": null
   },
   {
     "category": "geometric",
@@ -642,10 +642,10 @@
     "illusion_type": "illusion_vqa",
     "model": "llava_1.5",
     "n": 435,
-    "accuracy": 0.1471264367816092,
-    "p_pred_correct": 0.1471264367816092,
-    "p_pred_illusory": 0.8505747126436781,
-    "p_pred_other": 0.0022988505747126,
+    "accuracy": 0.15,
+    "p_pred_correct": 0.15,
+    "p_pred_illusory": 0.85,
+    "p_pred_other": 0.0,
     "control_argmax_accuracy": null
   },
   {
@@ -697,11 +697,11 @@
     "illusion_type": "rotating_snakes",
     "model": "llava_1.5",
     "n": 480,
-    "accuracy": 1.0,
-    "p_pred_correct": 1.0,
+    "accuracy": 0.0,
+    "p_pred_correct": 0.0,
     "p_pred_illusory": 0.0,
-    "p_pred_other": 0.0,
-    "control_argmax_accuracy": 0.9625
+    "p_pred_other": 1.0,
+    "control_argmax_accuracy": null
   },
   {
     "category": "motion",
@@ -785,11 +785,11 @@
     "illusion_type": "scintillating_grid",
     "model": "llava_1.5",
     "n": 480,
-    "accuracy": 1.0,
-    "p_pred_correct": 1.0,
+    "accuracy": 0.0,
+    "p_pred_correct": 0.0,
     "p_pred_illusory": 0.0,
-    "p_pred_other": 0.0,
-    "control_argmax_accuracy": 1.0
+    "p_pred_other": 1.0,
+    "control_argmax_accuracy": null
   },
   {
     "category": "motion",

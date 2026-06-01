@@ -1,0 +1,44 @@
+{
+  "metric": "control_gated",
+  "metric_note": "HEAS on illusion answers where the control image was answered correctly. Not directly comparable to standard category HEAS in other columns.",
+  "source": "results/llava_symDPO_results",
+  "categories": [
+    "angle",
+    "color",
+    "geometric",
+    "motion"
+  ],
+  "values": {
+    "angle": null,
+    "color": 0.3152941176470587,
+    "geometric": 0.15191489361702126,
+    "motion": 0.4287758346581876
+  },
+  "cells": {
+    "angle": {
+      "n_passed": 0,
+      "n_total": 960,
+      "n_excluded": 960,
+      "p_illusory": null
+    },
+    "color": {
+      "n_passed": 170,
+      "n_total": 960,
+      "n_excluded": 790,
+      "p_illusory": 0.23529411764705882
+    },
+    "geometric": {
+      "n_passed": 188,
+      "n_total": 1080,
+      "n_excluded": 892,
+      "p_illusory": 0.031914893617021274
+    },
+    "motion": {
+      "n_passed": 629,
+      "n_total": 960,
+      "n_excluded": 331,
+      "p_illusory": 0.1287758346581876
+    }
+  },
+  "overall_weighted": 0.36
+}

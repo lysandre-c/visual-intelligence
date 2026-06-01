@@ -1,4 +1,42 @@
 {
-  "status": "pending",
-  "rows": []
+  "status": "ready",
+  "rows": [
+    {
+      "category": "geometric",
+      "llava_base": 0.12,
+      "llava_dpo": 0.88,
+      "llava_symmpo": 0.15191489361702126,
+      "human_baseline": 0.88
+    },
+    {
+      "category": "color",
+      "llava_base": 0.0799999999999999,
+      "llava_dpo": 0.92,
+      "llava_symmpo": 0.3152941176470587,
+      "human_baseline": 0.92
+    },
+    {
+      "category": "angle",
+      "llava_base": 0.14,
+      "llava_dpo": 0.8622675736961452,
+      "llava_symmpo": null,
+      "human_baseline": 0.86
+    },
+    {
+      "category": "motion",
+      "llava_base": 0.3,
+      "llava_dpo": 0.9116959064327484,
+      "llava_symmpo": 0.4287758346581876,
+      "human_baseline": 0.7
+    },
+    {
+      "category": "impossible",
+      "llava_base": 0.94,
+      "llava_dpo": 0.96516091954023,
+      "llava_symmpo": null,
+      "human_baseline": 0.913
+    }
+  ],
+  "symmpo_metric": "control_gated",
+  "symmpo_metric_note": "HEAS on illusion answers where the control image was answered correctly. Not directly comparable to standard category HEAS in other columns."
 }

@@ -159,47 +159,47 @@
         "llava_1.5": [
           {
             "param": 30.0,
-            "illusory_rate": 0.5166666666666667
+            "illusory_rate": 0.0
           },
           {
             "param": 31.0,
-            "illusory_rate": 0.4666666666666667
+            "illusory_rate": 0.0
           },
           {
             "param": 32.0,
-            "illusory_rate": 0.5333333333333333
+            "illusory_rate": 0.0
           },
           {
             "param": 33.0,
-            "illusory_rate": 0.6
+            "illusory_rate": 0.0
           },
           {
             "param": 34.0,
-            "illusory_rate": 0.6
+            "illusory_rate": 0.0
           },
           {
             "param": 35.0,
-            "illusory_rate": 0.5333333333333333
+            "illusory_rate": 0.0
           },
           {
             "param": 36.0,
-            "illusory_rate": 0.65
+            "illusory_rate": 0.0
           },
           {
             "param": 37.0,
-            "illusory_rate": 0.5
+            "illusory_rate": 0.0
           },
           {
             "param": 38.0,
-            "illusory_rate": 0.6333333333333333
+            "illusory_rate": 0.0
           },
           {
             "param": 39.0,
-            "illusory_rate": 0.6
+            "illusory_rate": 0.0
           },
           {
             "param": 40.0,
-            "illusory_rate": 0.5
+            "illusory_rate": 0.0
           }
         ],
         "llava_1.5_dpo": [
@@ -664,83 +664,83 @@
         "llava_1.5": [
           {
             "param": 6.0,
-            "illusory_rate": 0.9
+            "illusory_rate": 0.0
           },
           {
             "param": 6.88,
-            "illusory_rate": 0.7333333333333333
+            "illusory_rate": 0.0
           },
           {
             "param": 7.88,
-            "illusory_rate": 0.9333333333333333
+            "illusory_rate": 0.0
           },
           {
             "param": 9.03,
-            "illusory_rate": 0.9666666666666667
+            "illusory_rate": 0.0
           },
           {
             "param": 10.35,
-            "illusory_rate": 0.9333333333333333
+            "illusory_rate": 0.0
           },
           {
             "param": 11.86,
-            "illusory_rate": 0.8333333333333334
+            "illusory_rate": 0.0
           },
           {
             "param": 13.6,
-            "illusory_rate": 0.9666666666666667
+            "illusory_rate": 0.0
           },
           {
             "param": 15.58,
-            "illusory_rate": 0.9333333333333333
+            "illusory_rate": 0.0
           },
           {
             "param": 17.86,
-            "illusory_rate": 0.8666666666666667
+            "illusory_rate": 0.0
           },
           {
             "param": 20.47,
-            "illusory_rate": 0.8333333333333334
+            "illusory_rate": 0.0
           },
           {
             "param": 23.45,
-            "illusory_rate": 0.8
+            "illusory_rate": 0.0
           },
           {
             "param": 26.88,
-            "illusory_rate": 0.9
+            "illusory_rate": 0.0
           },
           {
             "param": 30.81,
-            "illusory_rate": 0.9
+            "illusory_rate": 0.0
           },
           {
             "param": 35.31,
-            "illusory_rate": 0.8
+            "illusory_rate": 0.0
           },
           {
             "param": 40.46,
-            "illusory_rate": 0.8666666666666667
+            "illusory_rate": 0.0
           },
           {
             "param": 46.37,
-            "illusory_rate": 0.8666666666666667
+            "illusory_rate": 0.0
           },
           {
             "param": 53.15,
-            "illusory_rate": 0.8333333333333334
+            "illusory_rate": 0.0
           },
           {
             "param": 60.91,
-            "illusory_rate": 0.9
+            "illusory_rate": 0.0
           },
           {
             "param": 69.8,
-            "illusory_rate": 0.8333333333333334
+            "illusory_rate": 0.0
           },
           {
             "param": 80.0,
-            "illusory_rate": 0.9666666666666667
+            "illusory_rate": 0.0
           }
         ],
         "llava_1.5_dpo": [
@@ -1297,67 +1297,67 @@
         "llava_1.5": [
           {
             "param": 45.0,
-            "illusory_rate": 1.0
+            "illusory_rate": 0.0
           },
           {
             "param": 53.0,
-            "illusory_rate": 1.0
+            "illusory_rate": 0.0
           },
           {
             "param": 61.0,
-            "illusory_rate": 1.0
+            "illusory_rate": 0.0
           },
           {
             "param": 69.0,
-            "illusory_rate": 1.0
+            "illusory_rate": 0.0
           },
           {
             "param": 77.0,
-            "illusory_rate": 1.0
+            "illusory_rate": 0.0
           },
           {
             "param": 85.0,
-            "illusory_rate": 1.0
+            "illusory_rate": 0.0
           },
           {
             "param": 93.0,
-            "illusory_rate": 1.0
+            "illusory_rate": 0.0
           },
           {
             "param": 101.0,
-            "illusory_rate": 1.0
+            "illusory_rate": 0.0
           },
           {
             "param": 109.0,
-            "illusory_rate": 1.0
+            "illusory_rate": 0.0
           },
           {
             "param": 117.0,
-            "illusory_rate": 1.0
+            "illusory_rate": 0.0
           },
           {
             "param": 125.0,
-            "illusory_rate": 1.0
+            "illusory_rate": 0.0
           },
           {
             "param": 133.0,
-            "illusory_rate": 1.0
+            "illusory_rate": 0.0
           },
           {
             "param": 141.0,
-            "illusory_rate": 1.0
+            "illusory_rate": 0.0
           },
           {
             "param": 149.0,
-            "illusory_rate": 1.0
+            "illusory_rate": 0.0
           },
           {
             "param": 157.0,
-            "illusory_rate": 1.0
+            "illusory_rate": 0.0
           },
           {
             "param": 165.0,
-            "illusory_rate": 1.0
+            "illusory_rate": 0.0
           }
         ],
         "llava_1.5_dpo": [
@@ -1850,67 +1850,67 @@
         "llava_1.5": [
           {
             "param": 15.0,
-            "illusory_rate": 1.0
+            "illusory_rate": 0.0
           },
           {
             "param": 18.0,
-            "illusory_rate": 1.0
+            "illusory_rate": 0.0
           },
           {
             "param": 21.0,
-            "illusory_rate": 1.0
+            "illusory_rate": 0.0
           },
           {
             "param": 24.0,
-            "illusory_rate": 0.9666666666666667
+            "illusory_rate": 0.0
           },
           {
             "param": 27.0,
-            "illusory_rate": 0.9666666666666667
+            "illusory_rate": 0.0
           },
           {
             "param": 30.0,
-            "illusory_rate": 0.9666666666666667
+            "illusory_rate": 0.0
           },
           {
             "param": 33.0,
-            "illusory_rate": 0.9
+            "illusory_rate": 0.0
           },
           {
             "param": 36.0,
-            "illusory_rate": 0.9666666666666667
+            "illusory_rate": 0.0
           },
           {
             "param": 39.0,
-            "illusory_rate": 0.9333333333333333
+            "illusory_rate": 0.0
           },
           {
             "param": 42.0,
-            "illusory_rate": 0.9333333333333333
+            "illusory_rate": 0.0
           },
           {
             "param": 45.0,
-            "illusory_rate": 0.8666666666666667
+            "illusory_rate": 0.0
           },
           {
             "param": 48.0,
-            "illusory_rate": 0.9333333333333333
+            "illusory_rate": 0.0
           },
           {
             "param": 51.0,
-            "illusory_rate": 0.9666666666666667
+            "illusory_rate": 0.0
           },
           {
             "param": 54.0,
-            "illusory_rate": 1.0
+            "illusory_rate": 0.0
           },
           {
             "param": 57.0,
-            "illusory_rate": 0.9333333333333333
+            "illusory_rate": 0.0
           },
           {
             "param": 60.0,
-            "illusory_rate": 1.0
+            "illusory_rate": 0.0
           }
         ],
         "llava_1.5_dpo": [
@@ -3245,67 +3245,67 @@
         "llava_1.5": [
           {
             "param": 50.0,
-            "illusory_rate": 0.6
+            "illusory_rate": 0.0
           },
           {
             "param": 54.0,
-            "illusory_rate": 0.5333333333333333
+            "illusory_rate": 0.0
           },
           {
             "param": 58.0,
-            "illusory_rate": 0.5333333333333333
+            "illusory_rate": 0.0
           },
           {
             "param": 63.0,
-            "illusory_rate": 0.5666666666666667
+            "illusory_rate": 0.0
           },
           {
             "param": 67.0,
-            "illusory_rate": 0.5333333333333333
+            "illusory_rate": 0.0
           },
           {
             "param": 71.0,
-            "illusory_rate": 0.6333333333333333
+            "illusory_rate": 0.0
           },
           {
             "param": 76.0,
-            "illusory_rate": 0.6666666666666666
+            "illusory_rate": 0.0
           },
           {
             "param": 80.0,
-            "illusory_rate": 0.5666666666666667
+            "illusory_rate": 0.0
           },
           {
             "param": 84.0,
-            "illusory_rate": 0.5333333333333333
+            "illusory_rate": 0.0
           },
           {
             "param": 89.0,
-            "illusory_rate": 0.5666666666666667
+            "illusory_rate": 0.0
           },
           {
             "param": 93.0,
-            "illusory_rate": 0.7333333333333333
+            "illusory_rate": 0.0
           },
           {
             "param": 97.0,
-            "illusory_rate": 0.5666666666666667
+            "illusory_rate": 0.0
           },
           {
             "param": 102.0,
-            "illusory_rate": 0.5666666666666667
+            "illusory_rate": 0.0
           },
           {
             "param": 106.0,
-            "illusory_rate": 0.5333333333333333
+            "illusory_rate": 0.0
           },
           {
             "param": 110.0,
-            "illusory_rate": 0.6
+            "illusory_rate": 0.0
           },
           {
             "param": 115.0,
-            "illusory_rate": 0.4
+            "illusory_rate": 0.0
           }
         ],
         "llava_1.5_dpo": [
@@ -3798,67 +3798,67 @@
         "llava_1.5": [
           {
             "param": 20.0,
-            "illusory_rate": 0.5333333333333333
+            "illusory_rate": 0.0
           },
           {
             "param": 23.0,
-            "illusory_rate": 0.16666666666666666
+            "illusory_rate": 0.0
           },
           {
             "param": 27.0,
-            "illusory_rate": 0.2
+            "illusory_rate": 0.0
           },
           {
             "param": 31.0,
-            "illusory_rate": 0.3333333333333333
+            "illusory_rate": 0.0
           },
           {
             "param": 34.0,
-            "illusory_rate": 0.3
+            "illusory_rate": 0.0
           },
           {
             "param": 38.0,
-            "illusory_rate": 0.3333333333333333
+            "illusory_rate": 0.0
           },
           {
             "param": 42.0,
-            "illusory_rate": 0.4
+            "illusory_rate": 0.0
           },
           {
             "param": 46.0,
-            "illusory_rate": 0.3
+            "illusory_rate": 0.0
           },
           {
             "param": 49.0,
-            "illusory_rate": 0.26666666666666666
+            "illusory_rate": 0.0
           },
           {
             "param": 53.0,
-            "illusory_rate": 0.3
+            "illusory_rate": 0.0
           },
           {
             "param": 57.0,
-            "illusory_rate": 0.3333333333333333
+            "illusory_rate": 0.0
           },
           {
             "param": 61.0,
-            "illusory_rate": 0.3333333333333333
+            "illusory_rate": 0.0
           },
           {
             "param": 64.0,
-            "illusory_rate": 0.26666666666666666
+            "illusory_rate": 0.0
           },
           {
             "param": 68.0,
-            "illusory_rate": 0.4
+            "illusory_rate": 0.0
           },
           {
             "param": 72.0,
-            "illusory_rate": 0.36666666666666664
+            "illusory_rate": 0.0
           },
           {
             "param": 76.0,
-            "illusory_rate": 0.43333333333333335
+            "illusory_rate": 0.0
           }
         ],
         "llava_1.5_dpo": [
@@ -4351,67 +4351,67 @@
         "llava_1.5": [
           {
             "param": 20.0,
-            "illusory_rate": 0.9333333333333333
+            "illusory_rate": 0.0
           },
           {
             "param": 23.67,
-            "illusory_rate": 0.9666666666666667
+            "illusory_rate": 0.0
           },
           {
             "param": 27.33,
-            "illusory_rate": 0.9666666666666667
+            "illusory_rate": 0.0
           },
           {
             "param": 31.0,
-            "illusory_rate": 1.0
+            "illusory_rate": 0.0
           },
           {
             "param": 34.67,
-            "illusory_rate": 0.9666666666666667
+            "illusory_rate": 0.0
           },
           {
             "param": 38.33,
-            "illusory_rate": 1.0
+            "illusory_rate": 0.0
           },
           {
             "param": 42.0,
-            "illusory_rate": 1.0
+            "illusory_rate": 0.0
           },
           {
             "param": 45.67,
-            "illusory_rate": 1.0
+            "illusory_rate": 0.0
           },
           {
             "param": 49.33,
-            "illusory_rate": 0.9666666666666667
+            "illusory_rate": 0.0
           },
           {
             "param": 53.0,
-            "illusory_rate": 1.0
+            "illusory_rate": 0.0
           },
           {
             "param": 56.67,
-            "illusory_rate": 0.9666666666666667
+            "illusory_rate": 0.0
           },
           {
             "param": 60.33,
-            "illusory_rate": 1.0
+            "illusory_rate": 0.0
           },
           {
             "param": 64.0,
-            "illusory_rate": 0.8333333333333334
+            "illusory_rate": 0.0
           },
           {
             "param": 67.67,
-            "illusory_rate": 0.9666666666666667
+            "illusory_rate": 0.0
           },
           {
             "param": 71.33,
-            "illusory_rate": 0.9666666666666667
+            "illusory_rate": 0.0
           },
           {
             "param": 75.0,
-            "illusory_rate": 1.0
+            "illusory_rate": 0.0
           }
         ],
         "llava_1.5_dpo": [
