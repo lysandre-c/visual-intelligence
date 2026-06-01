@@ -238,6 +238,14 @@ def _run_gradcam_comparison(
         torch_dtype=torch.float16,
         device_map="auto",
     )
+    
+    # Load trained projector weights if present
+    projector_path = Path(adapter_path) / "multi_modal_projector.pt"
+    if projector_path.exists():
+        logger.info("Loading trained projector weights from %s ...", projector_path)
+        projector_state = torch.load(str(projector_path), map_location="cpu", weights_only=True)
+        dpo_base.model.multi_modal_projector.load_state_dict(projector_state)
+
     dpo_model = PeftModel.from_pretrained(dpo_base, adapter_path)
     dpo_model.eval()
 

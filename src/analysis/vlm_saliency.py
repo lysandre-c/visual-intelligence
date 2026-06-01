@@ -95,37 +95,59 @@ def compute_vlm_gradcam(
 
     # Locate the vision tower through any wrapper layers
     vision_tower = _resolve_vision_tower(model)
-    target_layer = vision_tower.vision_model.encoder.layers[-2]
+    if hasattr(vision_tower, "vision_model"):
+        vision_model = vision_tower.vision_model
+    else:
+        vision_model = vision_tower
+    target_layer = vision_model.encoder.layers[-2]
+
+    # PeftModel.from_pretrained freezes every parameter (requires_grad=False), so
+    # for the DPO model the vision-tower output would NOT be in the autograd graph
+    # — the only grad source, pixel_values, is severed by accelerate's device_map
+    # pre-forward hook (re-casts under no_grad). Re-enable grad on the tower we
+    # backprop through so its activations require grad independently. (The model is
+    # discarded right after, so we don't bother restoring the frozen state.)
+    for p in vision_model.parameters():
+        p.requires_grad_(True)
 
     activations = []
     gradients = []
 
+    # A module forward hook + a *tensor* backward hook on the captured activation is
+    # more robust than register_full_backward_hook, which can silently no-op when the
+    # module is dispatched by accelerate (device_map="auto").
     def forward_hook(module, input, output):
-        activations.append(output[0])
-
-    def backward_hook(module, grad_input, grad_output):
-        gradients.append(grad_output[0])
+        act = output[0] if isinstance(output, tuple) else output
+        activations.append(act)
+        if act.requires_grad:
+            act.register_hook(lambda grad: gradients.append(grad))
 
     h1 = target_layer.register_forward_hook(forward_hook)
-    h2 = target_layer.register_full_backward_hook(backward_hook)
 
-    # Forward pass
-    outputs = model(**inputs, output_hidden_states=True)
-    logits = outputs.logits
-    # Next token prediction is at the last sequence position
-    next_token_logits = logits[0, -1, :]
+    # Forward + backward must run with grad enabled even if the caller is inside an
+    # inference/no_grad context.
+    with torch.enable_grad():
+        outputs = model(**inputs, output_hidden_states=True)
+        logits = outputs.logits
+        # Next token prediction is at the last sequence position
+        next_token_logits = logits[0, -1, :]
 
-    target_token_id = processor.tokenizer.encode(target_token, add_special_tokens=False)[-1]
-    score = next_token_logits[target_token_id]
+        target_token_id = processor.tokenizer.encode(target_token, add_special_tokens=False)[-1]
+        score = next_token_logits[target_token_id]
 
-    model.zero_grad()
-    score.backward(retain_graph=True)
+        model.zero_grad()
+        score.backward(retain_graph=True)
 
     h1.remove()
-    h2.remove()
 
-    if not gradients or not activations:
-        raise RuntimeError("Hooks did not capture gradients or activations.")
+    if not activations:
+        raise RuntimeError("Forward hook did not capture activations (target layer not on forward path).")
+    if not gradients:
+        ar = bool(activations[0].requires_grad)
+        raise RuntimeError(
+            f"Backward hook did not capture gradients (activation.requires_grad={ar}). "
+            "Vision-tower output is not in the autograd graph."
+        )
 
     grads = gradients[0][0]  # (seq_len, dim)
     acts = activations[0][0] # (seq_len, dim)
